@@ -6,7 +6,7 @@
 |---|---|
 | Current phase | **M0-RECON — closing (gate PASS recorded)** → next phase M1-FOUNDATION |
 | Current/active task | none in flight |
-| Last verified commit | `e5b838e` (AGENT.md zero-placeholder policy) — verification: post-push remote audit 2026-09-03 |
+| Last verified commit | `e5b838e` at M0 close → `d0cacc0` (asset pack) post-push verified 2026-09-03 → final design/asset readiness review performed 2026-09-03 (DA-GATE addendum; AG-012/AG-013 found & resolved; AG-001/AG-002 open) |
 | Implementation state | **Documentation-only repository.** No application source, schema, tests, or CI exist yet. Brand assets in `/branding/` (verified). All app functionality is `[REQUIRED]` (PRD status vocabulary). |
 | Current gate status | M0-GATE **PASS** · [DA-GATE](gates/DA-GATE.md) **PASS WITH CONDITIONS** (2026-09-03: production asset pack staged in `branding/` — logo variants, favicon package, app icons, watermark 128, Fraunces+Inter OFL fonts, icon system, design tokens, OG card; conditions: AG-002 human visual sign-off due before M1-GATE, AG-001 vector masters open) · M1–M5 gates **NOT_STARTED** |
 | Blocked tasks | M2-T008, M2-T009 (blocker B-001 — source authorization gate G-04, operator decision; **must not be unblocked by inventing a provider**) · M5-T006 (B-003 hosting AUP) · M5-T007 (B-002 counsel review) |

@@ -25,3 +25,13 @@
 **Conditions register:** C-1 = AG-002 (close before M1-GATE) · C-2 = AG-001 (close when operator supplies SVG masters; until then no vector use, no `favicon.svg`, no print/large-format derivatives).
 
 **Consumed by:** M1-T003 (tokens), M1-T004 (fonts), M1-T005 (favicon/icons/logo wiring), M1-T008…T010 (state matrix), M1-T016 (mono-on-dark emblem art), M3-T001 (watermark). M1 entry unchanged (M0-GATE PASS); C-1 gates **M1-GATE**, not M1 start.
+
+## Final readiness review addendum — 2026-09-03
+
+**Visual inspection capability (honest record):** image-visual inspection was re-attempted via the environment's image-read tooling and the environment again returned no vision capability (verbatim: "[An image was provided here, but you do not have vision capabilities.]"). Per the review directive, C-1/AG-002 therefore **cannot be closed by the authoring agent** and remains open for operator sign-off.
+
+**Forensic re-inspection (#2) — all passed:** transparent keys: 0 halo pixels (bg-colored @ alpha>200), component structure correct (primary = 8: emblem + 7 letters; symbol = 1: single vessel — matches "mathematically mirrored" geometry claim) · mono ink 100% single-color · watermark 100% gold-family, 492 opaque px · ICO directory parsed manually: type=1, two entries 16+32, both PNG payloads · OG tagline pixel-audit: champagne text within canvas, horizontal centering offset 1px · favicon-16 honest metric: brightest line-averaged pixel 2.8:1 vs Obsidian (full-tone gold = 8.1:1; 1px lines average down at 16px — decorative chrome, acceptable; recorded, not hidden) · fonts: fvar axes verified structurally (Fraunces wght 100–900 **default 900** → guardrail AG-013; Inter default 400 safe); PIL variation-axis rendering is unavailable in this environment (tooling limit — axes verified structurally instead; weight pinning enforced at M1-T004).
+
+**Review findings (recorded in ASSET-GAPS):** AG-012 (symbol-only mono line-art missing — HIGH, found & **resolved** via ASSET-LOGO-013 extraction crop) · AG-013 (Fraunces default-900 hazard — MEDIUM, found & **resolved** by guardrail documentation + M1-T004 refinement).
+
+**Gate status after review: PASS WITH CONDITIONS (unchanged)** — C-1 (AG-002 operator visual sign-off, due before M1-GATE) and C-2 (AG-001 vector masters) remain open; DA-1 evidence strengthened (symbol mono now exists); DA-2 evidence made more honest (16px metric). DA-5 carries the AG-013 guardrail. All other criteria unchanged from the table above.

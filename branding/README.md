@@ -12,12 +12,15 @@ branding/
 ├── syconia-app-icon.png
 ├── syconia-favicon.png
 ├── syconia-brand-guidelines.pdf
-├── logo/          derived transparent + monochrome-on-dark variants
+├── logo/          derived transparent, monochrome-on-dark (full lockup + symbol-only)
 ├── favicon/       16px, 32px, .ico   (svg = gap AG-001)
 ├── app-icon/      192 (PWA), 180 (Apple touch)
 ├── watermark/     syconia-watermark-128.png
 ├── social/        syconia-og-default.png (1200×630)
 ├── fonts/         Fraunces + Inter (SIL OFL 1.1) + licenses
+│   └── ⚠ Fraunces VF default instance = wght 900 (Black) — implementation MUST pin weights
+│       (next/font weight range + CSS font-weight ≥400, DESIGN-SYSTEM §5; guardrail AG-013;
+│       Inter default 400 is safe)
 ├── design-tokens.json   token foundation (consumed by M1-T003)
 ├── ICON-SYSTEM.md       lucide-react mapping + rules
 └── ASSET-MANIFEST.md    controlled register (this pack's source of truth)
@@ -41,7 +44,7 @@ branding/
 | Header <480px / drawer / admin sidebar | `syconia-symbol-only.png` (or transparent) | Symbol-only below 480px; admin sidebar 28px |
 | Favicon contexts | always symbol-only | See Favicon configuration below |
 | Light/print contexts | `syconia-monochrome-light.png` | Gold fails contrast on light (2.46:1) — mono ink only |
-| Dark line-art (empty/error/404 art, reduced-motion loader emblem) | `logo/syconia-logo-monochrome-on-dark.png` | Alabaster #FAF9F6 (18.9:1); decorative → `aria-hidden` |
+| Dark line-art **emblem** (empty/error/404 art, reduced-motion loader emblem) | `logo/syconia-logo-symbol-monochrome-on-dark.png` | Alabaster #FAF9F6 (18.9:1); decorative → `aria-hidden`; symbol-only per DESIGN-SYSTEM §3 (full-lockup variant `syconia-logo-monochrome-on-dark.png` for editorial display-size contexts) |
 | OG default card | `social/syconia-og-default.png` | Non-video pages; per-video OG = runtime proxy thumbnail (SEO.md) |
 
 ## Favicon configuration (browser-compatible; wired at M1-T005)
