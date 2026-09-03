@@ -11,3 +11,4 @@ coverage/
 .DS_Store
 /.skills/
 /docs/releases/*.local
+.cache/
