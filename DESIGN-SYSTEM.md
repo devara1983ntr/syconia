@@ -115,7 +115,7 @@ Cinematic composition, deep shadows, controlled highlights, sophisticated framin
 - Microcopy ≤ 8 words for actions; explanations ≤ 2 sentences.
 
 ## 13. Theming architecture
-Tokens live in one CSS-variables layer (`/app/styles/tokens.css`) consumed by Tailwind v4 `@theme` and `motion` variants. Themes = token value swaps only (components untouched): `theme-night` (default/only v1); future `theme-seasonal`, `theme-light` `[PROPOSED]`. Admin/premium/white-label theming hooks noted in PRD2 §12 — none active in v1.
+Tokens live in one CSS-variables layer (`/app/styles/tokens.css`) consumed by Tailwind v4 `@theme` and `motion` variants. Themes = token value swaps only (components untouched): `theme-night` (default/only v1); future `theme-seasonal`, `theme-light` `[PROPOSED]`. The internal admin panel consumes the same token layer (operational surfaces only); no other theming hooks exist in v1.
 
 ## 14. Brand quality gate (audit before any release — PRE-RELEASE §9)
 □ Logo fidelity (official assets only) □ clear-space rule honored □ no logo below 96px (wordmark) □ brand-color fidelity (raw hex only in tokens file) □ typography consistency (2 families only) □ gold-as-accent law □ component/token compliance □ favicon/app-icon correct □ glass limited to 3 surfaces □ motion transform/opacity only □ reduced-motion honored □ loading ostiole present □ empty/error states branded □ no SaaS-generic nor tube-site styling anywhere □ watermark placement correct □ SEO uses official spelling.

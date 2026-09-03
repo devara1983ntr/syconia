@@ -27,7 +27,7 @@ All public and admin surfaces conform to WCAG 2.2 AA. Third-party embed players 
 - Page titles unique & descriptive; `lang="en"`.
 
 ## 4. Contrast & color (1.4.1/1.4.3/1.4.11)
-Token table (DESIGN-SYSTEM §4) guarantees: body ≥ 7:1, secondary ≥ 4.5:1, tertiary ≥ 4.5:1 (≥14px only), gold-as-accent law (large/UI use only), focus ring ≥ 3:1 against adjacent, non-text UI (icons/badges) ≥ 3:1. Verified by unit test over computed values + axe on all states.
+Token table (DESIGN-SYSTEM §4) guarantees: body (Alabaster) 18.9:1, secondary ≥ 4.5:1, tertiary ≥ 4.5:1 (≥14px only); gold-on-dark rule per DESIGN-SYSTEM §4 — Ostiole Gold `#C5A059` (8.1:1) and Champagne Gold `#E6D3A0` (13.4:1) on Obsidian both pass AA for normal-size text and may be used for text accents, links and labels; the large-only restriction applies to light surfaces only; focus ring ≥ 3:1 against adjacent, non-text UI (icons/badges) ≥ 3:1. Verified by unit test over computed values + axe on all states.
 
 ## 5. Zoom, reflow, text spacing (1.4.4/1.4.10/1.4.12)
 Usable at 200% zoom and 320px width: no horizontal scroll, no clipped controls (fluid layouts, wrapping toolbars). Text-spacing overrides (line-height/letter/word) never break layouts. Player remains operable at 200% (controls scale with rem).
