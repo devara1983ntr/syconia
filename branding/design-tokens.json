@@ -1,0 +1,135 @@
+{
+  "$meta": {
+    "name": "SYCONIA Design Tokens — production foundation",
+    "version": "1.0.0",
+    "date": "2026-09-03",
+    "sources": [
+      "DESIGN-SYSTEM.md v1.0.2 §4 (color) §5 (typography) §6 (space/radius/elevation/border) §8 (responsive) §9 (motion)",
+      "ACCESSIBILITY.md §2 (focus) §4 (contrast) §7 (targets)",
+      "SCREENS.md S-00 (chrome) S-07 (watch max-width)",
+      "GESTURES.md (interaction thresholds)"
+    ],
+    "rules": [
+      "Single source for M1-T003 /app/styles/tokens.css generation; values here mirror the specs verbatim — do not fork.",
+      "Raw hex is permitted ONLY in this file and its CSS descendant (CI-CD G-8).",
+      "Entries marked \"_decision\" fix values the specification leaves open; each cites its rationale and is registered in .ai/DECISIONS.md. They are documented decisions, not invented requirements.",
+      "Contrast ratios computed per WCAG relative-luminance formula vs Obsidian #09090B; computed math governs conformance (brand-guidelines PDF figures do not compute — discrepancy B-1, DESIGN-SYSTEM §4)."
+    ],
+    "dark_theme_only_v1": true
+  },
+  "color": {
+    "brand": {
+      "emerald":   { "hex": "#012A21", "role": "primary backdrop band, hero washes, emerald surfaces" },
+      "obsidian":  { "hex": "#09090B", "role": "app background (dark theme is the only theme)" },
+      "gold":      { "hex": "#C5A059", "role": "Ostiole Gold — accents, active states, emblem line" },
+      "champagne": { "hex": "#E6D3A0", "role": "Champagne Gold — wordmark accents, secondary accents, focus ring" },
+      "alabaster": { "hex": "#FAF9F6", "role": "primary text on dark, editorial highlights" }
+    },
+    "semantic": {
+      "background":        { "value": "#09090B", "use": "page" },
+      "surface":           { "value": "#121214", "use": "cards, table rows" },
+      "surface-elevated":  { "value": "#1A1A1E", "use": "modals, dropdowns, drawer" },
+      "surface-emerald":   { "value": "#012A21", "use": "hero bands, category cards" },
+      "text-primary":      { "value": "#FAF9F6", "contrast_on_obsidian": "18.9:1", "use": "body/titles" },
+      "text-secondary":    { "value": "#B9B7B0", "contrast_on_obsidian": "9.9:1",  "use": "meta, captions" },
+      "text-tertiary":     { "value": "#8A8880", "contrast_on_obsidian": "5.6:1",  "use": "disabled, fine print (>=14px only)" },
+      "border":            { "value": "#26262B", "use": "hairlines, dividers" },
+      "accent":            { "value": "#C5A059", "contrast_on_obsidian": "8.1:1",  "use": "active nav, links, highlights" },
+      "accent-strong":     { "value": "#E6D3A0", "contrast_on_obsidian": "13.4:1", "use": "focus ring, emphasis text" },
+      "success":           { "value": "#4EC9A0", "contrast_on_obsidian": "9.6:1",  "use": "positive status" },
+      "warning":           { "value": "#E3B341", "contrast_on_obsidian": "10.2:1", "use": "caution, SLA amber" },
+      "error":             { "value": "#F08A84", "contrast_on_obsidian": "8.2:1",  "use": "errors, destructive" },
+      "focus":             { "value": "#E6D3A0", "use": "focus ring color" },
+      "scrim":             { "value": "rgba(9,9,11,0.56)", "use": "overlays" },
+      "glass":             { "value": "rgba(9,9,11,0.72)", "use": "header-on-scroll, drawer, player chrome only (blur 12px)" }
+    },
+    "status_color_rules": "functional-only; desaturated toward palette; no new hues; gold-as-text law per DESIGN-SYSTEM §4 (both golds pass AA normal text on dark; body copy stays Alabaster as editorial hierarchy; large-only restriction applies to light surfaces only)."
+  },
+  "typography": {
+    "families": {
+      "serif": { "font": "Fraunces", "license": "SIL OFL 1.1", "file": "branding/fonts/fraunces/Fraunces-VF.ttf", "use": "hero headlines, section titles, editorial/legal titles, major numbers, empty-state serif lines" },
+      "sans":  { "font": "Inter",   "license": "SIL OFL 1.1", "file": "branding/fonts/inter/Inter-VF.ttf",     "use": "everything else (nav, buttons, forms, tables, metadata, admin)" }
+    },
+    "wordmark": "official asset only (branding/syconia-primary-logo.png or transparent variant) — never typeset",
+    "variable_fonts": "single variable TTF per family (Fraunces: SOFT/WONK/opsz/wght; Inter: opsz/wght); weights <400 forbidden for text",
+    "italics": "_decision D-008: no italic style in v1 — no specification requires italics; italic instances are therefore not bundled",
+    "scale": {
+      "display": "clamp(34px,6vw,64px)/1.05 serif",
+      "h1": "clamp(26px,4vw,40px)/1.15 serif",
+      "h2": "clamp(20px,3vw,28px)/1.25 serif",
+      "h3": "18px/1.4 sans-semibold",
+      "body": "16px/1.7 sans",
+      "meta": "13px/1.5 sans",
+      "overline": "12px/0.12em uppercase sans-medium",
+      "data": "13px tabular-nums sans"
+    },
+    "rules": "min body 16px; measure 70–80ch; text-wrap: balance on headings; subsets+preload+font-display swap per PERFORMANCE §2 (wired in M1-T004)"
+  },
+  "space": {
+    "base": "8px",
+    "scale": { "space-1": "4px", "space-2": "8px", "space-3": "16px", "space-4": "24px", "space-5": "32px", "space-6": "40px", "space-7": "48px", "space-8": "64px", "_note": "spec fixes only --space-1:4px … --space-8:64px on an 8px base (DESIGN-SYSTEM §6); intermediate steps interpolated on that base — decision D-006" },
+    "section_rhythm": ["64px", "96px", "128px"],
+    "logo_clear": "--space-logo-clear = 4× ostiole-dot diameter (DESIGN-SYSTEM §3); applied as padding around all logo placements",
+    "grid": { "gutter": "16px <1024, 24px >=1024", "columns": "2→6 per SCREENS S-02" }
+  },
+  "radius": { "sm": "6px (chips, inputs)", "md": "10px (cards)", "lg": "16px (modals/sheets)", "full": "pill (pills, avatars)" },
+  "border": { "hairline": "1px solid #26262B", "gold_hairline": "reserved: active nav rail + focus ring ONLY" },
+  "elevation": {
+    "1": "0 1px 2px rgba(0,0,0,.5)",
+    "2": "0 8px 24px rgba(0,0,0,.45)  (drawer, modal)",
+    "3": "0 16px 48px rgba(0,0,0,.55) (fullscreen overlays)",
+    "rules": "shadows only; no glows, no colored shadows"
+  },
+  "glass": { "background": "var(--color-glass) rgba(9,9,11,0.72)", "blur": "12px", "surfaces": ["header on scroll", "drawer", "player chrome"], "restrictions": "nowhere else" },
+  "focus": { "ring": "2px solid #E6D3A0", "offset": "2px (Obsidian gap)", "never": "outline:none without replacement", "contrast": "ring >=3:1 vs adjacent (ACCESSIBILITY §4)" },
+  "targets": { "controls": "44×44px min", "nav_rows": "48px min", "spacing_between": ">=8px (WCAG 2.5.8)" },
+  "interaction_states": {
+    "sources": "DESIGN-SYSTEM §10 (each primitive: default/hover/active/focus/disabled/loading) + §9 motion table",
+    "hover_veil": "card veil opacity 0.4→0 on hover/focus (DESIGN-SYSTEM §9)",
+    "hover_underline": "gold underline grow 120ms on overlay buttons (GESTURES §4)",
+    "state_values": "_decision D-006b: per-component state values (hover surfaces, pressed scale, disabled opacity) are fixed in each primitive's Storybook spec at M1-T008…T010 against these tokens; disabled text = --color-text-tertiary (5.6:1, >=14px). No ad-hoc values."
+  },
+  "breakpoints": { "min_width_px": [480, 768, 1024, 1280, 1440], "mobile_first": true },
+  "viewport_audit_matrix": [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920],
+  "responsive_invariants": "no horizontal overflow at 320px; wordmark→symbol <480px; media 16:9; motion transform/opacity only",
+  "container": {
+    "_decision": "D-006 — spec fixes only S-07 watch max-w 1280; the ladder below extends that documented value consistently",
+    "content_max_w": "1280px (watch stage + page content, >=1024)",
+    "gutters": "16px <1024, 24px >=1024",
+    "measure": "70–80ch for long-form text",
+    "hero_band": "full-bleed emerald bands; inner content respects content_max_w"
+  },
+  "z_index": {
+    "_decision": "D-006 — ladder derived from spec'd component layering (SCREENS S-00 drawer/scrim, ERROR-STATES toasts, GESTURES §5 shortcuts overlay, full-screen failure ladder)",
+    "base": 0,
+    "header_sticky": 100,
+    "scrim": 200,
+    "drawer": 300,
+    "modal_sheet": 400,
+    "player_failure_overlay": 450,
+    "toast": 500,
+    "shortcuts_overlay": 600,
+    "dev_only": "no z-index value outside this ladder (G-8 lint extension at M1-T002 may enforce)"
+  },
+  "motion": {
+    "library": "motion/react (LazyMotion domAnimation)",
+    "transitions": {
+      "page_route": "opacity 0→1 180ms ease-out + translateY 8→0",
+      "drawer": "translateX -100%→0 260ms cubic-bezier(0.22,1,0.36,1); scrim fade 200ms",
+      "modal": "scale .96→1 + fade 200ms; sheet translateY 100%→0 280ms",
+      "card_hover": "scale 1→1.02 180ms + veil 0.4→0",
+      "card_to_watch": "shared-element expand 280ms (reduced-motion: fade)",
+      "skeleton_shimmer": "1.6s linear loop translateX sweep",
+      "ostiole_loader": "dot scale 1→1.12 + opacity pulse 1.2s alternating (brand loading signal)",
+      "toast": "slide-up + fade 200ms; auto-dismiss 4s (pause hover/focus)",
+      "stagger": "children 40ms apart, max 12 animated nodes"
+    },
+    "laws": "transform/opacity only; no infinite animations besides loader (pauses off-screen); will-change transient",
+    "reduced_motion": "prefers-reduced-motion: reduce → durations 0, opacity-only <=100ms, no shimmer/pulse loops, loader = static emblem"
+  },
+  "imagery": {
+    "content_thumbnails": "source-provided media via image proxy — never authored (DESIGN-SYSTEM §11)",
+    "category_hero": "deterministic token-palette gradient meshes, generated locally at runtime — no static files, no external art",
+    "ui_illustration": "line-art emblem exports + typography only"
+  }
+}

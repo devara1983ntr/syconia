@@ -107,6 +107,7 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 | Gate | Status | Note |
 |---|---|---|
 | [M0-GATE](./gates/M0-GATE.md) | PASS | PASS 2026-09-03 (evidence in gate file) |
+| [DA-GATE](./gates/DA-GATE.md) | PASS WITH CONDITIONS | Design & asset readiness 2026-09-03 — asset pack verified; C-1 (AG-002 visual sign-off) due before M1-GATE; C-2 (AG-001 vector masters) open |
 | [M1-GATE](./gates/M1-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [M2-GATE](./gates/M2-GATE.md) | BLOCKED | BLOCKED while B-001 open |
 | [M3-GATE](./gates/M3-GATE.md) | NOT_STARTED | NOT_STARTED |

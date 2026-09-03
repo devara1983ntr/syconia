@@ -39,3 +39,21 @@ NFR table (PRD §9) → PERFORMANCE/SECURITY/SEO/ACCESSIBILITY/TESTING docs → 
 - **Duplicated tasks:** none — one deliverable per task; overlapping areas (e.g., tokens) split by boundary (M1-T003 tokens vs M1-T005 brand assets).
 - **Contradictory requirements:** none open — all previously audited contradictions (H-1, M-1, G-01…G-34) were resolved in v1.0.1/v1.0.2; phase-label mapping handled by DECISIONS D-001 without scope change.
 - **Unresolved (recorded, not guessed):** G-04/B-001 (source authorization — operator), B-002 (counsel review), B-003 (hosting) — see BLOCKERS.md.
+
+## 9. Asset requirements → assets → tasks → verification (added 2026-09-03, asset-readiness directive)
+
+| Asset requirement | Specification | Asset(s) delivered | Wiring task | Verification | Gate |
+|---|---|---|---|---|---|
+| Logo configuration set (primary/symbol/light/dark/mono) | DESIGN-SYSTEM §2–§3 | ASSET-LOGO-001…003 (official) + -010…012 (derived, round-trip/symmetry/purity checks) | M1-T005, M1-T013 | ASSET-MANIFEST §Logo | DA-1 |
+| Favicon package (16/32/ico; svg pending vector master) | DESIGN-SYSTEM §2; brand guidelines (16px audit) | ASSET-FAV-001…004 | M1-T005 | ASSET-MANIFEST §Favicon | DA-2 |
+| App icon set (512/192/180) | DESIGN-SYSTEM §2; ARCHITECTURE (PWA) | ASSET-ICON-001…003 | M1-T005 | ASSET-MANIFEST §App icon | DA-3 |
+| Player watermark (128px, 20%, bottom-right, spec'd behaviors) | DESIGN-SYSTEM §2; SCREENS S-07; GESTURES §6 | ASSET-WM-001 + README §Watermark usage spec | M3-T001 | ASSET-MANIFEST §Watermark | DA-4 |
+| Licensed self-hosted typography (no substitution) | DESIGN-SYSTEM §5 | ASSET-FONT-001/002 (OFL 1.1, SHA-256) | M1-T004 | ASSET-MANIFEST §Typography | DA-5 |
+| Icon system (library + inventory + rules; no emoji/Unicode) | DESIGN-SYSTEM §7 | ICON-SYSTEM.md (mapped to specs) | M1-T002 (pin), M1-T008…T010, M3 chrome | ICON-SYSTEM §Verification | DA-6 |
+| Design-token foundation | DESIGN-SYSTEM §4–§9 | design-tokens.json (+ decisions D-005…D-008 for open values) | M1-T003 | token cross-check vs DESIGN-SYSTEM | DA-7 |
+| Player visual dependencies (no unmet image needs) | GESTURES §2–§7; SCREENS S-07 | audit in README §Player (icons+CSS+ostiole+watermark) | M3-T001…T003 | README audit table | DA-8 |
+| Image strategy (no fake content) | DESIGN-SYSTEM §11; PRD C-1 | README §Image system rules | M2-T015+ (runtime) | README rules + G-7 gate | DA-9 |
+| Social/OG (brand-real) | SEO.md §OG | ASSET-SOC-001 + runtime per-video thumbs | M5-T002 | ASSET-MANIFEST §Social | DA-10 |
+| A11y visual basis (focus/contrast/states/reduced-motion) | ACCESSIBILITY §2/§4/§6; DESIGN-SYSTEM §9/§10 | tokens + README §Accessibility | M1-T003/T008…T010 | contrast unit tests (TESTING §6) | DA-11 |
+
+Orphan analysis (assets): every delivered asset traces to a spec requirement above; no asset exists without a requirement row; AG-001/002/003 are the only unmet/unclosed items (see ASSET-GAPS.md).

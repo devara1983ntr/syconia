@@ -8,7 +8,7 @@ Version 1.0.0 · 2026-09-03 · Goal: prove **every implementation-relevant requi
 | PRD2.md | feed semantics, sorts, cursors §4, cache matrix, adapters §6, taxonomy governance, flags, SLOs, risks | M2-T004/T005/T007/T010, M3-T005/T006, M4-T008, M5-T001 | COVERED |
 | SCREENS.md (22 screens) | S-00…S-11, S-07R, A-01…A-10 + cross-screen matrix | M1-T012…T016, M2-T015…T017, M3-T004…T010, M4-T002…T008 — each screen ≥1 task | COVERED (S-07R in M3-T007; shortcuts overlay M1-T013; search/filter sheets M2-T016) |
 | UX-FLOWS.md | F1…F10 + navigation state machine §13 | M1-T013/T017 (nav/back), M2-T016 (URL state), M3-T004…T007, M4 tasks; flows asserted in E2E golden journeys (M1-T017, gates) | COVERED |
-| DESIGN-SYSTEM.md | tokens, typography, motion, 30+ primitives, brand rules §14 gate | M1-T003…T010, M1-T018 (gallery), M5 PRE-RELEASE §9 audit row | COVERED |
+| DESIGN-SYSTEM.md | tokens, typography, motion, 30+ primitives, brand rules §14 gate | **asset pack staged 2026-09-03** (DA-GATE: logo/favicon/icon/watermark/fonts/tokens/icon-system — branding/ + ASSET-MANIFEST), M1-T003…T010, M1-T018 (gallery), M5 PRE-RELEASE §9 audit row | COVERED (asset readiness front-loaded; UI tasks consume the pack) |
 | GESTURES.md | capability model, touch/mouse/keyboard, player machine §6.9, appendix machines §10 | M3-T001…T003, M3-T008/T009; machines tested at M3-GATE 3.1/3.2 | COVERED |
 | ARCHITECTURE.md | 3-plane architecture, repo layout §3, adapters §6, jobs §5, env §12, invariants §15 | M1-T001/T007, M2-T003…T007, M5-T005/T006; invariants asserted at every gate | COVERED |
 | DATABASE.md | 18 tables, indexes, roles §7, retention §6, slug/dedup policies | M2-T001/T002, M2-T019 (retention), M4-T009 (audit grants); G-4 at M2-GATE | COVERED |
