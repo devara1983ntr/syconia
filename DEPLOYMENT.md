@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | DEPLOYMENT.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` |
+| Document | DEPLOYMENT.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` |
 
 ---
 

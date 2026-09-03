@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | AGENT.md · v1.0.1 · 2026-09-03 |
+| Document | AGENT.md · v1.0.2 · 2026-09-03 |
 | Audience | AI coding agents (and humans) implementing this repository. Read this file fully before writing any code. |
 
 ---

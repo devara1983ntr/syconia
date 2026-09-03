@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Document | PRD2.md — advanced specification complementing [PRD.md](./PRD.md) |
-| Version | 1.0.1 — Documentation QA Audit · Date: 2026-09-03 |
+| Version | 1.0.2 — Gap-Audit Patch · Date: 2026-09-03 |
 | Status | All mechanisms described here are `[REQUIRED]` for v1 unless marked `[PROPOSED]` |
 
 ---
@@ -18,6 +18,7 @@ PRD.md defines *what* SYCONIA is and *who* it serves. This document defines *how
 - **Rail order (Home):** `Trending Now` → `New Releases` → `Most Watched (7d)` → `Rising`. A rail is rendered only if ≥ 4 items qualify; otherwise it is replaced by the next eligible rail (never a stub).
 - **Infinite scroll contract:** first page SSR (12 items/page on mobile grid, 24 on desktop); subsequent pages via cursor. Trigger at 800px from end; prefetch 1 page ahead when `saveData` is false. An explicit “Load more” button always exists as keyboard/mobile fallback and moves focus to the first new item (`aria-live` announcement: “12 more videos loaded”).
 - **End of feed:** footer strip “You’ve reached the end” with two suggestions (Trending, Categories) — never an abrupt void.
+- **Hero eligibility (normative):** `is_available = true` AND `is_hidden = false` AND `trending_score` within global top 10 AND proxied thumbnail verified (proxy 200 at render) AND title length 10–120 chars. The first item in that order is the hero; if none qualifies, the hero is suppressed and rails move up (no fallback fake hero).
 
 ### 2.2 Sorting semantics (normative)
 | Sort | Definition |
@@ -37,6 +38,27 @@ PRD.md defines *what* SYCONIA is and *who* it serves. This document defines *how
 - Thumbnail treatment: posters render with a subtle brand-consistent dim/blur (8px, 40% opacity veil) until hover (pointer:fine) or first tap-release (touch); a settings toggle “Discreet thumbnails: on/off” persists in localStorage only — `[REQUIRED]` (privacy UX, zero server state).
 - History hygiene: watch pages set `document.title` to the neutral base brand title on `visibilitychange` hidden (tab-mask), and offer “Clear session traces” (clears localStorage session id + beacons queue) in the footer — `[REQUIRED]`.
 - Referrer hygiene: all external links (source, provenance) use `rel="nofollow noopener noreferrer"`; Referrer-Policy `strict-origin-when-cross-origin` sitewide (SECURITY.md §4).
+
+### 2.5 Related-rail composition (normative — G-05 resolution)
+Ordered candidate pool for a watch page `V`:
+1. **Bucket A — same primary category:** videos sharing V's first category, ranked `trending_score DESC`.
+2. **Bucket B — shared tags:** videos sharing ≥1 tag with V (excluding Bucket A), ranked `shared_tag_count DESC, trending_score DESC`.
+3. **Bucket C — trending backfill:** global trending, ranked `trending_score DESC`.
+Global exclusions across all buckets: `V` itself, `is_hidden`, `is_available=false`, blocked entries, sources currently disabled. Dedupe by `id`. Rail = first 6 of the merged pool (A then B then C); rail rendered only if ≥4 items — else hidden (no stub). Continuation (`More` / `relatedCursor`) walks the identical pool with the stable composite key `(bucket, shared_tag_count, trending_score, id)` — deterministic across requests (API §4.2).
+
+### 2.6 View-count semantics (normative — G-06 resolution)
+- A **view** = one distinct `(session_id, video_id, calendar day)` with ≥1 quartile milestone (`q25|q50|q75|end`) — deduped in aggregation (`COUNT(DISTINCT session_id)` per video/day where event IN quartiles), so replays and beacon duplicates never double-count.
+- `views_24h` / `views_7d`: rolling sums of daily distinct-session counts (jobs, DATABASE §2.2). `views_total`: cumulative sum maintained by the nightly rollup. `WatchDTO.viewCount` = `views_total`.
+- Display rounding (watch page + admin): `<1000` exact · `1,000–999,999` → `X.Xk` · `≥1,000,000` → `X.XM`.
+
+### 2.7 Stale-request / race / cancellation policy (normative — G-08 resolution)
+- Every URL/query param change produces a new TanStack Query cache key → automatic query supersession; in-flight fetches are **aborted** on key change (`AbortController`); responses arriving for abandoned keys are discarded (last-write-wins rendering).
+- Suggest endpoint: each request carries a client `seq`; responses with `seq` < latest rendered `seq` are dropped (out-of-order guard).
+- Duplicate/idempotent beacons: no cancellation (safe by §2.6 aggregation dedupe).
+- Mutations (report/contact): single-flight — submit button disabled while in-flight; duplicate submits impossible; retries only after network-class failure with unchanged payload.
+
+### 2.8 Filter semantics under empty results (normative — G-27 resolution)
+The zero-result relaxation chain (§3.3) applies to the text query `q` **only**. Filters and sort are **never auto-relaxed or auto-removed**. A filtered query yielding zero items renders **E-02b** (ERROR-STATES) with an explicit **Clear filters** action; the response may include a `notice: "filters_cleared_suggestion"` hint but the server never silently changes the client's filter state.
 
 ## 3. Ranking & analytics mathematics
 

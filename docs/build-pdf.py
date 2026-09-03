@@ -13,7 +13,7 @@ from weasyprint import HTML
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "SYCONIA-PROJECT-SPECIFICATION.pdf"
 
-VERSION, DATE = "1.0.1", "2026-09-03"
+VERSION, DATE = "1.0.2", "2026-09-03"
 
 # (section number, PDF part title, doc path)
 SECTIONS = [

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | TESTING.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` |
+| Document | TESTING.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` |
 | Stack | Vitest (unit) · Testing Library (component) · Playwright (E2E + API) · axe-core (a11y) · Lighthouse CI (perf) · Zod contract tests |
 
 ---
@@ -47,7 +47,7 @@ Viewports (all suites): 320, 375, 390, 430, 768, 1024, 1280, 1440, 1920. No hori
 
 ## 5. Feature/interaction matrix (selection; full grid maintained alongside specs)
 Search (F-04): suggest keyboard combobox (arrow/enter/esc), debounce, relaxation chain, trend fallback — T-36…T-39.
-New endpoints (API §4.7b/§4.8b): interaction-event whitelist enforcement (unknown event dropped+logged, never stored) — T-87; csp-report age-exempt intake, sampling cap, 204-always, malformed tolerated — T-88.
+New endpoints (API §4.7b/§4.8b): interaction-event whitelist enforcement (unknown event dropped+logged, never stored) — T-87; csp-report age-exempt intake, sampling cap, 204-always, malformed tolerated — T-88. Contact endpoint (API §4.11): honeypot silent-drop, field validation, queue routing, rate limit — T-89. Admin contracts (API §5.1): DTO shapes both directions, sort whitelists + defaults, `confirmation_required` on destructive ops, `terms_not_verified` enable block, weight-sum validation, slug immutability — T-90.
 Player (F-08): capability-driven chrome rendering (per flag set — parametrized), keyboard F/T/ESC, failure ladder incl. alternate embed, buffering chip, autoplay muted-only policy, background unload, rotate chip — T-40…T-48 (per GESTURES §9).
 Navigation: drawer open/close/swipe/esc/focus-return, back-arrow semantics table (UX-FLOWS §13) on every screen pair — T-49…T-52.
 Gestures: tap/double-tap/long-press/drag/swipe behaviors with `player_api` stub vs `iframe` stub — T-53…T-56.

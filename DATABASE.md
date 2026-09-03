@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | DATABASE.md · v1.0.1 · 2026-09-03 |
+| Document | DATABASE.md · v1.0.2 · 2026-09-03 |
 | Status | Target schema `[REQUIRED]` — no database exists yet; this document is the authoritative implementation spec for `drizzle-kit` migrations. |
 
 Conventions: `snake_case` identifiers; UUID PKs (`gen_random_uuid()`); `created_at/updated_at timestamptz NOT NULL DEFAULT now()`; soft-state enums as Postgres enums; all FKs `ON DELETE` explicit; all timestamps UTC. Money features absent by design (no payments — PRD §3.2). **No media blobs, ever.**
@@ -47,7 +47,7 @@ Lifecycle: created by admin (code-reviewed adapter module must exist); disabled 
 | id | uuid PK | |
 | source_id | uuid | NOT NULL FK→sources(id) ON DELETE RESTRICT |
 | source_video_id | text | NOT NULL; **UNIQUE(source_id, source_video_id)** |
-| slug | text | NOT NULL UNIQUE — public URL id (`{words}-{shortid}`), regex `^[a-z0-9-]{3,96}$` |
+| slug | text | NOT NULL UNIQUE — public URL id, regex `^[a-z0-9-]{3,96}$`. **Generation algorithm (normative):** `slugify(title)` → keep the first 2–3 words (each ≤12 chars, stripped to `[a-z0-9-]`, no trailing hyphen) + `-` + 8-char base62 random suffix (crypto-random); collision on UNIQUE(slug) → regenerate suffix (max 3 attempts, then lengthen to 12 chars); slug is **immutable** after creation; non-latin titles fall back to the suffix alone (`sy-<12 chars>`) |
 | title | text | NOT NULL, 1–300 chars (source-provided; never fabricated) |
 | description | text | NULL, ≤5000 chars |
 | duration_seconds | integer | NULL CHECK (30–28800) |
@@ -68,7 +68,7 @@ Lifecycle: created by admin (code-reviewed adapter module must exist); disabled 
 | content_hash | text | NOT NULL — sha256(normalized core fields) for drift detection |
 
 Indexes: UNIQUE(slug); UNIQUE(source_id, source_video_id); GIN `search_vector` (generated tsvector over title, weighted A, description B) with trigger refresh; GIN trigram on title (`pg_trgm` gin_trgm_ops); BTREE (is_available, is_hidden, published_at DESC); BTREE (source_id, last_seen_at DESC); BTREE (views_total DESC); BTREE (views_7d DESC); BTREE (views_24h DESC).
-Lifecycle: upserted by sync; pruned to `unavailable` after 30d absent from source feed (configurable) unless hidden-for-takedown (retained as suppression record). Nothing is ever hard-deleted except by explicit admin purge (audited).
+Lifecycle: upserted by sync; pruned to `unavailable` after 30d absent from source feed (configurable) unless hidden-for-takedown (retained as suppression record). Nothing is ever hard-deleted except by explicit admin purge (audited). **Cross-source duplicate policy (normative):** the same external media exposed via two different sources remains **two distinct catalog entries** (each carries its own provenance, embed, and takedown state — per-source suppression is the compliance unit); `content_hash` is recorded for a future optional grouping/dedup feature `[PROPOSED]` only; no v1 merging.
 
 ### 2.3 `categories` / 2.4 `tags` — closed local taxonomy
 | categories | | tags | |
@@ -146,8 +146,8 @@ id · source_id FK NOT NULL · started_at/finished_at NOT NULL/NULL · status en
 key text PK · value jsonb NOT NULL · updated_by uuid FK→admin_users NULL · updated_at. Reads cached 60s; writes audited.
 
 ### 2.18 `interaction_events` — anonymous product analytics (raw; retention 90d)
-id uuid PK · session_id uuid NOT NULL (rotating cookie, not a person) · event text NOT NULL (server-enforced whitelist: `age_ack, page_view, rail_impression, card_open, search_submit, suggest_select, filter_apply, report_open, nav_drawer_open, nav_back_used, player_error` — API.md §4.7b) · video_slug text NULL · context jsonb NOT NULL DEFAULT '{}' (bounded enum/string fields ≤64 chars, validated) · created_at timestamptz NOT NULL DEFAULT now().
-Indexes: (event, created_at DESC); (created_at) for purge scans; (session_id) never exposed in queries by policy. **No IP, no UA, no identifiers beyond the rotating session uuid.** Nightly rollup into `daily_stats` aggregates (events per type per day) precedes the 90-day purge (mirrors watch_events lifecycle).
+id uuid PK · session_id uuid NOT NULL (rotating cookie, not a person) · event text NOT NULL (server-enforced whitelist: `age_ack, page_view, rail_impression, card_open, search_submit, suggest_select, filter_apply, report_open, nav_drawer_open, nav_back_used, player_error` — API.md §4.7b) · video_id uuid **FK→videos ON DELETE CASCADE, NULL** (linkage unified with `watch_events` — the client sends `videoSlug`, the server resolves it to `video_id` at insert; unknown slug → event dropped silently and counted) · context jsonb NOT NULL DEFAULT '{}' (bounded enum/string fields ≤64 chars, validated) · created_at timestamptz NOT NULL DEFAULT now().
+Indexes: (event, created_at DESC); (created_at) for purge scans; (video_id, created_at DESC). **No IP, no UA, no identifiers beyond the rotating session uuid.** Nightly rollup into `daily_stats` aggregates (events per type per day) precedes the 90-day purge (mirrors watch_events lifecycle).
 
 ## 3. Relationships summary
 - sources 1—N videos (RESTRICT delete: provenance integrity)

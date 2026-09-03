@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | DESIGN-SYSTEM.md · v1.0.1 · 2026-09-03 |
+| Document | DESIGN-SYSTEM.md · v1.0.2 · 2026-09-03 |
 | Branding source of truth | `/branding/syconia-brand-guidelines.pdf` (v1.0, Sept 2026) + `/branding/` assets — `[EXISTING]` |
 | Conflicts | PDF §5 "Corporate Decoy" rejected (PRD §17 C-2); unrelated business units out of scope (C-3) |
 

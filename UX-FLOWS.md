@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | UX-FLOWS.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` target behavior |
+| Document | UX-FLOWS.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` target behavior |
 
 Screens: [SCREENS.md](./SCREENS.md) · Interaction physics: [GESTURES.md](./GESTURES.md) · States: [ERROR-STATES.md](./ERROR-STATES.md)
 

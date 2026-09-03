@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | GESTURES.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` target behavior |
+| Document | GESTURES.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` target behavior |
 
 ---
 
@@ -85,6 +85,24 @@ Rules: shortcuts never fire while typing in a field; all are discoverable via `?
 - **Unsupported/geo-blocked source:** `probe` marks `geo`; UI shows “This selection isn’t available in your region” + Related (no external workaround links — deliberate policy).
 - **Privacy/discretion in player:** watermark 128px @20% opacity bottom-right (brand asset, `aria-hidden`); neutral clipboard/title behaviors (UX-FLOWS §14); no history API writes beyond our routes; referrer hygiene on all external links.
 
+### 6.9 Player state machine (normative)
+
+| State | Meaning | UI |
+|---|---|---|
+| `POSTER` | stage rendered, embed not initialized | poster + play affordance (our chrome) |
+| `INITIALIZING` | user tapped play; embed loading | ostiole pulse; timeout budget 8s |
+| `READY` | embed loaded, capable controls bound | capability chrome visible |
+| `PLAYING` / `PAUSED` / `BUFFERING` | native embed states (mirrored only when capability signal exists) | native + our corner overlay |
+| `ENDED` | playback finished | native end state; related rail emphasis |
+| `SOURCE_ERROR` | embed error/timeout after init | E-07 ladder |
+| `GEO_BLOCKED` | probe/`geo` | E-08 |
+| `REMOVED` | item hidden/taken down while watching | E-06 notice + exits |
+| `UNAUTHORIZED_SOURCE` | source disabled/breaker OPEN mid-session | E-18 chip + stage to E-07 ladder |
+| `OFFLINE` | network lost during session | E-05 inline in stage; embed pauses natively |
+
+**Valid transitions:** `POSTER→INITIALIZING→READY→{PLAYING⇄PAUSED, BUFFERING⇄READY, →ENDED}` · `READY/PLAYING/PAUSED/BUFFERING→{SOURCE_ERROR, GEO_BLOCKED, REMOVED, UNAUTHORIZED_SOURCE, OFFLINE}` · any error state `→INITIALIZING` (Retry) or `→POSTER` (alternate variant/back) · `OFFLINE→READY` (auto on `online` + retry).
+**Invalid transitions (must be prevented in code):** `POSTER→{PLAYING,ENDED,any error}` (no playback claims before init) · `INITIALIZING→ENDED` · `ENDED→PLAYING` (replay must pass `→READY`) · any error state `→PLAYING/PAUSED` directly (healing only via `INITIALIZING`) · `POSTER→POSTER` re-entry without route change. No state may render fabricated playback (FR-10); every error state offers ≥2 exits (E-07 ladder).
+
 ## 7. Documented platform divergences (honest limitations)
 | Platform | Divergence |
 |---|---|
@@ -100,6 +118,17 @@ Rules: shortcuts never fire while typing in a field; all are discoverable via `?
 - Long-press card (touch): context sheet (Copy link / Report / Hide locally `[PROPOSED]`).
 - Drawer: edge-swipe open (rightward from left 24px), swipe-left close, scrim tap close.
 - Overscroll: chained at document level only; rails use `overscroll-behavior: contain`.
+- Haptics: **none in v1** — browser vibration APIs are inconsistently implemented and untrusted for this context; no gesture triggers vibration. (Deliberate policy, not an omission.)
 
 ## 9. Player interaction acceptance matrix (test basis — TESTING §7 T-40…T-48)
 Every capability flag × {tap, double-tap, drag, long-press, keyboard F/T/ESC, fullscreen enter/exit, buffering chip, failure ladder, geo block, autoplay policy, rotate chip, background unload} × {Chromium, Firefox, iOS Safari (manual/BrowserStack), Android Chrome} — expected results per §3–§7; divergence rows assert the *documented* divergence, not an idealized one.
+
+## 10. Formal state-machine appendix (normative)
+
+**A. Age gate** — states: `UNVERIFIED` (any route, content withheld server-side) → `VERIFIED` (Enter; cookie 12 months) | `EXITED` (Leave site → external neutral page; terminal — no return transition in-session). `VERIFIED→UNVERIFIED` only via cookie expiry/deletion/Clear-session-traces. Invalid: `UNVERIFIED→` anything content-bearing; `EXITED→VERIFIED` without a fresh visit.
+
+**B. Takedown** (`takedown_requests.status`) — `new → under_review → actioned | rejected | escalated`; `escalated → under_review | actioned`; auto-hide on arrival applies to reasons {copyright, underage, nc} while remaining `new` (visibility is a *separate* videos flag, not a status). Invalid: `actioned|rejected → any` (terminal; re-open = new request referencing the record); `new → actioned` without a review pass is blocked by the UI contract (A-08 resolve modal requires an action + notes).
+
+**C. External source / circuit breaker** — per source: `disabled → enabled` (requires `terms_verified_at`, API §5.1 gate) · breaker: `closed → open` (5 consecutive failures or >30% of 50) → `half_open` (10 min) → `closed` (probe success) | `open` (probe failure, timer resets). `enabled ↔ disabled` is orthogonal to breaker state (disabling an open breaker keeps its state until the re-enable probe). Invalid: `half_open → closed` without a probe; `disabled → open` (no traffic flows while disabled).
+
+**D. Network (client)** — `online ⇄ offline` (`online`/`offline` events) · `online+queue → flushing → online` (beacon/mutation queue drains with jitter, cap 50, drop-oldest) · any region render state may carry the offline banner independently. Invalid: `offline → flushing` (never flush while offline); auto `online` recovery never replays route navigation (visible-region refresh + toast only).

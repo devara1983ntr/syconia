@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | CI-CD.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` |
+| Document | CI-CD.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` |
 | Platform | GitHub Actions + Vercel (primary path); portable to Docker/VPS (DEPLOYMENT §7) |
 
 ---

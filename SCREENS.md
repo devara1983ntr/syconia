@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | SCREENS.md · v1.0.1 · 2026-09-03 |
+| Document | SCREENS.md · v1.0.2 · 2026-09-03 |
 | Status | All screens `[REQUIRED]` (no UI code exists yet). Layouts reference DESIGN-SYSTEM.md tokens; flows reference UX-FLOWS.md; states reference ERROR-STATES.md. |
 | Viewports | Mobile 320–479 · Phablet 480–767 · Tablet 768–1023 · Desktop 1024–1535 · Wide ≥1536 (design tokens scale fluidly; all layouts are mobile-first) |
 
@@ -31,7 +31,7 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 - **URL/Route:** interstitial overlay over target route (no separate URL; deep-link preserved).
 - **Purpose:** 18+ legal access control (PRD F-01); first brand impression.
 - **Layouts (all viewports — identical centered composition):** Obsidian full-screen; symbol-only emblem (breathing 4s scale 1→1.03 loop — disabled under reduced-motion); serif headline “A private world awaits.”; sub-copy “You must be 18 or older to enter SYCONIA.”; body “By entering you confirm your age and agree to our Terms.”; primary button **I am 18 or older — Enter** (Ostiole Gold fill, Obsidian text) / secondary **Leave site** (ghost) / text link Terms of Service.
-- **Behavior:** server-rendered when age cookie absent — content never ships. Enter → set cookie+localStorage, fade-out 240ms, reveal app, route intact. Leave → neutral external redirect. Terms link opens in new tab (the only pre-gate action).
+- **Behavior:** server-rendered when age cookie absent — content never ships. Enter → set cookie+localStorage, fade-out 240ms, reveal app, route intact. Leave → fixed neutral redirect target `https://www.wikipedia.org` (configurable via `AGE_LEAVE_URL`; must be a non-adult, neutral page — never an adult or competitor property). Terms link opens in new tab (the only pre-gate action).
 - **Keyboard:** focus moves into dialog on load; Enter key activates focused control; trap enforced.
 - **Touch:** large targets (56px buttons), no hover dependencies.
 - **Error:** none possible client-side (static); Terms load failure → inline “Open Terms in a new tab” retry link.
@@ -97,7 +97,7 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 - **Layouts:** hero band (name, description, count, curated hero) + grid identical to S-03 main area; FilterBar reduced to Duration + Sort (category fixed).
 - **Sorting:** full sort set (PRD2 §2.2). **Pagination:** infinite + Load more.
 - **Sub-navigation:** breadcrumb Home / Categories / {Name} (aria-labelled, schema.org BreadcrumbList).
-- **States:** as S-03; empty category → E-02 variant “This gallery is being curated — explore Trending”.
+- **States:** as S-03; cold-empty category → E-02 variant “This gallery is being curated — explore Trending”; **filtered-empty** (duration filter/sort yields zero while the category has items) → E-02b “No videos match the current filters” + **Clear filters** (filters are never auto-relaxed — PRD2 §2.8).
 - **Keyboard/touch:** grid tab order; pull-to-refresh `[PROPOSED]`.
 - **Back arrow:** → `/categories` (or history).
 - **Transitions:** shared hero from index card `[PROPOSED]`; standard otherwise.
@@ -106,7 +106,7 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 
 - **URL/Route:** `/tags`, `/tags/[slug]`
 - **Purpose:** long-tail discovery; SEO surface.
-- **Index layout:** search-in-tags field + featured tags (pill row) + alphabetical section list with counts (desktop 3-col, mobile 1-col with sticky letter headers).
+- **Index layout:** search-in-tags field (server-backed: `GET /api/tags?q=` prefix filter, API §4.6 — not a client-only filter) + featured tags (pill row) + alphabetical section list with counts (desktop 3-col, mobile 1-col with sticky letter headers); list is cursor-paginated (48/page) with letter-section headers computed client-side per loaded page.
 - **Detail layout:** compact header (tag chip + count) + S-03 grid minus category filter; related-tags row (co-occurrence top-8).
 - **Sorting/Pagination/States:** as S-05. **Back arrow:** index → Home; detail → `/tags`.
 - **Keyboard:** letters jump sections (typeahead on list).
@@ -119,7 +119,7 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 - **Tablet:** single column; related below metadata.
 - **Mobile:** stage sticky-top on scroll-down (collapsed 16:9 mini-player `[PROPOSED]`); metadata stacked; related horizontal snap row.
 - **Stage chrome (ours):** before-init poster (thumb + centered Ostiole play affordance); loading ostiole pulse; capability-driven control bar **only if** adapter declares `player_api` delegation — otherwise native source controls + our corner overlay: [fullscreen] [theater] [open-at-source] [report] [watermark].
-- **Meta row:** provenance chip “Provided by {source}” (→ source page, `nofollow noopener`), publish date, view count (approx, formatted), **Report** button (opens S-07R modal: reason select, details textarea, optional email, submit → toast “Reference TKN-XXXXXX recorded”).
+- **Meta row:** provenance chip “Provided by {source}” (→ source page, `nofollow noopener`), publish date, view count (approx, formatted), **Report** button (opens S-07R modal: reason select, details textarea, optional email, **hidden honeypot field `website`** — visually hidden, `tabindex=-1`, `aria-hidden`; if filled, the submission is silently accepted-and-dropped server-side, SECURITY §10 — submit → toast “Reference TKN-XXXXXX recorded”).
 - **Tags:** chips → tag detail. **Description:** collapsed 3 lines + “More”.
 - **Related:** same category → same tags → trending fill (PRD2); card = compact VideoCard.
 - **Menus/buttons:** share (copy link, neutral preview note), report, open-at-source (external icon).
@@ -131,6 +131,8 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 - **Touch:** tap stage toggles controls (source player) / our overlay buttons 44px; double-tap far-left/right seek ±10s *if delegated*; swipe-down on fullscreen exits (GESTURES §3).
 - **Orientation:** rotating to landscape in fullscreen-eligible state offers fullscreen (system-backed; iOS falls back to source player behavior — documented divergence, GESTURES §7).
 - **Transitions:** entrance: stage fade + metadata slide-up 240ms; related cards stagger.
+- **Theater persistence:** theater mode persists for the browser session only (`sessionStorage` key `sy_theater`); never persisted across sessions or synced to the URL.
+- **No-JS fallback (`<noscript>`, FR-9):** metadata (title, tags, description, provenance) renders server-side without JavaScript; the stage shows a branded static panel “JavaScript is required to play this video.” with a plain `<a>` **Open at source** link (works without JS); no fabricated player chrome.
 - **A11y:** stage `role="region" aria-label`; report modal dialog (focus trap, ESC, labelled); watermark `aria-hidden`; autoplay muted-only (policy GESTURES §6).
 - **Security:** iframe sandbox/allowlist (ARCHITECTURE §6); report CSRF; no media on our origin.
 - **Analytics:** `watch_start`, quartiles, `player_error{source,code}`, `report_open/submit`, related CTR.
@@ -143,7 +145,7 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 - **Contact:** structured channels (abuse, legal/DMCA, privacy, general) as definition list + form (subject enum, message ≤2000, email optional) → `/api/report`-style handler with rate limit.
 - **States:** static pages (no skeletons needed); form has validation, inline errors, success panel with reference code.
 - **Back arrow:** → Home. **Keyboard/a11y:** standard prose semantics; anchors focusable; TOC `nav` labelled.
-- **SEO:** `noindex` optional per page policy (SEO.md §6); 2257 + DMCA indexed.
+- **SEO:** **decision (SEO.md §1/§6): all legal/info pages are indexable with canonical** — Terms, Privacy, DMCA, 2257, Cookies, About, Contact (compliance surfaces; standard practice); no “optional noindex” ambiguity remains.
 
 ## S-09 — 404 Not Found
 

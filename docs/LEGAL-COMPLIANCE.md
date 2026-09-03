@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | docs/LEGAL-COMPLIANCE.md · v1.0.1 · 2026-09-03 · Audience: operator (Roshan) + counsel |
+| Document | docs/LEGAL-COMPLIANCE.md · v1.0.2 · 2026-09-03 · Audience: operator (Roshan) + counsel |
 | Purpose | The compliance frame referenced by PRD §5, SECURITY.md §12, DEPLOYMENT.md §2 and PRE-RELEASE.md §15. This is a specification of obligations and controls, not legal advice — final copy and jurisdictional strategy require qualified counsel. |
 
 ---

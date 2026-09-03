@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | ARCHITECTURE.md · v1.0.1 · 2026-09-03 |
+| Document | ARCHITECTURE.md · v1.0.2 · 2026-09-03 |
 | Status | Target architecture. **No application code exists yet in this repository** — every element below is `[REQUIRED]` unless marked `[EXISTING]` (brand assets) or `[PROPOSED]`. |
 
 ---
@@ -112,7 +112,7 @@ Error boundaries: `error.tsx` per route group; `global-error.tsx` last resort; p
 
 - **API plane** = Next.js Route Handlers under `/app/api`, thin controllers: parse (Zod) → authorize (age cookie / admin session) → rate-limit → service (`/lib/services`) → respond. No business logic in handlers.
 - **Services layer**: `catalogService` (list/get/related), `searchService`, `taxonomyService`, `ingestService`, `analyticsService`, `takedownService`, `adminService`. Pure functions over Drizzle — unit-testable without HTTP.
-- **Jobs plane**: `scripts/jobs/*` invoked by platform cron (Vercel Cron / GitHub Actions / system crontab on VPS): `sync-sources` (per-source, isolated), `probe-availability`, `rollup-daily`, `purge-expired`, `refresh-trending`. All idempotent, all write `sync_runs`/`audit_log` rows, all kill-switchable via `system_settings`.
+- **Jobs plane** (canonical registry — single source of truth): `scripts/jobs/*` invoked by platform cron (Vercel Cron / GitHub Actions / system crontab on VPS): `sync-sources` (per-source, isolated), `probe-availability`, `rollup-daily`, `purge-expired`, `refresh-trending`, `mapping-backfill` (on-demand after mapping-rule create/update — UX-FLOWS §9), `sitemap-refresh` (post-sync — CI-CD §7). All idempotent, all write `sync_runs`/`audit_log` rows, all kill-switchable via `system_settings`.
 - **Middleware** (edge): ① age-cookie enforcement on public content + `/api` (PRD FR-1), ② security headers (SECURITY.md §4), ③ admin session redirect, ④ request-id injection for log correlation.
 
 ## 6. Adapter architecture (external sources)
@@ -123,7 +123,7 @@ Error boundaries: `error.tsx` per route group; `global-error.tsx` last resort; p
 - **Embed rendering:** server components validate `embed.url` against the source manifest before emitting the iframe; attributes locked: `sandbox="allow-scripts allow-same-origin allow-presentation"`, `allowfullscreen`, `referrerpolicy="strict-origin-when-cross-origin"`, `loading="lazy"`. No third-party `<script>` ever loads on our origin.
 
 ## 7. Data flow — watch session
-1. RSC renders watch shell from DB (ISR) with reserved 16:9 stage → 2. client island initializes embed per adapter capability set → 3. anonymous session id (cookie `sy_sid`, uuid v4, 30d) ties beacons → 4. quartile beacons POST `/api/events/watch` (batched, `keepalive` on hide) → 5. rollups nightly. No PII anywhere in the chain.
+1. RSC renders watch shell from DB (ISR) with reserved 16:9 stage → 2. client island initializes embed per adapter capability set → 3. anonymous session id (cookie `sy_sid`, uuid v4) ties beacons → 4. quartile beacons POST `/api/events/watch` (batched, `keepalive` on hide) → 5. rollups nightly. No PII anywhere in the chain. **`sy_sid` lifecycle (normative):** 30-day expiry from issuance, **no renewal** (a fresh `sy_sid` is minted after expiry — continuity of analytics is deliberately sacrificed for privacy); rotated immediately by the “Clear session traces” control (UX-FLOWS §14).
 
 ## 8. Caching architecture
 Layered: CDN/ISR (tag purge via `revalidateTag`) → route-handler micro-cache → Drizzle prepared statements → TanStack Query client cache. TTLs and invalidation events: single source of truth in PRD2 §5. Invariant: **admin hide/takedown purges `video:{id}` + listing tags and is effective ≤60s end-to-end** (E2E-verified).

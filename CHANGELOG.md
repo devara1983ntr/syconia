@@ -2,6 +2,23 @@
 
 All notable changes to the SYCONIA project are documented here. Format: Keep a Changelog; versioning: SemVer.
 
+## [1.0.2] — 2026-09-03 — Pre-Implementation Gap-Audit Patch
+
+Applied the 8-group patch plan resolving the gap audit (G-01…G-34). No scope, architecture, brand, or legal changes; documentation-only.
+
+### Added / Resolved
+- **API.md:** §5.1 complete admin data contracts (9 DTOs + all 16 mutation request schemas, sort whitelists, `confirmation_required`, `terms_not_verified`, `weights_invalid`, `slug_immutable`); §4.11 `POST /api/contact` (honeypot, queue routing, CTN references); `notice?` field on `/api/videos` 200 DTO; `relevance` restricted to search on `/api/videos` with explicit rejection semantics; duration buckets half-open `[0,300)/[300,900)/[900,1800)/[1800,∞)`; `related=<slug>` continuation param + stable relatedCursor key; taxonomy contract (categories bounded ≤200 unpaginated; tags `q=` prefix + cursor 48/page).
+- **PRD2.md:** §2.5 related-rail composition (buckets A/B/C, exclusions, ≥4 rule, deterministic key); §2.6 view-count semantics (distinct session/day with ≥q25; display rounding); §2.7 stale-request/race/cancellation policy (query-key supersession, AbortController, suggest `seq` guard, single-flight mutations); §2.8 filters never auto-relaxed; §2.1 hero eligibility criteria.
+- **GESTURES.md:** §6.9 formal player state machine (10 states, valid + invalid transitions); §8 v1 haptics policy (none); §10 formal state-machine appendix (age gate, takedown, source/breaker, network).
+- **ERROR-STATES.md:** E-02b filtered-empty state; E-05/§5 v1 offline mechanism corrected (no SW — client-side nav E-04 + /offline link; hard-nav limitation documented, SW `[PROPOSED]` F-21).
+- **SECURITY.md:** §6 normative cookie contracts (`sy_age_ok` signed payload format; `sy_admin` opaque token, hashed at rest; `sy_csrf` issuance/rotation), CSRF flows for admin + public forms, admin lockout scope (per username AND truncated IP).
+- **SCREENS.md:** S-01 leave-site target (`https://www.wikipedia.org`, env `AGE_LEAVE_URL`); S-05 filtered-empty → E-02b; S-06 server-backed tag search + pagination; S-07 theater persistence (sessionStorage) + no-JS `<noscript>` fallback + S-07R honeypot field; S-08 legal indexing decision applied.
+- **DATABASE.md:** slug generation algorithm (normative); cross-source duplicate policy (distinct entries per source; content_hash future-only); `interaction_events.video_id` FK unified with watch_events (server resolves slug→id).
+- **ARCHITECTURE.md:** canonical jobs registry synchronized (+`mapping-backfill`, +`sitemap-refresh`); `sy_sid` lifecycle (30d, no renewal, rotate on clear-traces).
+- **SEO.md:** E-06b unavailable pages emit `noindex, follow` with automatic restoration; legal/info indexing decision (all indexable, canonicals).
+- **TESTING.md:** T-89 (contact), T-90 (admin contracts) rows. `.env.example`: `AGE_LEAVE_URL`.
+- **Unresolved by design:** G-04 (external-source selection) remains an operational M2 operator gate — no provider named, assumed, or integrated (per audit instruction).
+
 ## [1.0.1] — 2026-09-03 — Documentation QA Audit & Corrections
 
 ### Fixed (documentation defects found by QA audit)

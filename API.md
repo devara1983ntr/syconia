@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | API.md · v1.0.1 · 2026-09-03 |
+| Document | API.md · v1.0.2 · 2026-09-03 |
 | Status | Target contract `[REQUIRED]`. Base URL: same-origin `/api`. All endpoints HTTPS-only. |
 
 Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope `{ error: { code, message, requestId } }`; cursor pagination per PRD2 §4; every response carries `x-request-id`. **Global precondition:** all `/api/*` except `/api/health`, `/api/ready`, `/api/csp-report`, `/api/admin/login` require the signed age cookie (`sy_age_ok`) — enforced by middleware (403 `age_verification_required` otherwise).
@@ -28,14 +28,14 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 
 ### 4.1 `GET /api/videos` — catalog list
 - **Purpose:** rails, listings, related-source lists. **Auth:** P0.
-- **Query:** `rail=trending|new|most_watched|rising` · `category=<slug>` · `tag=<slug>` · `source=<slug>` · `duration=short|medium|long|extended` (≤5, 5–15, 15–30, >30min) · `sort=relevance|new|longest|most_watched` (default per rail) · `cursor?` · `limit` (server-clamped 6–48).
-- **200:** `{ items: VideoCardDTO[≤48], nextCursor: string|null }` where `VideoCardDTO = { slug, title, durationSeconds|null, thumbUrl (proxied), sourceName, publishedAt|null, categories: string[] (slugs, ≤3), tags: string[] (slugs, ≤5) }`.
+- **Query:** `rail=trending|new|most_watched|rising` · `category=<slug>` · `tag=<slug>` · `source=<slug>` · `related=<slug>` (related-rail continuation, PRD2 §2.5) · `duration=short|medium|long|extended` — half-open buckets `short [0,300) · medium [300,900) · long [900,1800) · extended [1800,∞)` seconds; boundary values belong to the higher bucket · `sort=new|longest|most_watched` (**`relevance` is search-only** — undefined without `q`; rejected here with `validation_failed` sanitized to the rail/listing default) · default sort: rail-specific per PRD2 §2.2; listings default `new` · `cursor?` · `limit` (server-clamped 6–48).
+- **200:** `{ items: VideoCardDTO[≤48], nextCursor: string|null, notice?: string }` where `notice` is an optional human-readable degradation banner key (e.g., `some_sources_unavailable`, `filters_cleared`) and `VideoCardDTO = { slug, title, durationSeconds|null, thumbUrl (proxied), sourceName, publishedAt|null, categories: string[] (slugs, ≤3), tags: string[] (slugs, ≤5) }`.
 - **Behavior:** 30s micro-cache; queries hit indexes (DATABASE §5); hidden/unavailable excluded at SQL level.
 - **Errors:** `validation_failed` (unknown enum → sanitized to default + 200 with `notice` field — never hard-fail browsing), `rate_limited`.
 - **Timeout/retry:** server-side p50 budget 80ms; client TanStack retry ×2 (backoff 500ms/2s) on 5xx/network only.
 
 ### 4.2 `GET /api/videos/{slug}` — watch payload
-- **Auth:** P0. **200:** `WatchDTO = { slug, title, description, durationSeconds, publishedAt, viewCount, source: { slug, name, provenanceUrl }, embed: { url (validated vs manifest), type, capabilities: [] }, categories[], tags[], relatedCursor }`.
+- **Auth:** P0. **200:** `WatchDTO = { slug, title, description, durationSeconds, publishedAt, viewCount, source: { slug, name, provenanceUrl }, embed: { url (validated vs manifest), type, capabilities: [] }, categories[], tags[], relatedCursor }`. **`relatedCursor` continuation contract (normative):** the Related rail is ordered by the stable composite key `(bucket, shared_tag_count, trending_score, id)` (composition PRD2 §2.5); `relatedCursor` is a signed cursor over that key; continuation calls `GET /api/videos?related=<slug>&cursor=<relatedCursor>` and walks the identical ordering — deterministic across requests; live exclusions (hidden/unavailable/blocked) are re-applied at each page. `viewCount` = `views_total` (semantics PRD2 §2.6; display rounding client-side).
 - **Errors:** `not_found` — **canonical status rule (single source of truth, mirrored in SEO.md §5 and ERROR-STATES E-06):** hidden (admin/takedown) or removed items → **HTTP 404** with helpful E-06 UI (no existence leak, URL exits indexes); temporarily unavailable (probe pending, may return) → **HTTP 200** with E-06 UI + related rail; `source_unavailable` if breaker open for that source (payload still returned 200 with `embed:null` + `notice` so UI can render E-04 with related content).
 - **Caching:** 600s ISR-aligned; purged by tag on hide.
 
@@ -47,14 +47,16 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 - **Auth:** P0. **200:** `{ suggestions: [{ type: query|title|category|tag, label, slug?, thumbUrl?, score }][≤8] }` (zero-query → trending queries). 30s cache; p95 <120ms SLO.
 
 ### 4.5 `GET /api/categories` / `GET /api/categories/{slug}` · 4.6 `GET /api/tags` / `GET /api/tags/{slug}`
-- **Auth:** P0. Visible-only taxonomy with `videoCount` (cached estimate). Listing response includes hero metadata for categories. **Errors:** `not_found`.
+- **Auth:** P0. **Categories (bounded, unpaginated by design):** the visible category set is admin-curated and closed (≤200 rows); the index response is the complete ordered list `[{ slug, name, description, videoCount, sortOrder }]` ordered `(sort_order, name)` — no cursor. Changing this bound requires a spec change, not a query.
+- **Tags (paginated + filterable):** `GET /api/tags?q=&cursor=` — `q` (optional, 1–48 chars, prefix match, case/diacritic-folded) is the server-side `search-in-tags` mechanism used by S-06; page size fixed 48; default ordering `(usage_count DESC, name ASC)`; response `{ items: [{ slug, name, videoCount, isFeatured }], nextCursor }`. Tag detail `{ slug, name, description, videoCount }`. **Errors:** `not_found`; unknown `q` characters normalized (never 422 for content).
+- Both responses: visible-only taxonomy; `videoCount` is a cached estimate (60s). Listing response includes hero metadata for categories.
 
 ### 4.7 `POST /api/events/watch` — view beacons (P1)
 - **Body:** `{ videoSlug, event: start|q25|q50|q75|end, sessionTs }`; session from `sy_sid` cookie server-side. **202** always (fire-and-forget; malformed → dropped, logged). Batched client-side (≤10/beacon, `navigator.sendBeacon` on hide). Rate 120/min.
 
 ### 4.7b `POST /api/events/interaction` — product analytics beacons (P1)
 - **Purpose:** the interaction events catalogued in PRD.md §10 (`age_ack`, `page_view`, `rail_impression`, `card_open`, `search_submit`, `suggest_select`, `filter_apply`, `report_open`, `nav_*`, `player_error`).
-- **Body:** `{ events: [{ event: <whitelist enum>, ts, videoSlug?, rail?, context? }] }` — batched ≤20, `navigator.sendBeacon`-capable; **event names outside the whitelist are dropped and logged** (never stored raw). No free-form properties beyond bounded enum/string fields (≤64 chars).
+- **Body:** `{ events: [{ event: <whitelist enum>, ts, videoSlug?, rail?, context? }] }` — batched ≤20, `navigator.sendBeacon`-capable; **event names outside the whitelist are dropped and logged** (never stored raw). No free-form properties beyond bounded enum/string fields (≤64 chars). `videoSlug` is resolved server-side to `video_id` at insert (FK integrity, DATABASE §2.18); unknown/deleted slug → event dropped silently and counted (`event_drop_unknown_video`) — never a client error.
 - **Response:** **202** always. Rate class: 120/min (shared with watch beacons). Persists to `interaction_events` (DATABASE §2.18; 90-day retention, nightly rollup, then purge).
 
 ### 4.8 `POST /api/events/client-error`
@@ -71,6 +73,12 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 
 ### 4.10 `GET /api/health` / `GET /api/ready`
 - `health`: 200 `{ok:true}` liveness. `ready`: checks DB `SELECT 1` + breaker map; 503 with component detail (no secrets) — used by deploy gate & uptime monitor.
+
+### 4.11 `POST /api/contact` — contact/general messages (P0 + CSRF)
+- **Purpose:** the S-08 Contact form (SCREENS.md) — abuse, legal, privacy, and general messages that are not per-video reports (those use §4.9).
+- **Body:** `{ subject: abuse|legal|privacy|general, message: 1–2000 chars, contactEmail?: RFC-valid }` + hidden honeypot field `website` (present in the form, visually hidden, `tabindex=-1`, `aria-hidden`, `autocomplete="off"`; if non-empty the request is **accepted 202 and silently dropped** — logged `contact_honeypot`, no storage).
+- **Behavior:** entries are persisted into `takedown_requests` (DATABASE §2.11) with `reason=other_legal`, `status=new`, `video_id=NULL`, `details = "[{subject}] {message}"` — one operational queue, no new table. Subjects `abuse`/`legal` surface in the A-08 queue with an amber (non-auto-hide) priority hint; they never auto-hide content (no video is referenced).
+- **Response:** **202** `{ reference: "CTN-XXXXXX" }` (shown in UI confirmation panel). **Errors:** `validation_failed` (field details), `rate_limited` (5/h). CSRF: double-submit token + Origin check (SECURITY §6).
 
 ## 5. Admin endpoints (P2, all mutations audited)
 
@@ -93,6 +101,36 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 | `/api/admin/sync` | POST | trigger `{sourceSlug}` | CRON_SECRET or P2; idempotent; audit |
 
 Errors: 401/403 + `validation_failed`; all bodies Zod-validated; no bulk ops without explicit `confirm:true`.
+
+### 5.1 Admin data contracts (normative — implementable without guessing)
+
+**Common rules:** list responses `{ items: T[], nextCursor: string|null }` (signed cursors, PRD2 §4); mutations return the updated entity; page size 25; every mutation requires the `x-csrf-token` header (SECURITY §6) and writes an `audit_log` row; destructive operations (mapping DELETE, tag merge, block DELETE, category/tag delete) additionally require `confirm: true` in the body → else **422 `confirmation_required`**. **Server-side table sorting (A-03…A-10):** every admin list accepts `sort=<field>:<asc|desc>`; whitelists — videos `title|published_at|views_total|updated_at` · categories `sort_order|name|usage_count` · tags `usage_count|name` · sources `priority|slug` · mappings `priority|hit_count` · takedowns `received_at|status` · audit `created_at|action`; any other field → `validation_failed`. Defaults: videos `updated_at:desc`, takedowns `received_at:asc`, audit `created_at:desc`, categories `sort_order:asc`, tags `usage_count:desc`, sources `priority:asc`, mappings `priority:desc`.
+
+| DTO | Fields (types) |
+|---|---|
+| `AdminVideoRow` | id uuid, slug, title, sourceSlug, durationSeconds int\|null, publishedAt iso\|null, isAvailable bool, isHidden bool, hiddenReason `admin\|policy\|null`, viewsTotal bigint, thumbUrl, categories slug[], tags slug[], updatedAt iso |
+| `AdminCategory` | id, slug, name, description string\|null, isVisible bool, sortOrder int, usageCount int, updatedAt |
+| `AdminTag` | id, slug, name, description string\|null, isFeatured bool, usageCount int, updatedAt |
+| `AdminSource` | id, slug, displayName, isEnabled bool, termsVerifiedAt iso\|null, termsReferenceUrl https\|null, priority int, breakerState `closed\|open\|half_open`, lastSync {status, itemsSeen, itemsAdded, itemsFailed, durationMs}\|null, capabilities string[] |
+| `AdminMapping` | id, sourceSlug, direction `category\|tag`, pattern, isRegex bool, targetSlug, priority int, isActive bool, hitCount int, lastHitAt iso\|null |
+| `AdminTakedown` | id, reference `TKN-XXXXXX\|CTN-XXXXXX`, video {slug,thumb}\|null, sourceUrlClaimed https\|null, reason enum, status enum, action enum\|null, receivedAt, resolvedAt iso\|null, reporterEmail\|null, notes\|null |
+| `AdminBlock` | id, sourceSlug, sourceVideoId\|null, pattern\|null, scope `video\|pattern`, reason, createdAt, createdBy username |
+| `AdminAuditRow` | id, adminUser, action (whitelist §8), entityType, entityId, requestId, createdAt; `diff` included detail-on-expand only |
+| `AdminOverview` | kpis {sessions24h, watches24h, searchZeroResultRate, takedownQueueOldestHours}, sources[AdminSource], recentSyncRuns[≤8], queueAlerts[] |
+
+**Mutation request bodies (Zod-validated):**
+- `POST /api/admin/login` `{username 3–32, password 8–128}` → 200 `{ admin: {username}, csrfToken }` + `sy_admin` session cookie + `sy_csrf` cookie (SECURITY §6). 401 `unauthorized` on bad credentials (attempt counter in response).
+- `PATCH …/videos/{id}/visibility` `{isHidden: bool, reason?: admin|policy}` (reason required when `isHidden=true` → 422) → `AdminVideoRow`; purges CDN tags `video:{id}` + listing tags.
+- `POST …/videos/{id}/resync` `{}` → 202 `{syncRunId}`; rate 6/min (429).
+- `POST /api/admin/categories` `{name 2–48, slug? (auto-suggested from name, regex `^[a-z0-9-]{2,32}$`, immutable after create), description? ≤280, sortOrder ≥0, isVisible bool}`; `PATCH …/{id}` partial (slug rejected with 422 `slug_immutable`).
+- `POST /api/admin/tags` `{name 2–48, slug?, description?, isFeatured bool}`; `PATCH …/{id}` partial **or** `{mergeIntoId: uuid}` → merge = alias + re-map join rows + soft-hide source tag (audited `tag.merge`); 422 if target == source.
+- `PATCH …/sources/{id}` `{isEnabled?: bool, priority?: 0–1000, termsVerifiedAt?: iso, termsReferenceUrl?: https}` — `isEnabled=true` with `termsVerifiedAt=null` → **422 `terms_not_verified`** (LEGAL-COMPLIANCE §4 gate).
+- `POST /api/admin/mappings` `{sourceSlug, direction, pattern 1–64, isRegex bool (validated compiles), targetSlug, priority 0–1000, isActive}` → triggers `mapping-backfill` job (ARCHITECTURE §5); `PATCH`/`DELETE {confirm:true}`.
+- `PATCH …/takedowns/{id}` `{status: under_review|actioned|rejected|escalated, action?: hide_video|block_pattern|reported_to_source|none, notes? ≤1000}` — `actioned` requires an `action` (422 otherwise); `hide_video` delegates to the visibility contract above; `block_pattern` delegates to the blocks contract.
+- `POST /api/admin/blocks` `{sourceSlug, scope, sourceVideoId? (required if scope=video), pattern? (required if scope=pattern), reason}`; `DELETE …/{id} {confirm:true}` (FR-8 suppression removal is audited).
+- `PATCH /api/admin/settings` — partial per the typed flags in PRD2 §8; `trending_weights {w24,w7,wq}` must sum to 1.0 ± 0.01 → 422 `weights_invalid`; retention 30–180.
+- `POST /api/admin/sync` `{sourceSlug}` → 202 `{syncRunId}` (idempotent per source; superseded runs abort cleanly).
+- `GET /api/admin/audit` filters `{admin?, action?, entityType?, entityId?, from?, to?}` — read-only, CSV export rate-limited 2/min.
 
 ## 6. External adapter architecture (outbound)
 

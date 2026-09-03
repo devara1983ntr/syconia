@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | SECURITY.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` controls |
+| Document | SECURITY.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` controls |
 
 ---
 
@@ -48,8 +48,14 @@ Cache-Control: no-store                      /* on /api/admin/** and watch beaco
 - URL fields validated twice (ingestion + render) against manifest host allowlists (https, no userinfo, standard ports, no `javascript:`/`data:` schemes possible by construction).
 - CSP as second line (§4). No third-party scripts at all — analytics is first-party.
 
-## 6. CSRF considerations
-State-changing endpoints are admin-only (cookie `SameSite=Strict` + per-session CSRF token + Origin check) and public `POST /api/report` (double-submit token + Origin check + rate limit). Age cookie is `SameSite=Lax` (never authorizes writes). Beacons are idempotent inserts with no privilege.
+## 6. CSRF, session tokens & cookie contracts
+State-changing endpoints are admin-only (cookie `SameSite=Strict` + per-session CSRF token + Origin check) and public `POST /api/report` + `POST /api/contact` (double-submit token + Origin check + rate limit). Age cookie is `SameSite=Lax` (never authorizes writes). Beacons are idempotent inserts with no privilege.
+
+**Cookie contracts (normative):**
+- **Age cookie** `sy_age_ok`: HttpOnly, Secure, SameSite=Lax, 12 months. Payload format: `<exp-epoch-seconds>.<hex-hmac-sha256(exp, AGE_SECRET)>` — verified server-side (expiry + signature); malformed/expired/forged = absent (403 path). The localStorage mirror is a non-authoritative UX hint only (the server never reads it).
+- **Admin session cookie** `sy_admin`: HttpOnly, Secure, SameSite=Strict, 8h idle / 24h absolute. Payload: opaque 256-bit random token; `admin_sessions` stores only `sha256(token)`; no role/claim data in the cookie.
+- **CSRF issuance/rotation:** on successful login the server returns `{ csrfToken }` in the body **and** sets a readable (non-HttpOnly) `sy_csrf` cookie; every admin mutation must echo it in the `x-csrf-token` header (compared to the session-bound value). Token is rotated on every login and invalidated on logout/session expiry. Public report/contact use the classic double-submit pattern (token cookie + header echo) with no session binding.
+- **Admin lockout scope:** the failure counter is maintained **per username AND per truncated IP** — either counter reaching 5 within 15 minutes locks both keys for 15 minutes (audited `auth.fail`); attempts against a nonexistent username still count toward the IP counter (no username enumeration).
 
 ## 7. SQL injection prevention
 Drizzle ORM parameterizes every query (no string-built SQL); search uses tsvector/trigram operators with bound parameters; dynamic sort/filter keys are enum-mapped server-side (never interpolated identifiers); DB roles cannot execute DDL (DATABASE §7); logs never contain raw SQL with user input.

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | ACCESSIBILITY.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` — conformance target: **WCAG 2.2 Level AA** (product law; PRD §9) |
+| Document | ACCESSIBILITY.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` — conformance target: **WCAG 2.2 Level AA** (product law; PRD §9) |
 
 ---
 

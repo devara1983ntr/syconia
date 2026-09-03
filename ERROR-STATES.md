@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | ERROR-STATES.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` catalogue — every async surface maps to ≥1 E-XX |
+| Document | ERROR-STATES.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` catalogue — every async surface maps to ≥1 E-XX |
 
 ---
 
@@ -18,9 +18,10 @@
 |---|---|---|---|---|
 | E-01 | Home page | rails API 5xx ×2 | Stage: emblem line-art + “The garden is momentarily closed.” + Retry | Retry → home revalidate; drawer nav unaffected |
 | E-02 | Home/category cold catalog | zero visible items (new deploy) | “The gallery is being curated.” + CTA → Categories/Tags (if also empty → status link) | Operator: run sync (A-06) |
+| E-02b | Filtered listing — zero matches | filters/sort applied yield empty set (catalog itself non-empty) | Distinct state: “No videos match the current filters.” + **Clear filters** action (restores URL to unfiltered listing) + count of relaxed-filter hint (“Without duration filter: N”) | Clear filters; remove chips; filters are never auto-relaxed (PRD2 §3.3) |
 | E-03 | Search zero results | 0 matches incl. relaxation | “Nothing matched ‘{q}’.” + relaxed attempts (if any, labelled “Close matches”) + Trending rail + “Try:” chips | Edit query; chips; back preserves query |
 | E-04 | Search/list API error | 5xx/network | Inline panel “Something interrupted the search.” + Retry (query preserved in field & URL) | Retry; drawer exit; offline banner if cause |
-| E-05 | Global offline | `offline` event / fetch network fail | Slim persistent header banner “Offline — showing cached pages” + per-region inline fallbacks; `/offline` page on hard navigation | Auto-detect `online` → “Back online” toast + refresh visible regions |
+| E-05 | Global offline | `offline` event / fetch network fail | Slim persistent header banner “Offline — showing cached pages” + per-region inline fallbacks; banner links to `/offline` (S-11). **v1 cannot intercept hard navigations** (no service worker) — SW-based interception is `[PROPOSED]` with F-21 | Auto-detect `online` → “Back online” toast + refresh visible regions |
 | E-06 | Watch — item gone | slug hidden (admin/takedown) or removed | **HTTP 404** + full-page: “This selection is no longer available.” + Related rail + Back (canonical status rule, API.md §4.2) | Related; back arrow; report if user believes error |
 | E-06b | Watch — temporarily unavailable | slug `is_available=false` (probe pending, may return) | **HTTP 200** + same E-06 composition + Related rail (item may return) | Related; back arrow; report broken |
 | E-07 | Watch — playback failure | embed timeout 8s / error / breaker | Stage overlay ladder: **Retry** → **Alternate source variant** (if provided) → **Open at source** + **Report**; digest shown | Ladder; item flagged `degraded`; pipeline re-probe |
@@ -45,7 +46,7 @@ Home: hero block + card-row skeletons (12) streamed. Search: field live, grid sk
 Network-class errors: 1 silent auto-retry (800ms, jittered) then manual button. 5xx: manual only (avoid stampede). 429: client honors `Retry-After`, exponential backoff, max 3. Beacons: queued offline, flushed on reconnect (cap 50, drop oldest). All retries preserve scroll anchor, inputs, and URL.
 
 ## 5. Offline behavior detail
-Banner + cached navigation (client history); visible regions render last-good data with “as of HH:MM” stamps; mutations (report) queue-and-warn; auto-recovery toast; hard navigations to uncached routes → `/offline` (S-11). Service-worker caching `[PROPOSED]` (F-21) upgrades this without UX change.
+Banner + cached navigation (client history); visible regions render last-good data with “as of HH:MM” stamps; mutations (report, contact) queue-and-warn; failed **client-side** navigations render E-04 inline with a link to `/offline` (S-11); **hard** navigations while offline show the browser's own offline error in v1 (no service worker — interception arrives only with F-21 `[PROPOSED]`; a documented, accepted v1 limitation). Service-worker caching `[PROPOSED]` (F-21) upgrades this without UX change.
 
 ## 6. Error taxonomy (internal codes ↔ events)
 `ERR_NETWORK · ERR_API_5XX · ERR_VALIDATION · ERR_RATE_LIMIT · ERR_CURSOR · ERR_AGE_GATE · ERR_AUTH · ERR_FORBIDDEN · ERR_NOT_FOUND · ERR_SOURCE_TIMEOUT · ERR_SOURCE_BREAKER · ERR_EMBED_DEAD · ERR_EMBED_GEO` — each maps to beacon `code`, log level, and dashboard facet (PRD2 §9). None contain user data.
