@@ -1,6 +1,6 @@
 # SYCONIA — Documentation Index
 
-Version 1.0.0 · 2026-09-03 · Owner: Roshan · Consolidated PDF: [SYCONIA-PROJECT-SPECIFICATION.pdf](./SYCONIA-PROJECT-SPECIFICATION.pdf)
+Version 1.0.1 · 2026-09-03 · Owner: Roshan · Consolidated PDF: [SYCONIA-PROJECT-SPECIFICATION.pdf](./SYCONIA-PROJECT-SPECIFICATION.pdf)
 
 ## Reading order (recommended)
 

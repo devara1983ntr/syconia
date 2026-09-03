@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | PERFORMANCE.md · v1.0.0 · 2026-09-03 · `[REQUIRED]` budgets & tactics |
+| Document | PERFORMANCE.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` budgets & tactics |
 
 ---
 

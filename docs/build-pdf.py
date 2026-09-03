@@ -13,7 +13,7 @@ from weasyprint import HTML
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "SYCONIA-PROJECT-SPECIFICATION.pdf"
 
-VERSION, DATE = "1.0.0", "2026-09-03"
+VERSION, DATE = "1.0.1", "2026-09-03"
 
 # (section number, PDF part title, doc path)
 SECTIONS = [
@@ -37,9 +37,12 @@ SECTIONS = [
     (18, "Operations — SOP", "SOP.md"),
     (19, "Pre-Release Checklist", "PRE-RELEASE.md"),
     (20, "Agent Instructions & Governance", "AGENT.md"),
-    (21, "Legal & Compliance", "docs/LEGAL-COMPLIANCE.md"),
-    (22, "Documentation Index & Changelog", "docs/DOCUMENTATION-INDEX.md"),
+    (22, "Legal & Compliance", "docs/LEGAL-COMPLIANCE.md"),
+    (23, "Documentation Index & Changelog", "docs/DOCUMENTATION-INDEX.md"),
+    (24, "README & Changelog", "README.md"),
 ]
+# Part 24 appends CHANGELOG.md content after README (same section)
+APPEND = {24: "CHANGELOG.md"}
 ANCHOR = {Path(p).name: f"sec-{num}" for num, _, p in SECTIONS}
 
 GLYPH_MAP = {"❌": "✗", "✅": "✔", "☐": "□", "▸": "›", "❤": "♥", "·": "·"}
@@ -138,6 +141,9 @@ def build():
         aid = f"sec-{num}"
         toc_items.append(f'<li><span class="n">{num}</span><a href="#{aid}">{title}</a></li>')
         doc_html = md_to_html(src.read_text())
+        if num in APPEND:
+            extra = ROOT / APPEND[num]
+            doc_html += md_to_html(extra.read_text())
         body_parts.append(
             f'<section class="part" id="{aid}"><div class="partbanner">'
             f'<div class="pnum">Part {num:02d}</div><h1>{title}</h1></div>'
@@ -153,7 +159,7 @@ def build():
         <b>Consolidated Project Specification</b><br/>
         Version {VERSION} — Documentation Baseline<br/>
         Date {DATE} · Owner / Developer credit: Roshan<br/>
-        Compiled verbatim from the 23-document specification suite
+        Compiled verbatim from the 24-document specification suite
       </div>
       <div class="foot">CONFIDENTIAL — contains design, security, and operational specifications.<br/>
       Content platform for adults 18+. Compliance frame: docs/LEGAL-COMPLIANCE.md.</div>

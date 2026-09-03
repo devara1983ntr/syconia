@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | SECURITY.md · v1.0.0 · 2026-09-03 · `[REQUIRED]` controls |
+| Document | SECURITY.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` controls |
 
 ---
 
@@ -22,8 +22,8 @@ Content-Security-Policy:
   default-src 'self';
   script-src 'self' 'nonce-{random}' 'strict-dynamic';
   style-src 'self' 'unsafe-inline';          /* token layer needs inline vars; no third-party styles */
-  img-src 'self' data: https:;               /* thumbnails via /_next/image proxy; https: narrowed by
-                                                remotePatterns allowlist at the proxy level */
+  img-src 'self' data:;                     /* all thumbnails served via the /_next/image proxy
+                                            (same-origin); data: for inline placeholder art only */
   media-src 'none';                          /* no media on our origin — ever */
   frame-src https://{source-host-allowlist}; /* per-manifest, from enabled sources only */
   connect-src 'self';
@@ -75,7 +75,7 @@ No accounts; anonymous rotating `sy_sid` (30d) for aggregate analytics only; IPs
 Every adapter payload is untrusted: Zod-validated field-wise (PRD2 §6), size/duration plausibility-checked, embed URLs allowlist-checked at ingestion **and** render (defense in depth), unknown fields quarantined to JSONB never rendered raw. Terms verification gate before any source is enabled (API.md §6.1; LEGAL-COMPLIANCE §4). No source HTML is ever parsed for playback URLs — official embed endpoints only (anti-scraping posture + ToS compliance).
 
 ## 14. Dependency & supply-chain security
-Lockfile-only installs (`npm ci`); weekly `npm audit` + automated dependency PRs (SOP §11); CI gate G-5 blocks High/CRIT advisories; pinned action hashes in CI; SBOM generated per release `[PROPOSED]`; no runtime `eval`-class code; icons/fonts from audited OFL sources.
+Lockfile-only installs (`npm ci`); weekly `npm audit` + automated dependency PRs (SOP §11); CI gate G-5 blocks High/CRIT advisories; pinned action hashes in CI; SBOM generated per release `[PROPOSED]`; no runtime `eval`-class code; fonts from audited SIL-OFL sources (Fraunces, Inter); icons via lucide-react (ISC license); brand assets are project-proprietary (guidelines PDF §"Confidential & Proprietary") — license compliance recorded per dependency in the release record.
 
 ## 15. Threat model (STRIDE summary)
 | Threat | Vector | Control |

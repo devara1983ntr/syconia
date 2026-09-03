@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | PRE-RELEASE.md · v1.0.0 · 2026-09-03 |
+| Document | PRE-RELEASE.md · v1.0.1 · 2026-09-03 |
 | Rule | Release ships only when every line below is **PASS**. Any FAIL blocks release; N/A requires written justification by the owner (Roshan) recorded in the release record. Evidence column cites the artifact (CI run URL, dashboard, screenshot, report). |
 
 Legend: ☐ pending · ✅ PASS · ❌ FAIL · ➖ N/A(+justification). This template is completed per release and archived in `/docs/releases/` `[REQUIRED] artifact`.

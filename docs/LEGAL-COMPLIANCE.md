@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | docs/LEGAL-COMPLIANCE.md · v1.0.0 · 2026-09-03 · Audience: operator (Roshan) + counsel |
+| Document | docs/LEGAL-COMPLIANCE.md · v1.0.1 · 2026-09-03 · Audience: operator (Roshan) + counsel |
 | Purpose | The compliance frame referenced by PRD §5, SECURITY.md §12, DEPLOYMENT.md §2 and PRE-RELEASE.md §15. This is a specification of obligations and controls, not legal advice — final copy and jurisdictional strategy require qualified counsel. |
 
 ---
@@ -20,6 +20,7 @@ The supplied brand guidelines' §5 ("Corporate Decoy Deployment") directs presen
 
 ## 4. Third-party content sources
 - Eligibility: sources offering official APIs/feeds/embed programs whose terms permit third-party metadata aggregation + embedding. Before enabling: operator records terms reference URL + verification date (admin Sources gate — API §6.1, SCREENS A-06).
+- **No automatic grant:** an API key, public feed, or embeddable snippet is not itself a licence to redistribute, re-host, or aggregate; per-source terms must affirmatively permit the use we make of them, and silence or ambiguity disables the source until resolved (API.md §6.1).
 - Prohibited: circumventing paywalls/geoblocks or technical measures; bulk scraping outside documented programs; misrepresenting our client to the source.
 - Attribution & provenance: every watch page shows "Provided by {source}" (PRD F-07). Embeds honor source branding/controls (we do not strip attribution — embed terms generally require it).
 - Rate respect: adapter rate budgets + circuit breakers (ARCHITECTURE §6) keep usage within documented limits.

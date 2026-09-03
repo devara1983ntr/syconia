@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | DESIGN-SYSTEM.md · v1.0.0 · 2026-09-03 |
+| Document | DESIGN-SYSTEM.md · v1.0.1 · 2026-09-03 |
 | Branding source of truth | `/branding/syconia-brand-guidelines.pdf` (v1.0, Sept 2026) + `/branding/` assets — `[EXISTING]` |
 | Conflicts | PDF §5 "Corporate Decoy" rejected (PRD §17 C-2); unrelated business units out of scope (C-3) |
 
@@ -49,20 +49,20 @@ Watermark variant (128px, 6pt refined lines, 20% opacity) is derived from the sy
 | `--color-surface` | `#121214` (Obsidian +6% lightness, same hue) | — | Cards, table rows |
 | `--color-surface-elevated` | `#1A1A1E` | — | Modals, dropdowns, drawer |
 | `--color-surface-emerald` | `#012A21` | — | Hero bands, category cards |
-| `--color-text-primary` | `#FAF9F6` | 19.5:1 | Body/titles |
-| `--color-text-secondary` | `#B9B7B0` (Alabaster 72% on Obsidian) | ≥7:1 | Meta, captions |
-| `--color-text-tertiary` | `#8A8880` | 4.6:1 | Disabled, fine print (≥14px only) |
+| `--color-text-primary` | `#FAF9F6` | 18.9:1 | Body/titles |
+| `--color-text-secondary` | `#B9B7B0` (Alabaster 72% on Obsidian) | 9.9:1 | Meta, captions |
+| `--color-text-tertiary` | `#8A8880` | 5.6:1 | Disabled, fine print (≥14px only) |
 | `--color-border` | `#26262B` | — | Hairlines, dividers |
-| `--color-accent` | `#C5A059` | 6.9:1 (large/UI) | Active nav, links, highlights |
-| `--color-accent-strong` | `#E6D3A0` | 11.2:1 | Focus ring, emphasis text |
-| `--color-success` | `#4EC9A0` | 7.4:1 | Positive status (emerald-harmonized) |
-| `--color-warning` | `#E3B341` | 8.1:1 | Caution, SLA amber |
-| `--color-error` | `#F08A84` | 7.9:1 | Errors, destructive (soft coral; never pure red glow) |
+| `--color-accent` | `#C5A059` | 8.1:1 | Active nav, links, highlights |
+| `--color-accent-strong` | `#E6D3A0` | 13.4:1 | Focus ring, emphasis text |
+| `--color-success` | `#4EC9A0` | 9.6:1 | Positive status (emerald-harmonized) |
+| `--color-warning` | `#E3B341` | 10.2:1 | Caution, SLA amber |
+| `--color-error` | `#F08A84` | 8.2:1 | Errors, destructive (soft coral; never pure red glow) |
 | `--color-focus` | `#E6D3A0` | — | 2px ring + 2px Obsidian offset |
 | `--color-scrim` | `rgba(9,9,11,0.56)` | — | Overlays |
 | `--color-glass` | `rgba(9,9,11,0.72)` | — | Header/drawer/player chrome (blur 12px) |
 
-Rules: derived neutrals are lightness steps of the brand hues only — no new hues. Status colors are functional-only and visually harmonized (desaturated toward the palette). **Gold is an accent, never small-body-text color where contrast < 4.5:1** (Ostiole Gold text ≥18.66px bold or ≥24px only; Champagne Gold passes AA at all sizes on Obsidian). No other colors may appear anywhere; CI gate greps for raw hex outside the token file (CI-CD §4 G-8).
+Rules: derived neutrals are lightness steps of the brand hues only — no new hues. Status colors are functional-only and visually harmonized (desaturated toward the palette). **All ratios above are computed per the WCAG relative-luminance formula against Obsidian `#09090B` and are re-verified by unit test (TESTING §6); they are normative for conformance.** Branding-source discrepancy **B-1 (documented per PRD §17 policy):** the brand-guidelines PDF's own contrast figures — Ostiole Gold "3.2:1", Night Emerald "12.8:1", Champagne "2.1:1", Obsidian "19.5:1" (all vs white) — do not match computed WCAG values (2.46:1, 15.5:1, 1.48:1, 19.9:1 respectively). The guidelines remain the *aesthetic* authority; the computed math governs *conformance*. **Gold-as-text law (corrected):** on Obsidian — the only v1 theme — Ostiole Gold computes 8.1:1 and Champagne 13.4:1, so **both pass WCAG AA for normal-size text on dark surfaces** and may be used for text accents, links, labels and emphasis; body copy nevertheless remains Alabaster/secondary as an editorial-hierarchy rule (brand restraint, not contrast necessity). On light surfaces (Alabaster print/letterhead contexts) gold fails (2.46:1 vs white) and is restricted to large or decorative use only. No other colors may appear anywhere; CI gate greps for raw hex outside the token file (CI-CD §4 G-8).
 
 ## 5. Typography
 - **Primary (editorial serif):** **Fraunces** (SIL OFL 1.1) — licensed, self-hosted via `next/font`. Chosen as the legally-safe embodiment of the guidelines' direction (which names proprietary Canela/Ogg as *examples*, never bundled).

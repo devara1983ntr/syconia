@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Document | PRD2.md — advanced specification complementing [PRD.md](./PRD.md) |
-| Version | 1.0.0 — Documentation Baseline · Date: 2026-09-03 |
+| Version | 1.0.1 — Documentation QA Audit · Date: 2026-09-03 |
 | Status | All mechanisms described here are `[REQUIRED]` for v1 unless marked `[PROPOSED]` |
 
 ---
@@ -54,7 +54,7 @@ PRD.md defines *what* SYCONIA is and *who* it serves. This document defines *how
 If strict query yields 0: relax in order — (a) trigram similarity ≥ 0.25, (b) drop lowest-specificity token, (c) tag/category fuzzy. If still 0, render E-03 (ERROR-STATES.md) with trending; the failed query is logged with `relaxed=1` for taxonomy gap analysis (admin Tags screen surfaces gaps weekly).
 
 ### 3.4 Rollup & retention
-Raw `watch_events` and `search_queries` aggregate nightly into `daily_video_stats` / `daily_search_stats`; raw rows purged at 90 days (Settings-tunable 30–180); rollups retained indefinitely (aggregate, non-identifying). Purge job is idempotent and audited.
+Raw `watch_events`, `interaction_events` and `search_queries` aggregate nightly into `daily_video_stats` / `daily_search_stats` / daily event-type aggregates; raw rows purged at 90 days (Settings-tunable 30–180); rollups retained indefinitely (aggregate, non-identifying). The hourly trending job also maintains `videos.views_24h` / `videos.views_7d` (DATABASE §2.2). Purge job is idempotent and audited.
 
 ## 4. Cursor pagination specification
 - Cursor = Base64URL(`{sortKey, id}`), signed with HMAC (server secret) to prevent forgery/tamper (403 on invalid signature).

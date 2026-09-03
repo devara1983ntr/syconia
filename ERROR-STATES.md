@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | ERROR-STATES.md · v1.0.0 · 2026-09-03 · `[REQUIRED]` catalogue — every async surface maps to ≥1 E-XX |
+| Document | ERROR-STATES.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` catalogue — every async surface maps to ≥1 E-XX |
 
 ---
 
@@ -21,7 +21,8 @@
 | E-03 | Search zero results | 0 matches incl. relaxation | “Nothing matched ‘{q}’.” + relaxed attempts (if any, labelled “Close matches”) + Trending rail + “Try:” chips | Edit query; chips; back preserves query |
 | E-04 | Search/list API error | 5xx/network | Inline panel “Something interrupted the search.” + Retry (query preserved in field & URL) | Retry; drawer exit; offline banner if cause |
 | E-05 | Global offline | `offline` event / fetch network fail | Slim persistent header banner “Offline — showing cached pages” + per-region inline fallbacks; `/offline` page on hard navigation | Auto-detect `online` → “Back online” toast + refresh visible regions |
-| E-06 | Watch — item gone | hidden/unavailable slug | Full-page: “This selection is no longer available.” + Related rail + Back | Related; back arrow; report if user believes error |
+| E-06 | Watch — item gone | slug hidden (admin/takedown) or removed | **HTTP 404** + full-page: “This selection is no longer available.” + Related rail + Back (canonical status rule, API.md §4.2) | Related; back arrow; report if user believes error |
+| E-06b | Watch — temporarily unavailable | slug `is_available=false` (probe pending, may return) | **HTTP 200** + same E-06 composition + Related rail (item may return) | Related; back arrow; report broken |
 | E-07 | Watch — playback failure | embed timeout 8s / error / breaker | Stage overlay ladder: **Retry** → **Alternate source variant** (if provided) → **Open at source** + **Report**; digest shown | Ladder; item flagged `degraded`; pipeline re-probe |
 | E-08 | Watch — geo/unsupported | probe `geo` / player refuses region | “This selection isn’t available in your region.” + Related | Related; no circumvention links (policy) |
 | E-09 | Suggest dropdown | error/timeout | Silent dropdown close; field keeps text; icon subtle warn | Type continues; ESC clears |

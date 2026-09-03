@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | DATABASE.md · v1.0.0 · 2026-09-03 |
+| Document | DATABASE.md · v1.0.1 · 2026-09-03 |
 | Status | Target schema `[REQUIRED]` — no database exists yet; this document is the authoritative implementation spec for `drizzle-kit` migrations. |
 
 Conventions: `snake_case` identifiers; UUID PKs (`gen_random_uuid()`); `created_at/updated_at timestamptz NOT NULL DEFAULT now()`; soft-state enums as Postgres enums; all FKs `ON DELETE` explicit; all timestamps UTC. Money features absent by design (no payments — PRD §3.2). **No media blobs, ever.**
@@ -63,9 +63,11 @@ Lifecycle: created by admin (code-reviewed adapter module must exist); disabled 
 | is_hidden | boolean | NOT NULL DEFAULT false — admin/takedown hide (sticky across syncs) |
 | hidden_reason | enum(`admin`,`takedown`,`policy`) | NULL when visible |
 | views_total | bigint | NOT NULL DEFAULT 0 (from rollups) |
+| views_24h | bigint | NOT NULL DEFAULT 0 — job-maintained (hourly trending job, PRD2 §3.1) |
+| views_7d | bigint | NOT NULL DEFAULT 0 — job-maintained rolling 7-day sum (supports `most_watched`/`rising` sorts and cursors, PRD2 §2.2/§4) |
 | content_hash | text | NOT NULL — sha256(normalized core fields) for drift detection |
 
-Indexes: UNIQUE(slug); UNIQUE(source_id, source_video_id); GIN `search_vector` (generated tsvector over title, weighted A, description B) with trigger refresh; GIN trigram on title (`pg_trgm` gin_trgm_ops); BTREE (is_available, is_hidden, published_at DESC); BTREE (source_id, last_seen_at DESC); BTREE (views_total DESC).
+Indexes: UNIQUE(slug); UNIQUE(source_id, source_video_id); GIN `search_vector` (generated tsvector over title, weighted A, description B) with trigger refresh; GIN trigram on title (`pg_trgm` gin_trgm_ops); BTREE (is_available, is_hidden, published_at DESC); BTREE (source_id, last_seen_at DESC); BTREE (views_total DESC); BTREE (views_7d DESC); BTREE (views_24h DESC).
 Lifecycle: upserted by sync; pruned to `unavailable` after 30d absent from source feed (configurable) unless hidden-for-takedown (retained as suppression record). Nothing is ever hard-deleted except by explicit admin purge (audited).
 
 ### 2.3 `categories` / 2.4 `tags` — closed local taxonomy
@@ -143,6 +145,10 @@ id · source_id FK NOT NULL · started_at/finished_at NOT NULL/NULL · status en
 ### 2.17 `system_settings` — typed feature flags (PRD2 §8)
 key text PK · value jsonb NOT NULL · updated_by uuid FK→admin_users NULL · updated_at. Reads cached 60s; writes audited.
 
+### 2.18 `interaction_events` — anonymous product analytics (raw; retention 90d)
+id uuid PK · session_id uuid NOT NULL (rotating cookie, not a person) · event text NOT NULL (server-enforced whitelist: `age_ack, page_view, rail_impression, card_open, search_submit, suggest_select, filter_apply, report_open, nav_drawer_open, nav_back_used, player_error` — API.md §4.7b) · video_slug text NULL · context jsonb NOT NULL DEFAULT '{}' (bounded enum/string fields ≤64 chars, validated) · created_at timestamptz NOT NULL DEFAULT now().
+Indexes: (event, created_at DESC); (created_at) for purge scans; (session_id) never exposed in queries by policy. **No IP, no UA, no identifiers beyond the rotating session uuid.** Nightly rollup into `daily_stats` aggregates (events per type per day) precedes the 90-day purge (mirrors watch_events lifecycle).
+
 ## 3. Relationships summary
 - sources 1—N videos (RESTRICT delete: provenance integrity)
 - videos N—N categories/tags (via joins, mapping-rule-driven)
@@ -158,7 +164,7 @@ key text PK · value jsonb NOT NULL · updated_by uuid FK→admin_users NULL · 
 ## 5. Index strategy rationale
 | Query path | Index |
 |---|---|
-| Home rails (trending/new/most watched) | (is_available,is_hidden,published_at DESC); (views_total DESC); rollup (day,trending_score) |
+| Home rails (trending/new/most watched) | (is_available,is_hidden,published_at DESC); (views_7d DESC); (views_24h DESC); (views_total DESC); rollup (day,trending_score) |
 | Category listing | join reverse index + (is_visible, sort_order) |
 | Search | GIN tsvector; GIN trgm |
 | Slug lookups | UNIQUE(slug) |
@@ -172,6 +178,7 @@ key text PK · value jsonb NOT NULL · updated_by uuid FK→admin_users NULL · 
 |---|---|---|
 | videos rows | while available + 30d grace; hidden-takedown rows indefinite | sync prune job |
 | watch_events (raw) | 90d default (30–180 tunable) | nightly purge job (audited) |
+| interaction_events (raw) | 90d (same window as watch_events) | same purge job |
 | search_queries (raw) | 90d | same |
 | rollups | indefinite (aggregate) | — |
 | admin_sessions | expiry + 7d | nightly purge |

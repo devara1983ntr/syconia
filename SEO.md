@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | SEO.md · v1.0.0 · 2026-09-03 · `[REQUIRED]` |
+| Document | SEO.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` |
 
 Reality note: adult-content discoverability in general web search is constrained by SafeSearch and platform policies; this strategy maximizes what is legitimately indexable while following search-engine guidelines strictly (no cloaking, no sneaky redirects — brand-discretion measures that alter *presentation*, not *content vs crawler*, are documented in §7).
 
@@ -41,7 +41,7 @@ Validation: schema validator in CI for representative fixtures (G-10); no markup
 ## 5. Adult-content policy compliance
 - Meta robots `rating`/`RTA` label (`<meta name="rating" content="RTA-5042-1996-1400-1577-RTA">` standard self-label) — declared honestly for family-safe filters.
 - No cloaking: crawler and user receive identical content/links; discretion veil (DESIGN-SYSTEM §11) is presentation styling applied equally to all renderers with JS; `<noscript>` fallbacks keep content list-visible.
-- No doorway/redirect chains; expired watch pages → real 404 (E-06 for users with content suggestions — served as 200 only for *hidden* variant; **removed** items return genuine 404 with helpful UI, per guidelines).
+- No doorway/redirect chains; canonical watch-item status rule (mirrored from API.md §4.2): **hidden (admin/takedown) and removed items return a genuine HTTP 404** with the helpful E-06 UI; **temporarily unavailable items return HTTP 200** with E-06 UI + related rail (item may return). Parameterized/cursor URLs `noindex`.
 
 ## 6. Page/URL quality rules
 Slugs: lowercase, hyphenated, stable forever (DATABASE unique). No ID-noise in URLs. Redirects: 301 map managed in code for renamed taxonomies (admin rename creates redirect pair, audited). Dead links purged from sitemap within a sync cycle.

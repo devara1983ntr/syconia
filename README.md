@@ -5,7 +5,7 @@
 SYCONIA (pronounced *sy-COHN-ee-uh*, from *syconium* — the enclosed fig bloom) is a premium, dark-themed **adult media discovery and streaming platform**. It stores no media: playback is delivered exclusively through the official embed players and APIs of approved third-party sources, wrapped in a cinematic, editorial, discreet brand experience. There are no accounts, no payments, no premium tiers — an anonymous 18+ age gate is the only barrier.
 
 - **Developer credit:** Roshan
-- **Documentation baseline:** v1.0.0 — 2026-09-03
+- **Documentation:** v1.0.1 (QA-audited baseline) — 2026-09-03
 - **Status:** Documentation-complete, pre-implementation (see [CHANGELOG.md](./CHANGELOG.md))
 
 ---

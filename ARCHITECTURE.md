@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | ARCHITECTURE.md · v1.0.0 · 2026-09-03 |
+| Document | ARCHITECTURE.md · v1.0.1 · 2026-09-03 |
 | Status | Target architecture. **No application code exists yet in this repository** — every element below is `[REQUIRED]` unless marked `[EXISTING]` (brand assets) or `[PROPOSED]`. |
 
 ---

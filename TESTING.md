@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | TESTING.md · v1.0.0 · 2026-09-03 · `[REQUIRED]` |
+| Document | TESTING.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` |
 | Stack | Vitest (unit) · Testing Library (component) · Playwright (E2E + API) · axe-core (a11y) · Lighthouse CI (perf) · Zod contract tests |
 
 ---
@@ -47,6 +47,7 @@ Viewports (all suites): 320, 375, 390, 430, 768, 1024, 1280, 1440, 1920. No hori
 
 ## 5. Feature/interaction matrix (selection; full grid maintained alongside specs)
 Search (F-04): suggest keyboard combobox (arrow/enter/esc), debounce, relaxation chain, trend fallback — T-36…T-39.
+New endpoints (API §4.7b/§4.8b): interaction-event whitelist enforcement (unknown event dropped+logged, never stored) — T-87; csp-report age-exempt intake, sampling cap, 204-always, malformed tolerated — T-88.
 Player (F-08): capability-driven chrome rendering (per flag set — parametrized), keyboard F/T/ESC, failure ladder incl. alternate embed, buffering chip, autoplay muted-only policy, background unload, rotate chip — T-40…T-48 (per GESTURES §9).
 Navigation: drawer open/close/swipe/esc/focus-return, back-arrow semantics table (UX-FLOWS §13) on every screen pair — T-49…T-52.
 Gestures: tap/double-tap/long-press/drag/swipe behaviors with `player_api` stub vs `iframe` stub — T-53…T-56.
@@ -71,7 +72,7 @@ E2E stability: retries ×1 only; flaky tests quarantined with issue, never delet
 Requirements → tests: PRD FR-1…FR-10 → T-16/T-70 (FR-1), T-49…T-52 (FR-2), T-10/T-11 (FR-3), T-06…T-09 (FR-4), T-22/T-27 (FR-5), T-24/T-27 (FR-6/9), T-33 (FR-7), T-31 (FR-8), SSR/streaming checks (FR-9), CI G-7 (FR-10). NFRs → PERFORMANCE/SECURITY/SEO/ACCESSIBILITY suites as listed above.
 
 ## 8. Visual regression
-Playwright screenshots per breakpoint for: home, search, category, watch, all states (E-01…E-07), admin dashboard/tables, primitives gallery page (`/system` internal route, noindex) — diff threshold 0.1%; brand-fidelity guard (logo/clear-space/spacing) via layout-box asserts.
+Playwright screenshots per breakpoint for: home, search, category, watch, all states (E-01…E-07), admin dashboard/tables, and the **Storybook primitive gallery** (DESIGN-SYSTEM §10 mandates a Storybook entry per primitive — the gallery is an internal tooling surface, not a public route) — diff threshold 0.1%; brand-fidelity guard (logo/clear-space/spacing) via layout-box asserts.
 
 ## 9. Release manual checklist (per PRE-RELEASE.md)
 iOS Safari + Android Chrome device passes: age gate, drawer, search, player matrix incl. documented divergences (GESTURES §7), offline behavior, zoom 200%, dynamic type. Signed off in release record (CHANGELOG entry).

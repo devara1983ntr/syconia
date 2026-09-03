@@ -2,10 +2,10 @@
 
 | Field | Value |
 |---|---|
-| Document | API.md · v1.0.0 · 2026-09-03 |
+| Document | API.md · v1.0.1 · 2026-09-03 |
 | Status | Target contract `[REQUIRED]`. Base URL: same-origin `/api`. All endpoints HTTPS-only. |
 
-Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope `{ error: { code, message, requestId } }`; cursor pagination per PRD2 §4; every response carries `x-request-id`. **Global precondition:** all `/api/*` except `/api/health`, `/api/ready`, `/api/admin/login` require the signed age cookie (`sy_age_ok`) — enforced by middleware (403 `age_verification_required` otherwise).
+Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope `{ error: { code, message, requestId } }`; cursor pagination per PRD2 §4; every response carries `x-request-id`. **Global precondition:** all `/api/*` except `/api/health`, `/api/ready`, `/api/csp-report`, `/api/admin/login` require the signed age cookie (`sy_age_ok`) — enforced by middleware (403 `age_verification_required` otherwise).
 
 ---
 
@@ -36,7 +36,7 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 
 ### 4.2 `GET /api/videos/{slug}` — watch payload
 - **Auth:** P0. **200:** `WatchDTO = { slug, title, description, durationSeconds, publishedAt, viewCount, source: { slug, name, provenanceUrl }, embed: { url (validated vs manifest), type, capabilities: [] }, categories[], tags[], relatedCursor }`.
-- **Errors:** `not_found` (hidden/unavailable/deleted → same opaque 404; no existence leak), `source_unavailable` if breaker open for that source (payload still returned with `embed:null` + `notice` so UI can render E-04 with related content).
+- **Errors:** `not_found` — **canonical status rule (single source of truth, mirrored in SEO.md §5 and ERROR-STATES E-06):** hidden (admin/takedown) or removed items → **HTTP 404** with helpful E-06 UI (no existence leak, URL exits indexes); temporarily unavailable (probe pending, may return) → **HTTP 200** with E-06 UI + related rail; `source_unavailable` if breaker open for that source (payload still returned 200 with `embed:null` + `notice` so UI can render E-04 with related content).
 - **Caching:** 600s ISR-aligned; purged by tag on hide.
 
 ### 4.3 `GET /api/search?q=` — search results page 1
@@ -52,8 +52,17 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 ### 4.7 `POST /api/events/watch` — view beacons (P1)
 - **Body:** `{ videoSlug, event: start|q25|q50|q75|end, sessionTs }`; session from `sy_sid` cookie server-side. **202** always (fire-and-forget; malformed → dropped, logged). Batched client-side (≤10/beacon, `navigator.sendBeacon` on hide). Rate 120/min.
 
+### 4.7b `POST /api/events/interaction` — product analytics beacons (P1)
+- **Purpose:** the interaction events catalogued in PRD.md §10 (`age_ack`, `page_view`, `rail_impression`, `card_open`, `search_submit`, `suggest_select`, `filter_apply`, `report_open`, `nav_*`, `player_error`).
+- **Body:** `{ events: [{ event: <whitelist enum>, ts, videoSlug?, rail?, context? }] }` — batched ≤20, `navigator.sendBeacon`-capable; **event names outside the whitelist are dropped and logged** (never stored raw). No free-form properties beyond bounded enum/string fields (≤64 chars).
+- **Response:** **202** always. Rate class: 120/min (shared with watch beacons). Persists to `interaction_events` (DATABASE §2.18; 90-day retention, nightly rollup, then purge).
+
 ### 4.8 `POST /api/events/client-error`
 - **Body:** `{ code, route, sample: boolean }` (no stacks in prod, sampled 20%). 202.
+
+### 4.8b `POST /api/csp-report` — Content-Security-Policy violation intake (age-exempt)
+- **Purpose:** receives browser CSP reports from the `report-uri` directive (SECURITY.md §4). **Age-exempt** (like health/ready): reports must be receivable from any page state, including the age gate.
+- **Behavior:** accepts `application/csp-report` JSON; stores a capped, sampled record (max 500/hour stored; remainder counted only); fields kept: `document-uri` path (no query), `violated-directive`, `blocked-uri` host — **no full URLs, no PII**. Responds **204 No Content** always (including malformed — dropped silently, counted). Rate 60/min/IP; outputs feed the CSP-violation dashboard + weekly review (SOP §11).
 
 ### 4.9 `POST /api/report` — takedown/issue entry (P0 + CSRF token)
 - **Body:** `{ videoSlug, reason: copyright|underage|nc|other_legal|wrong_meta|broken, details?≤1000, contactEmail? }`.
@@ -90,6 +99,7 @@ Errors: 401/403 + `validation_failed`; all bodies Zod-validated; no bulk ops wit
 ### 6.1 Policy
 - Outbound calls only from the jobs/server plane through `/lib/adapters/http.ts` (SSRF seam, ARCHITECTURE §6). Client never calls sources directly.
 - **Source candidacy rule:** a source is eligible only if it offers an official public API, feed, or embed program whose terms permit third-party embedding/aggregation of metadata. The operator must record `terms_verified_at` + reference URL per source before enabling (admin UI enforces). Scraping beyond documented endpoints, terms-gated endpoints, or circumvention of technical controls is prohibited. Candidate families: official webmaster/feed APIs and oEmbed-style providers (specific sources selected at M2 by the operator after terms review; adapter interface is source-agnostic).
+- **No-automatic-grant rule:** possessing an API key, feed endpoint, or copy-paste embed snippet does **not** by itself grant redistribution, re-hosting, or metadata-aggregation rights. Permission to aggregate metadata and embed must be affirmatively established from each source's published terms (or written permission) before that source is enabled; where terms are silent or ambiguous, the source remains **disabled** pending counsel sign-off. Embedding always renders the source's own player — never re-hosted streams or downloads; the image proxy caches provider thumbnails for display only.
 
 ### 6.2 Adapter interface
 ```ts

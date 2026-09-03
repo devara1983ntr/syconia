@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | SCREENS.md · v1.0.0 · 2026-09-03 |
+| Document | SCREENS.md · v1.0.1 · 2026-09-03 |
 | Status | All screens `[REQUIRED]` (no UI code exists yet). Layouts reference DESIGN-SYSTEM.md tokens; flows reference UX-FLOWS.md; states reference ERROR-STATES.md. |
 | Viewports | Mobile 320–479 · Phablet 480–767 · Tablet 768–1023 · Desktop 1024–1535 · Wide ≥1536 (design tokens scale fluidly; all layouts are mobile-first) |
 
@@ -125,13 +125,13 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 - **Menus/buttons:** share (copy link, neutral preview note), report, open-at-source (external icon).
 - **Notifications:** player failure overlay E-07 ladder (Retry → Alternate → Open at source → Report); source-wide degradation chip.
 - **Loading:** stage reserves exact 16:9 (zero CLS); metadata skeletons (title bar 60%, meta row, 3 tag chips).
-- **Empty:** video hidden/unavailable → E-06 “This selection is no longer available” + related suggestions (never a dead end).
+- **Empty:** video hidden/unavailable → E-06 (404 status for hidden/removed; 200 for temporarily unavailable — API.md §4.2) with related suggestions (never a dead end).
 - **Offline:** stage disabled with E-05 inline + cached metadata.
 - **Keyboard:** F fullscreen · T theater · ESC exit fullscreen/close overlays · M mute *if delegated* · player-native keys otherwise (GESTURES §5).
 - **Touch:** tap stage toggles controls (source player) / our overlay buttons 44px; double-tap far-left/right seek ±10s *if delegated*; swipe-down on fullscreen exits (GESTURES §3).
 - **Orientation:** rotating to landscape in fullscreen-eligible state offers fullscreen (system-backed; iOS falls back to source player behavior — documented divergence, GESTURES §7).
 - **Transitions:** entrance: stage fade + metadata slide-up 240ms; related cards stagger.
-- **A11y:** stage `role="region" aria-label`; report modal dialog (focus trap, ESC, labelled); watermark `aria-hidden`; autoplay muted-only (policy GESTURES §8).
+- **A11y:** stage `role="region" aria-label`; report modal dialog (focus trap, ESC, labelled); watermark `aria-hidden`; autoplay muted-only (policy GESTURES §6).
 - **Security:** iframe sandbox/allowlist (ARCHITECTURE §6); report CSRF; no media on our origin.
 - **Analytics:** `watch_start`, quartiles, `player_error{source,code}`, `report_open/submit`, related CTR.
 
@@ -169,7 +169,7 @@ Standard per-screen guarantees (apply to every screen below unless overridden): 
 
 # Admin panel (`/admin` — authenticated, noindex, P2)
 
-Common admin shell: left sidebar nav (collapses to icons ≤1024px, bottom tab bar on mobile), top bar (section title, admin identity, logout), data tables (dense, sans, 13–14px) with column sort, server-driven pagination (numbered, 25/page — cursor under the hood), global search per section, action confirmation modals for destructive ops, every table row action audited. Admin theme: same tokens; surfaces `--color-surface` on Obsidian; semantic status colors per DESIGN-SYSTEM §6.
+Common admin shell: left sidebar nav (collapses to icons ≤1024px, bottom tab bar on mobile), top bar (section title, admin identity, logout), data tables (dense, sans, 13–14px) with column sort, server-driven pagination (numbered, 25/page — cursor under the hood), global search per section, action confirmation modals for destructive ops, every table row action audited. Admin theme: same tokens; surfaces `--color-surface` on Obsidian; semantic status colors per DESIGN-SYSTEM §6. **Admin empty-state rule (all tables/dashboards):** honest zeros and “No records match the current filters” states — never fabricated, demo, or illustrative data; a fresh install shows real zeroes with “Awaiting first sync” status (A-02), and empty filter results offer a “Clear filters” action.
 
 ## A-01 — Admin Login
 - **Route:** `/admin/login`. Centered card: username, password (show/hide), submit; lockout messaging after 4 failures (“Final attempt before a 15-minute lock”); rate limit 5/15min; session 8h idle/24h absolute; audit `auth.login/auth.fail`. A11y: errors `aria-live`, caps-lock hint, autocomplete attributes. Back arrow: none (root of admin).

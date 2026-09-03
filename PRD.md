@@ -4,7 +4,7 @@
 |---|---|
 | Project | SYCONIA — premium adult media discovery & streaming platform |
 | Document | PRD.md (master product requirements) |
-| Version | 1.0.0 — Documentation Baseline |
+| Version | 1.0.1 — Documentation QA Audit |
 | Date | 2026-09-03 |
 | Product owner | Roshan (developer & credit holder) |
 | Status legend | `[EXISTING]` verified present in repository · `[REQUIRED]` must be implemented · `[PROPOSED]` approved future phase · `[CONFLICT]` documented conflict, see §17 |

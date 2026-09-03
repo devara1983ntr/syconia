@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | GESTURES.md · v1.0.0 · 2026-09-03 · `[REQUIRED]` target behavior |
+| Document | GESTURES.md · v1.0.1 · 2026-09-03 · `[REQUIRED]` target behavior |
 
 ---
 
