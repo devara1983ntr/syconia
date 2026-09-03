@@ -70,6 +70,17 @@ Wordmark is **not** typeset — official asset only. Italic instances not bundle
 
 No per-icon SVG files are produced — the library is the source (per asset directive §9; avoids duplication and style drift).
 
+## Supporting / secondary assets (2026-09-03 audit — see SUPPORTING-ASSETS.md for the full category audit)
+
+| Asset ID | File | Format / Dimensions | Purpose | Source | Verification | Status |
+|---|---|---|---|---|---|---|
+| ASSET-ICON-004 | `app-icon/syconia-app-icon-maskable-512.png` | PNG RGBA 512×512 | PWA manifest icon, `purpose: maskable` (safe-zone-inscribed: survives circular/squircle launcher masks) | ASSET-ICON-001 composition: official 512 art scaled 287px (inscribed in 80% safe circle) on exact-Obsidian canvas | All art radius 203.65 ≤ safe 204.8; corners exactly #09090B; 32,050 bytes | DERIVED-VERIFIED |
+| ASSET-ICON-005 | `app-icon/syconia-app-icon-maskable-192.png` | PNG RGBA 192×192 | PWA manifest icon, maskable | Same derivation at 192 | Art radius 74.95 ≤ safe 76.8; corners Obsidian; 7,244 bytes | DERIVED-VERIFIED |
+| ASSET-SPEC-001 | `CATEGORY-ART-SYSTEM.md` | Spec document | Deterministic token-derived category art (CSS-first; seed algorithm; contrast-proof obligation; anti-invention clauses) | DESIGN-SYSTEM §11 mandate | Spec audited against tokens/§11; no image files by design; consumed by M2-T017 | VERIFIED |
+| ASSET-SPEC-002 | `SUPPORTING-ASSETS.md` | Audit document | Secondary-asset category audit: 14 categories → verdicts with spec citations (2 present, 2 created, 9 rejected, 1 pending) | This audit pass | Every verdict cites a spec row; zero rejected-as-unnecessary assets created | VERIFIED |
+
+Performance notes: maskable pair = 39.3KB total, immutable static cache; category system = ~200B CSS/surface, zero images (rasterization only on measured trigger per spec §2).
+
 ## Design tokens
 
 | Asset ID | File | Purpose | Status |
@@ -84,4 +95,4 @@ No per-icon SVG files are produced — the library is the source (per asset dire
 
 ## Totals
 
-**20 assets verified (6 official verified, 11 derived/composed verified, 2 fonts verified, icon system + tokens verified). 1 unresolved deliverable (vector/SVG masters — AG-001, owner: operator). Final readiness review 2026-09-03: forensic re-inspection passed (halo=0, components, ICO structure, OG tagline centering offset 1px, font axes structural check); vision-based human inspection NOT available in the authoring environment (AG-002 remains open for operator sign-off). Zero placeholders. Zero generated brand artwork.**
+**24 assets verified (6 official, 13 derived/composed, 2 fonts, icon system + tokens, 2 specs + audit doc). 1 unresolved deliverable (vector/SVG masters — AG-001, owner: operator); documentation screenshots PENDING real UI (AG-014). Final readiness review 2026-09-03: forensic re-inspection passed (halo=0, components, ICO structure, OG tagline centering offset 1px, font axes structural check); vision-based human inspection NOT available in the authoring environment (AG-002 remains open for operator sign-off). Zero placeholders. Zero generated brand artwork.**

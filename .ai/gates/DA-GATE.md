@@ -35,3 +35,7 @@
 **Review findings (recorded in ASSET-GAPS):** AG-012 (symbol-only mono line-art missing — HIGH, found & **resolved** via ASSET-LOGO-013 extraction crop) · AG-013 (Fraunces default-900 hazard — MEDIUM, found & **resolved** by guardrail documentation + M1-T004 refinement).
 
 **Gate status after review: PASS WITH CONDITIONS (unchanged)** — C-1 (AG-002 operator visual sign-off, due before M1-GATE) and C-2 (AG-001 vector masters) remain open; DA-1 evidence strengthened (symbol mono now exists); DA-2 evidence made more honest (16px metric). DA-5 carries the AG-013 guardrail. All other criteria unchanged from the table above.
+
+## Supporting-asset pass addendum — 2026-09-03 (addendum 2)
+
+Secondary-category audit (14 categories, `branding/SUPPORTING-ASSETS.md`): **DA-3 strengthened** (maskable 512/192 manifest icons, safe-zone-verified) · **DA-9 strengthened** (category art now has a normative deterministic spec, `CATEGORY-ART-SYSTEM.md` — CSS-first, zero image files, contrast-proof obligation at M2-T017) · **DA-10/DA-14 unchanged** (OG complete; no critical asset reclassified). 9 categories rejected with spec citations (restraint is the spec). New pending item AG-014 (documentation screenshots — impossible until real UI; not fabricatable). Status remains **PASS WITH CONDITIONS** (C-1 AG-002, C-2 AG-001 open).

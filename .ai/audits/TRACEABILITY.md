@@ -57,3 +57,11 @@ NFR table (PRD §9) → PERFORMANCE/SECURITY/SEO/ACCESSIBILITY/TESTING docs → 
 | A11y visual basis (focus/contrast/states/reduced-motion) | ACCESSIBILITY §2/§4/§6; DESIGN-SYSTEM §9/§10 | tokens + README §Accessibility | M1-T003/T008…T010 | contrast unit tests (TESTING §6) | DA-11 |
 
 Orphan analysis (assets): every delivered asset traces to a spec requirement above; no asset exists without a requirement row; AG-001/002/003 are the only unmet/unclosed items (see ASSET-GAPS.md).
+
+### Supporting-asset pass rows (2026-09-03)
+
+| Requirement | Specification | Asset(s) | Wiring task | Verification | Gate |
+|---|---|---|---|---|---|
+| PWA installability (manifest icons incl. maskable) | PRD §72; SEO.md §Favicons/app-icons | ASSET-ICON-002/003/004/005 | M1-T005 | safe-zone radius check (203.65 ≤ 204.8), corners, bytes | DA-3 (addendum 2) |
+| Category visual system (deterministic token meshes) | DESIGN-SYSTEM §11 | ASSET-SPEC-001 (spec; zero files by design) | M2-T017 (generator), M2-T018 (perf trigger) | determinism + contrast unit tests (task ACs) | M2-GATE 2.9-adjacent |
+| Secondary-category restraint (nothing unnecessary) | DESIGN-SYSTEM §1; supporting directives | ASSET-SPEC-002 audit (9 rejections cited) | — (governance doc) | audit table row-by-row | DA-GATE DA-15 scope |
