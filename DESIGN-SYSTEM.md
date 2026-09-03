@@ -1,0 +1,121 @@
+# SYCONIA — Design System & Brand Implementation
+
+| Field | Value |
+|---|---|
+| Document | DESIGN-SYSTEM.md · v1.0.0 · 2026-09-03 |
+| Branding source of truth | `/branding/syconia-brand-guidelines.pdf` (v1.0, Sept 2026) + `/branding/` assets — `[EXISTING]` |
+| Conflicts | PDF §5 "Corporate Decoy" rejected (PRD §17 C-2); unrelated business units out of scope (C-3) |
+
+---
+
+## 1. Brand foundation (locked)
+- **Name/spelling:** SYCONIA (all-caps in display contexts; body prose may use "SYCONIA" only — no alternate company names in UI).
+- **Pronunciation:** sy-COHN-ee-uh. **Etymology:** *syconium* (Greek *sykon*, fig) — the enclosed bloom. **Concept:** The Inward Bloom. **Tagline:** *The Beauty of the Inward Experience.* **Secondary:** *Where Intimacy Blooms.*
+- **Position:** Quiet Luxury + Cinematic Technology + Editorial Media. Forbidden: neon, tube-site clichés, generic SaaS, excessive gradients/glass/gold, clutter, vulgarity.
+- **Logo geometry (from guidelines):** mirrored S-curves forming a symmetrical vessel/urn silhouette; refined negative space; central ostiole dot; minimal line work; mathematically mirrored Béziers.
+
+## 2. Official asset inventory `[EXISTING]` (in `/branding/`, copied from `/uploads/`)
+| File | Role | Spec |
+|---|---|---|
+| `syconia-primary-logo.png` | Primary emblem + wordmark | 2160×2148; Night Emerald bg, Ostiole Gold emblem, custom wordmark |
+| `syconia-symbol-only.png` | Symbol-only | 1635×1626; Obsidian bg; favicon/avatar/watermark basis |
+| `syconia-monochrome-light.png` | Monochrome light | 1635×1626; for light/Alabaster contexts & print |
+| `syconia-app-icon.png` | App icon | 512×512; golden border, 3D-luster monogram |
+| `syconia-favicon.png` | Favicon | 32×32 (line-weight thickened for legibility; 16px audit passed per guidelines) |
+| `syconia-brand-guidelines.pdf` | Normative brand reference | 6 pages |
+
+Watermark variant (128px, 6pt refined lines, 20% opacity) is derived from the symbol-only asset by scale + opacity only — no redraw. **Rule: never recreate the logo as hand-written CSS/SVG approximation while these assets exist; use official files (or exact exports of them).** Dark/light/mono variants map 1:1 to the files above.
+
+## 3. Logo usage rules
+- Never: stretch, rotate, recolor (beyond supplied variants), alter geometry, add shadows/neon, crop the wordmark, place on low-contrast backgrounds, combine with unapproved marks, shrink the full logo below 96px width (use symbol-only below that; favicon contexts always symbol-only).
+- **Clear space:** ≥ 4× the ostiole dot's diameter on all sides — enforced via layout tokens (`--space-logo-clear`).
+- Placement: header (wordmark), drawer header (symbol + wordmark), favicon/app icon, player watermark bottom-right (never center, never over native controls), admin sidebar (symbol-only 28px), 404/error art (line-art rendering of symbol `[REQUIRED]`: a monochrome stroke export of the official asset, not a redraw).
+- Loading indicator: the ostiole dot pulse (§10) — the dot is the brand's "alive" signal.
+
+## 4. Color tokens (the only color source)
+**Brand primitives**
+| Token | Hex | Role |
+|---|---|---|
+| `--color-brand-emerald` | `#012A21` | Primary backdrop band, hero washes, emerald surfaces |
+| `--color-brand-obsidian` | `#09090B` | App background (dark theme is the only theme) |
+| `--color-brand-gold` | `#C5A059` | Ostiole Gold — accents, active states, emblem line |
+| `--color-brand-champagne` | `#E6D3A0` | Champagne Gold — wordmark, secondary accents, focus ring |
+| `--color-brand-alabaster` | `#FAF9F6` | Primary text on dark, editorial highlights |
+
+**Semantic tokens (dark theme, canonical values)**
+| Token | Value | Contrast on Obsidian | Use |
+|---|---|---|---|
+| `--color-background` | `#09090B` | — | Page |
+| `--color-surface` | `#121214` (Obsidian +6% lightness, same hue) | — | Cards, table rows |
+| `--color-surface-elevated` | `#1A1A1E` | — | Modals, dropdowns, drawer |
+| `--color-surface-emerald` | `#012A21` | — | Hero bands, category cards |
+| `--color-text-primary` | `#FAF9F6` | 19.5:1 | Body/titles |
+| `--color-text-secondary` | `#B9B7B0` (Alabaster 72% on Obsidian) | ≥7:1 | Meta, captions |
+| `--color-text-tertiary` | `#8A8880` | 4.6:1 | Disabled, fine print (≥14px only) |
+| `--color-border` | `#26262B` | — | Hairlines, dividers |
+| `--color-accent` | `#C5A059` | 6.9:1 (large/UI) | Active nav, links, highlights |
+| `--color-accent-strong` | `#E6D3A0` | 11.2:1 | Focus ring, emphasis text |
+| `--color-success` | `#4EC9A0` | 7.4:1 | Positive status (emerald-harmonized) |
+| `--color-warning` | `#E3B341` | 8.1:1 | Caution, SLA amber |
+| `--color-error` | `#F08A84` | 7.9:1 | Errors, destructive (soft coral; never pure red glow) |
+| `--color-focus` | `#E6D3A0` | — | 2px ring + 2px Obsidian offset |
+| `--color-scrim` | `rgba(9,9,11,0.56)` | — | Overlays |
+| `--color-glass` | `rgba(9,9,11,0.72)` | — | Header/drawer/player chrome (blur 12px) |
+
+Rules: derived neutrals are lightness steps of the brand hues only — no new hues. Status colors are functional-only and visually harmonized (desaturated toward the palette). **Gold is an accent, never small-body-text color where contrast < 4.5:1** (Ostiole Gold text ≥18.66px bold or ≥24px only; Champagne Gold passes AA at all sizes on Obsidian). No other colors may appear anywhere; CI gate greps for raw hex outside the token file (CI-CD §4 G-8).
+
+## 5. Typography
+- **Primary (editorial serif):** **Fraunces** (SIL OFL 1.1) — licensed, self-hosted via `next/font`. Chosen as the legally-safe embodiment of the guidelines' direction (which names proprietary Canela/Ogg as *examples*, never bundled).
+- **Secondary (sans):** **Inter** (SIL OFL 1.1) — explicitly shortlisted by the guidelines ("Satoshi, Inter, Roboto").
+- **Scale (fluid, clamp between mobile/desktop):** display `clamp(34px,6vw,64px)/1.05` serif · h1 `clamp(26px,4vw,40px)/1.15` serif · h2 `clamp(20px,3vw,28px)/1.25` serif · h3 `18px/1.4` sans-semibold · body `16px/1.7` sans · meta `13px/1.5` sans · overline `12px/0.12em uppercase` sans-medium · data `13px tabular-nums` sans.
+- **Usage:** serif = hero headlines, section titles, editorial/legal page titles, major numbers; sans = everything else (nav, buttons, forms, tables, metadata, admin). Wordmark remains the official asset (not typeset).
+- **Rules:** min body 16px; 70–80ch measure; no font weights below 400 for text; `text-wrap: balance` on headings.
+
+## 6. Spacing, radii, elevation, borders
+- **Spacing:** 8px base (`--space-1:4px` … `--space-8:64px`; section rhythm 64/96/128). Grid gutter 16/24 by viewport.
+- **Radii:** `--radius-sm:6px` (chips, inputs) · `--radius-md:10px` (cards) · `--radius-lg:16px` (modals/sheets) · `--radius-full` (pills, avatars). **No random rounded cards** — radius maps to component class, not mood.
+- **Elevation (subtle depth, shadows only, no glows):** `--elevation-1: 0 1px 2px rgba(0,0,0,.5)` · `--elevation-2: 0 8px 24px rgba(0,0,0,.45)` (drawer/modal) · `--elevation-3: 0 16px 48px rgba(0,0,0,.55)` (fullscreen overlays). No colored shadows, no neon.
+- **Glassmorphism (restrained — three surfaces only):** header on scroll, drawer, player chrome: `background: var(--color-glass); backdrop-filter: blur(12px)`. Nowhere else.
+- **Borders:** 1px hairlines (`--color-border`); gold hairline reserved for active nav rail + focus ring only.
+
+## 7. Iconography
+lucide-react (1.5px stroke, 20/24px) for UI icons; color inherits `currentColor`; brand symbols exclusively from `/branding/`. Custom icons prohibited except line-art exports of the official emblem. Icon+label always for destructive/ambiguous actions.
+
+## 8. Responsive system
+Breakpoints: `480 / 768 / 1024 / 1280 / 1440` (min-width, mobile-first) with designed audits at 320, 375, 390, 430, 768, 1024, 1280, 1440, 1920. Fluid type/spacing via `clamp()`. Grids 2→6 columns (SCREENS S-02). Invariants: no horizontal overflow at 320px; touch targets ≥44px; wordmark swaps to symbol-only <480px; hero/media maintain 16:9; all motion transform/opacity only.
+
+## 9. Motion specification (implemented with `motion/react`)
+| Transition | Spec |
+|---|---|
+| Page/route | opacity 0→1 (180ms, ease-out) + translateY 8→0 |
+| Drawer | translateX −100%→0, 260ms, `cubic-bezier(0.22,1,0.36,1)`; scrim fade 200ms |
+| Modal/sheet | scale .96→1 + fade (200ms); sheet translateY 100%→0 (280ms) |
+| Card hover/focus | scale 1→1.02 (180ms) + veil opacity 0.4→0 |
+| Card→watch | shared-element thumbnail expand (280ms) — reduced-motion: fade |
+| Skeleton shimmer | 1.6s linear loop, translateX gradient sweep |
+| Ostiole loader | dot scale 1→1.12 + opacity pulse, 1.2s alternating (the brand loading signal) |
+| Toast | slide-up + fade in 200ms; auto-dismiss 4s (pause on hover/focus) |
+| Stagger lists | children 40ms apart, cap 12 animated nodes |
+| Reduced motion | `prefers-reduced-motion: reduce` → durations 0, transitions opacity-only ≤100ms, no shimmer/pulse loops, loader = static emblem |
+
+Performance law: animate **only** `transform`/`opacity`; no layout-triggering properties; no infinite animations besides loader (which pauses off-screen); `will-change` applied transiently.
+
+## 10. Component inventory (design-system primitives — all inherit tokens)
+Button (primary gold / secondary ghost / destructive / sizes sm-md-lg; loading state with ostiole dot) · IconButton · Input (with hint/error slots) · Select · Textarea · Checkbox · Radio · Switch · Badge (status/count/source) · Tooltip (focus+hover, 300ms delay, ESC-dismiss) · Dropdown · Modal · Drawer · BottomSheet (≤767px) · Tabs · Card · Avatar (admin) · Skeleton (text/card/grid/stage shapes) · Toast · Alert · Pagination (Load-more + numbered) · Breadcrumb · Navigation (header/drawer/footer) · SearchBar (combobox) · FilterBar · VideoCard · CategoryCard · TagChip · EmptyState · LoadingState · ErrorState · OfflineBanner · ProvenanceChip · DurationBadge · MetaRow · ShortcutsOverlay · PlayerShell (stage/chrome/watermark/poster/failure ladder) · AdminTable (sort/pagination/row-actions) · KpiCard · StateChip · ConfirmDialog · AuditDiff.
+Each primitive spec'd with: anatomy, states (default/hover/active/focus/disabled/loading), sizes, a11y contract, token mapping, and Storybook entry `[REQUIRED]` (TESTING §5).
+
+## 11. Imagery direction
+Cinematic composition, deep shadows, controlled highlights, sophisticated framing, restrained treatment. Content thumbnails are **source-provided media** delivered through the image proxy (never authored, never explicit-branded UI art). UI illustration = line-art emblem + typographic compositions only. Category hero defaults: token-palette abstract (emerald/obsidian gradient meshes — generated locally, deterministic, no external art).
+
+## 12. Voice & copy (samples are tone, not content)
+- Empty state: “The gallery is being curated.” (serif) + one sans action line.
+- 404: “Lost in the bloom.” / “The page you seek doesn’t exist — or has drifted beyond the garden.”
+- Offline: “You’re offline. Previously visited pages remain available.”
+- Buttons: specific verbs (“Enter”, “Watch”, “Retry”, “Report”, “Copy link”). No exclamation marks, no clickbait, no vulgar phrasing, no corporate filler.
+- Microcopy ≤ 8 words for actions; explanations ≤ 2 sentences.
+
+## 13. Theming architecture
+Tokens live in one CSS-variables layer (`/app/styles/tokens.css`) consumed by Tailwind v4 `@theme` and `motion` variants. Themes = token value swaps only (components untouched): `theme-night` (default/only v1); future `theme-seasonal`, `theme-light` `[PROPOSED]`. Admin/premium/white-label theming hooks noted in PRD2 §12 — none active in v1.
+
+## 14. Brand quality gate (audit before any release — PRE-RELEASE §9)
+□ Logo fidelity (official assets only) □ clear-space rule honored □ no logo below 96px (wordmark) □ brand-color fidelity (raw hex only in tokens file) □ typography consistency (2 families only) □ gold-as-accent law □ component/token compliance □ favicon/app-icon correct □ glass limited to 3 surfaces □ motion transform/opacity only □ reduced-motion honored □ loading ostiole present □ empty/error states branded □ no SaaS-generic nor tube-site styling anywhere □ watermark placement correct □ SEO uses official spelling.
