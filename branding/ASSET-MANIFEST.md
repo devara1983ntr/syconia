@@ -1,7 +1,7 @@
 # SYCONIA — Production Asset Manifest (controlled register)
 
 **Version 1.0.0 · 2026-09-03 · Authority: AGENT.md → specs → docs → this file.**
-Verification method note (honest scope): all VERIFIED rows below were validated **programmatically** (dimensions, mode, alpha channel, palette purity, round-trip compositing against the official master, mirror-symmetry IoU, file-format reload). No human visual pass was performed in the authoring environment — see gap **AG-002** (pending operator sign-off) in `.ai/audits/ASSET-GAPS.md`. No asset is marked VERIFIED without a recorded check.
+Verification method note (honest scope): all VERIFIED rows below were validated **programmatically** (dimensions, mode, alpha channel, palette purity, round-trip compositing against the official master, mirror-symmetry IoU, file-format reload). No human visual pass was possible in the authoring environment; **operator visual sign-off was subsequently received 2026-09-03 — AG-002 CLOSED/PASS** (scope recorded in `.ai/audits/ASSET-GAPS.md`). No asset is marked VERIFIED without a recorded check.
 
 Provenance chain: `/uploads/` (operator originals, byte-identical, never edited) → `/branding/` root (official masters, never edited) → `/branding/**` subdirectories (derived productions; derivation = background key-out / flat alpha-preserving recolor / resample / repack / composition onto brand-token canvas only — **no geometry edits, no redraw**, per DESIGN-SYSTEM §2–§3).
 

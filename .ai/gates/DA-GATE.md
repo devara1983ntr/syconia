@@ -2,7 +2,7 @@
 
 **Version 1.0.0 · 2026-09-03 · Scope:** verifies the production asset pack so UI implementation never invents, approximates, or fabricates a required visual asset (asset directive §22). This gate does **not** modify the M0→M5 roadmap; it front-loads asset readiness consumed by M1-T003/T004/T005, M3-T001 and all UI tasks.
 
-**Status: PASS WITH CONDITIONS** — every criterion below has objective programmatic evidence. Two open items are recorded (not hidden): **C-1** human visual sign-off of derived assets (due before M1-GATE; tracked as AG-002) and **C-2** official vector/SVG masters (AG-001; UNRESOLVED — non-blocking for v1 UI, blocking `favicon.svg` + print/large-format use). Status vocabulary note: PASS WITH CONDITIONS = all criteria evidenced, with owner-tracked open items that do not block the gated activity.
+**Status: PASS WITH CONDITIONS** — every criterion below has objective programmatic evidence. **C-1 (human visual sign-off) SATISFIED 2026-09-03:** the operator personally visually inspected and approved the derived production asset pack (AG-002 → CLOSED/PASS; sign-off scope recorded in ASSET-GAPS.md). **C-2 (official vector/SVG masters, AG-001) remains OPEN** — a non-fabrication condition: no vector master exists, and none may be traced or generated; non-blocking for v1 UI, blocking `favicon.svg` + print/large-format use only. Status vocabulary note: PASS WITH CONDITIONS = all criteria evidenced, with owner-tracked open items that do not block the gated activity.
 
 | # | Criterion (objective) | Evidence | Result |
 |---|---|---|---|
@@ -22,7 +22,7 @@
 | DA-14 | No critical missing assets | All CRITICAL asset classes evidenced; open items are AG-001 (HIGH, workaround: 1635–2160px rasters exceed all v1 UI needs) + AG-002 (MEDIUM, operator sign-off) | PASS WITH CONDITIONS |
 | DA-15 | No prohibited placeholders | Placeholder scan of added files clean; zero generated brand artwork; zero fake content; UNRESOLVED marked not substituted | PASS |
 
-**Conditions register:** C-1 = AG-002 (close before M1-GATE) · C-2 = AG-001 (close when operator supplies SVG masters; until then no vector use, no `favicon.svg`, no print/large-format derivatives).
+**Conditions register:** C-1 = AG-002 — **SATISFIED 2026-09-03** (operator visual sign-off; CLOSED/PASS) · C-2 = AG-001 — OPEN (close when operator supplies SVG masters; until then no vector use, no `favicon.svg`, no print/large-format derivatives).
 
 **Consumed by:** M1-T003 (tokens), M1-T004 (fonts), M1-T005 (favicon/icons/logo wiring), M1-T008…T010 (state matrix), M1-T016 (mono-on-dark emblem art), M3-T001 (watermark). M1 entry unchanged (M0-GATE PASS); C-1 gates **M1-GATE**, not M1 start.
 
@@ -39,3 +39,7 @@
 ## Supporting-asset pass addendum — 2026-09-03 (addendum 2)
 
 Secondary-category audit (14 categories, `branding/SUPPORTING-ASSETS.md`): **DA-3 strengthened** (maskable 512/192 manifest icons, safe-zone-verified) · **DA-9 strengthened** (category art now has a normative deterministic spec, `CATEGORY-ART-SYSTEM.md` — CSS-first, zero image files, contrast-proof obligation at M2-T017) · **DA-10/DA-14 unchanged** (OG complete; no critical asset reclassified). 9 categories rejected with spec citations (restraint is the spec). New pending item AG-014 (documentation screenshots — impossible until real UI; not fabricatable). Status remains **PASS WITH CONDITIONS** (C-1 AG-002, C-2 AG-001 open).
+
+## Addendum 3 — operator visual sign-off (2026-09-03)
+
+The operator (Roshan) recorded personal visual inspection and approval of the supplied production assets: logo variants · transparent logo/symbol assets · favicon 16/32/ICO · app icons · maskable PWA icons · watermark · monochrome assets · OG asset · overall visual consistency. **C-1 is satisfied; AG-002 is CLOSED/PASS.** No other condition changed: C-2 (AG-001) remains open — no vector masters were supplied and none were fabricated; AG-003 remains blocked by AG-001; AG-014 remains pending real UI. Gate status: **PASS WITH CONDITIONS (C-1 satisfied, C-2 open)** — M1-GATE's asset precondition is now clear pending only AG-001's non-fabrication stance, which does not block M1.

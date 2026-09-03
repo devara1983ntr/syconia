@@ -36,3 +36,9 @@ All asset checks are programmatic (round-trip composite vs master ≤18 max chan
 - **`branding/CATEGORY-ART-SYSTEM.md`** (ASSET-SPEC-001) — normative deterministic token-mesh spec for category art (DESIGN-SYSTEM §11 mandate): SHA-256 slug seed, bounded emerald/obsidian layers, ≤10% champagne key-light, CSS-first (~200B/surface, zero images) with objective rasterization trigger (>4ms paint at M2-T018), label-contrast proof obligation. Wired to M2-T017.
 - **Maskable PWA icons** (ASSET-ICON-004/005, D-009) — official 512 composition inscribed in maskable safe zone (radius verified 203.65 ≤ 204.8), corners exact Obsidian, 39.3KB total; manifest wiring noted in M1-T005.
 - Manifest 24 verified assets; ASSET-GAPS +AG-014 (pending); TRACEABILITY +3 rows; DA-GATE addendum 2 (status unchanged); DECISIONS D-009; QUALITY log. Roadmap 70 tasks untouched (2/1/63/4).
+
+## [1.1.3] — 2026-09-03
+### Operator visual sign-off recorded (AG-002 only)
+- **AG-002 → CLOSED / PASS:** operator (Roshan) personally visually inspected the supplied production assets and approved the derived production asset pack — scope: logo variants, transparent logo/symbol assets, favicon 16/32/ICO, app icons, maskable PWA icons, watermark, monochrome assets, OG asset, overall visual consistency.
+- DA-GATE: condition C-1 satisfied (addendum 3); status PASS WITH CONDITIONS with only C-2 (AG-001) open — non-fabrication condition, does not block M1.
+- Unchanged by instruction: **AG-001 OPEN/DEFERRED** (official SVG masters; none traced/generated), **AG-003 BLOCKED BY AG-001**, **AG-014 PENDING real UI**. Roadmap untouched (70 tasks, 2/1/63/4); M0-T003 not started; no code, no new assets. Files: ASSET-GAPS, DA-GATE, ASSET-MANIFEST (header note), CURRENT-STATE, MASTER-CHECKLIST, this log. TRACEABILITY/COVERAGE carry no AG-002 references — correctly left untouched.
