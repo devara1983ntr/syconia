@@ -14,7 +14,7 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 
 | Task | Title | Status | Evidence |
 |---|---|---|---|
-| [M1-T001](./tasks/M1/M1-T001.md) | Initialize Next.js + TypeScript strict scaffold | NOT_STARTED | — |
+| [M1-T001](./tasks/M1/M1-T001.md) | Initialize Next.js + TypeScript strict scaffold | COMPLETE | task file Completion Evidence: `npm run build` PASS (routes `/`+`/_not-found`, 0 warnings), `npm run typecheck` clean, `npm run lint` 0/0, G-7 gate PASS, dev-boot smoke HTTP 200 · lockfile: next 16.3.4 / react 19.2.8 / typescript 5.9.3 strict+noUncheckedIndexedAccess / eslint 9.39.5 flat · commit `feat(app): initialize Next.js + TypeScript strict scaffold (M1-T001)` |
 | [M1-T002](./tasks/M1/M1-T002.md) | Install test/quality toolchain (Vitest, Testing Library, Playwright, axe, custom lint rules) | NOT_STARTED | — |
 | [M1-T003](./tasks/M1/M1-T003.md) | Implement design tokens layer + Tailwind v4 wiring | NOT_STARTED | — |
 | [M1-T004](./tasks/M1/M1-T004.md) | Self-host fonts (Fraunces + Inter) via next/font | NOT_STARTED | — |
@@ -114,4 +114,4 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 | [M4-GATE](./gates/M4-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [M5-GATE](./gates/M5-GATE.md) | NOT_STARTED | NOT_STARTED |
 
-**Totals:** 70 tasks — 3 COMPLETE · 63 NOT_STARTED · 4 BLOCKED (M2-T008/T009 ← B-001; M5-T006 ← B-003; M5-T007 ← B-002). Gates: M0 PASS · M2 BLOCKED(B-001) · M1/M3/M4/M5 NOT_STARTED.
+**Totals:** 70 tasks — 4 COMPLETE · 62 NOT_STARTED · 4 BLOCKED (M2-T008/T009 ← B-001; M5-T006 ← B-003; M5-T007 ← B-002). Gates: M0 PASS · M2 BLOCKED(B-001) · M1/M3/M4/M5 NOT_STARTED.

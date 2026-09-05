@@ -65,3 +65,7 @@ Orphan analysis (assets): every delivered asset traces to a spec requirement abo
 | PWA installability (manifest icons incl. maskable) | PRD §72; SEO.md §Favicons/app-icons | ASSET-ICON-002/003/004/005 | M1-T005 | safe-zone radius check (203.65 ≤ 204.8), corners, bytes | DA-3 (addendum 2) |
 | Category visual system (deterministic token meshes) | DESIGN-SYSTEM §11 | ASSET-SPEC-001 (spec; zero files by design) | M2-T017 (generator), M2-T018 (perf trigger) | determinism + contrast unit tests (task ACs) | M2-GATE 2.9-adjacent |
 | Secondary-category restraint (nothing unnecessary) | DESIGN-SYSTEM §1; supporting directives | ASSET-SPEC-002 audit (9 rejections cited) | — (governance doc) | audit table row-by-row | DA-GATE DA-15 scope |
+
+### Scaffold traceability note (2026-09-05, M1-T001)
+- ARCHITECTURE §3 tree = *target* layout. M1-T001 delivered the full directory skeleton + framework-required root files (`app/layout.tsx`, `app/(public)/page.tsx` stripped home, configs, canonical scripts, G-7 gate). Route files for screens, `middleware.ts`, `sitemap.ts`/`robots.ts`, `not-found`/`error`/`global-error` land with their owning tasks (M1-T011/T014/T016; M5-T002) — no divergence, staged delivery per task scope ("scaffold + config only; no business logic; no sample content").
+- AGENT §6 canonical commands: declared in `package.json` from M1-T001; commands owned by later tasks fail closed via `scripts/ci/tooling-pending.mjs` (exit 2 + owning task id) — honest gated state per AGENT §2.1.10, replaced by real toolchains as M1-T002/M2-T001/M4-T001/M5-T001 land.

@@ -1,0 +1,8 @@
+# SYCONIA G-7 allowlist (CI-CD.md §4) — reviewed exceptions only.
+# One path per line (repo-root relative); every entry requires a
+# justification comment and a review reference. Keep this list minimal.
+
+# The gate machinery itself carries the marker vocabulary as detection
+# patterns, so it must exempt its own files (reviewed with M1-T001).
+scripts/ci/no-placeholder-gate.sh
+scripts/ci/no-placeholder-gate-allowlist.txt

@@ -8,7 +8,7 @@
 
 | ID | Title | Status | Depends on |
 |---|---|---|---|
-| [M1-T001](../../tasks/M1/M1-T001.md) | Initialize Next.js + TypeScript strict scaffold | NOT_STARTED | M0-T003 |
+| [M1-T001](../../tasks/M1/M1-T001.md) | Initialize Next.js + TypeScript strict scaffold | COMPLETE | M0-T003 |
 | [M1-T002](../../tasks/M1/M1-T002.md) | Install test/quality toolchain (Vitest, Testing Library, Playwright, axe, custom lint rules) | NOT_STARTED | M1-T001 |
 | [M1-T003](../../tasks/M1/M1-T003.md) | Implement design tokens layer + Tailwind v4 wiring | NOT_STARTED | M1-T001 |
 | [M1-T004](../../tasks/M1/M1-T004.md) | Self-host fonts (Fraunces + Inter) via next/font | NOT_STARTED | M1-T003 |

@@ -12,3 +12,7 @@ coverage/
 /.skills/
 /docs/releases/*.local
 .cache/
+
+# Next.js / TypeScript generated files (never edited by hand)
+next-env.d.ts
+*.tsbuildinfo
