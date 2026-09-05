@@ -2,6 +2,22 @@
 
 All notable changes to the SYCONIA project are documented here. Format: Keep a Changelog; versioning: SemVer.
 
+## [2.0.0] — 2026-09-05 — Primitives Batch 1 + Storybook Gallery (M1-T008)
+
+### Added
+- **`components/ui/` primitives (8):** `Button` (primary gold / secondary ghost / destructive; sm 44 / md 48 / lg 56; loading = the ostiole-dot §9 pulse through the motion system, aria-busy + inert; `.sy-press` via the new `--press-scale` token) · `IconButton` (aria-label type-enforced; loading swaps the icon for the dot) · `Input` / `Select` / `Textarea` (label + hint/error slots, aria-describedby/aria-invalid wiring, native select semantics, lucide ChevronDown) · `Checkbox` / `Radio` (native inputs, ≥44px label-row hit areas, focus ring mirrored on the visual, gold checked state, native radio-group arrows) · `Switch` (role=switch on a native button, aria-checked, controlled + uncontrolled). All tokens-only (G-8); all states per §10 (default/hover/press/focus/disabled/loading/error).
+- **D-006b state register** (`components/ui/states.ts` + `--press-scale: 0.98` token): the design-tokens.json mandate "per-component state values fixed at M1-T008…T010" — control heights, §5-only text sizes, choice/switch/loader visuals, pinned by unit tests together with their token sources.
+- **Storybook 10.6** (`.storybook/`, scripts `storybook`/`build-storybook`): react-vite + addon-a11y, real token layer in preview, **52 stories** across all 8 primitives (state matrices + keyboard play functions); `storybook build` green.
+- **Tests (51, total 196):** D-006b register pins · per-primitive contracts (semantics, wiring, inert branches, activation) · **axe-core zero-critical per state matrix** · **userEvent keyboard journeys** (Tab/Space/Enter/arrows, radio group navigation).
+
+### Dependencies (spec-justified)
+- `lucide-react@1.41.0` (DESIGN-SYSTEM §7 / ICON-SYSTEM — the icon library).
+- `storybook@10.6.0` + `@storybook/react-vite` + `@storybook/addon-a11y` (DS §10 "Storybook entry [REQUIRED]"; TESTING §8).
+- `@testing-library/user-event@14.6.1` (dev; keyboard journeys, TESTING §6/§10).
+
+### Fixed
+- G-7 allowlist: the literal word "placeholder" collides with the native HTML attribute + Tailwind `placeholder:` variant — reviewed exemption for `components/ui/field.tsx` + two field stories (UI features, not marker vocabulary).
+
 ## [1.9.0] — 2026-09-05 — Official Brand-Asset Integration (M1-T005)
 
 ### Added

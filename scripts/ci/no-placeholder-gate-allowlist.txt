@@ -6,3 +6,16 @@
 # patterns, so it must exempt its own files (reviewed with M1-T001).
 scripts/ci/no-placeholder-gate.sh
 scripts/ci/no-placeholder-gate-allowlist.txt
+
+# M1-T008 — the Input/Textarea primitives pass through the NATIVE HTML
+# `placeholder` attribute (DESIGN-SYSTEM §10 Input anatomy: label +
+# control + hint/error slots + the standard input attributes) and style
+# it with the Tailwind `placeholder:` variant (token-colored tertiary
+# text, §4). The gate's vocabulary targets placeholder MARKERS in code
+# (mock content/logic); these files carry none — the word collision is
+# with the UI feature, not the anti-pattern. Reviewed with M1-T008.
+components/ui/field.tsx
+# Stories demonstrating the attribute with §12-tone sample props
+# (stories are demonstrative surfaces by design; no production copy).
+components/ui/stories/input.stories.tsx
+components/ui/stories/textarea.stories.tsx

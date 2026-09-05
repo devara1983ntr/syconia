@@ -141,6 +141,11 @@
   --grid-gutter: 16px;
   --grid-gutter-md: 24px;
 
+  /* D-006b primitive state values (fixed at M1-T008…T010): pressed
+   * scale — §9 transform-only micro-interaction (2% depression).
+   * Applied by the .sy-press component class (globals.css). */
+  --press-scale: 0.98;
+
   /* ACCESSIBILITY §7 touch targets */
   --target-min: 44px;
   --target-nav-row: 48px;

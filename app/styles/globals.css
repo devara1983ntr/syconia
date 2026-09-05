@@ -54,3 +54,23 @@
     }
   }
 }
+
+/*
+ * Component layer — shared primitive state classes (D-006b values,
+ * tokens only). Classes are prefixed `sy-` and consumed by
+ * components/ui/*; stories/tests pin them.
+ */
+@layer components {
+  /* Pressed state for controls: scale via the --press-scale token
+     (§9: transform-only; the reduced-motion base rule above collapses
+     durations to ~0 for motion-safe degradation). */
+  .sy-press {
+    transition-property: transform, background-color, border-color, color,
+      filter;
+    transition-duration: 120ms;
+    transition-timing-function: ease-out;
+  }
+  .sy-press:active {
+    transform: scale(var(--press-scale));
+  }
+}
