@@ -10,4 +10,4 @@
 |---|---|---|---|
 | [M0-T001](../../tasks/M0/M0-T001.md) | Create `.ai/` execution-control system | COMPLETE | -,  , n, o, n, e |
 | [M0-T002](../../tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | -,  , M, 0, -, T, 0, 0, 1 |
-| [M0-T003](../../tasks/M0/M0-T003.md) | Verify M1 toolchain prerequisites | READY | -,  , M, 0, -, T, 0, 0, 2 |
+| [M0-T003](../../tasks/M0/M0-T003.md) | Verify M1 toolchain prerequisites | COMPLETE | -,  , M, 0, -, T, 0, 0, 2 |

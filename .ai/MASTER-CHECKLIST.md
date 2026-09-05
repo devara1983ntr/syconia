@@ -8,7 +8,7 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 |---|---|---|---|
 | [M0-T001](./tasks/M0/M0-T001.md) | Create `.ai/` execution-control system | COMPLETE | commit `docs: add AI implementation execution system` + QUALITY §validation log |
 | [M0-T002](./tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | commit `docs: add AI implementation execution system` + QUALITY §validation log |
-| [M0-T003](./tasks/M0/M0-T003.md) | Verify M1 toolchain prerequisites | READY | environment check outputs (pending) |
+| [M0-T003](./tasks/M0/M0-T003.md) | Verify M1 toolchain prerequisites | COMPLETE | task file Completion Evidence: node v24.19.0, npm 11.17.0, PostgreSQL 17.11 reachable 127.0.0.1:5432 (rootless official Debian packages), Playwright 1.62.1 + chromium-1234 · commit `chore(ai): record M0-T003 toolchain verification (M0-T003)` |
 
 ## M1-FOUNDATION — [M1-GATE](./gates/M1-GATE.md)
 
@@ -114,4 +114,4 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 | [M4-GATE](./gates/M4-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [M5-GATE](./gates/M5-GATE.md) | NOT_STARTED | NOT_STARTED |
 
-**Totals:** 70 tasks — 2 COMPLETE · 1 READY · 63 NOT_STARTED · 4 BLOCKED (M2-T008/T009 ← B-001; M5-T006 ← B-003; M5-T007 ← B-002). Gates: M0 PASS · M2 BLOCKED(B-001) · M1/M3/M4/M5 NOT_STARTED.
+**Totals:** 70 tasks — 3 COMPLETE · 63 NOT_STARTED · 4 BLOCKED (M2-T008/T009 ← B-001; M5-T006 ← B-003; M5-T007 ← B-002). Gates: M0 PASS · M2 BLOCKED(B-001) · M1/M3/M4/M5 NOT_STARTED.
