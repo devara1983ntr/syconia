@@ -11,7 +11,7 @@
 | [M1-T001](../../tasks/M1/M1-T001.md) | Initialize Next.js + TypeScript strict scaffold | COMPLETE | M0-T003 |
 | [M1-T002](../../tasks/M1/M1-T002.md) | Install test/quality toolchain (Vitest, Testing Library, Playwright, axe, custom lint rules) | COMPLETE | M1-T001 |
 | [M1-T003](../../tasks/M1/M1-T003.md) | Implement design tokens layer + Tailwind v4 wiring | COMPLETE | M1-T001 |
-| [M1-T004](../../tasks/M1/M1-T004.md) | Self-host fonts (Fraunces + Inter) via next/font | NOT_STARTED | M1-T003 |
+| [M1-T004](../../tasks/M1/M1-T004.md) | Self-host fonts (Fraunces + Inter) via next/font | COMPLETE | M1-T003 |
 | [M1-T005](../../tasks/M1/M1-T005.md) | Integrate official brand assets (favicon, icons, logo components) | NOT_STARTED | M1-T003, M1-T004 |
 | [M1-T006](../../tasks/M1/M1-T006.md) | Configure Motion (motion/react LazyMotion) | NOT_STARTED | M1-T001 |
 | [M1-T007](../../tasks/M1/M1-T007.md) | Env validation + Zod boundary schemas (/lib/env.ts, /lib/validation) | NOT_STARTED | M1-T001 |

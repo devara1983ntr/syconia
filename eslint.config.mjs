@@ -26,8 +26,16 @@ const eslintConfig = defineConfig([
     },
     rules: {
       // G-8 custom rules (CI-CD.md §3.2/§4): raw hex only in the token layer,
-      // no dangerouslySetInnerHTML, no `any`.
-      "syconia/no-raw-hex": ["error", { allowedFiles: ["app/styles/tokens.css"] }],
+      // no dangerouslySetInnerHTML, no `any`. The token-layer spec snapshot
+      // test (tests/unit/tokens.test.ts) quotes the DESIGN-SYSTEM §4/§5
+      // tables verbatim — that is the verification source, not production
+      // styling, so it joins the exemption list (reviewed allowlist per G-8).
+      "syconia/no-raw-hex": [
+        "error",
+        {
+          allowedFiles: ["app/styles/tokens.css", "tests/unit/tokens.test.ts"],
+        },
+      ],
       "syconia/no-dangerously-set-inner-html": "error",
       "@typescript-eslint/no-explicit-any": "error",
     },

@@ -1,5 +1,18 @@
 # Changelog — `.ai/` Execution Control System
 
+## [1.6.0] — 2026-09-05
+### Added (M1-T004 — self-hosted typography)
+- **`app/fonts.ts`** — next/font/local loading seam for the two licensed families, consumed straight from `branding/fonts/` (no downloads/substitutions): Fraunces (editorial serif) + Inter (interface sans), SIL OFL 1.1. `display: "swap"`, `preload: true`, metric-adjusted system fallbacks (Times New Roman / Arial) for swap-driven CLS compensation; one VF file per family = exactly 2 font files on first load (PERFORMANCE §2).
+- **AG-013 weight pin:** both faces declare `weight: "400 900"` — the emitted `@font-face` carries `font-weight: 400 900`, so no text can render below 400 and the Fraunces wght-900 default instance can never leak through; `style: "normal"` only (D-008 no italic). Test-enforced.
+- **Wiring:** root layout injects `--font-fraunces`/`--font-inter` on `<html>`; `app/styles/tokens.css` §5 families now resolve through them (`var(--font-inter, "Inter"), …`). Type scale unchanged (§5 snapshot still green).
+- **`tests/unit/fonts.test.tsx`** — 14 contract tests (captured next/font/local options; SHA-256 pins matching branding/ASSET-MANIFEST ASSET-FONT-001/002 exactly; layout + tokens wiring; all type weights ≥ 400) + 3 post-build self-hosting assertions (≥2 `as="font"` preloads to `/_next/static/media/*.ttf`, zero external font URLs, exactly 2 primary `@font-face` with swap + `400 900` + on-disk src files + 2 metric Fallback faces).
+### Fixed (quality debt)
+- **Pre-existing G-8 lint debt from the M1-T003 end-state:** `npm run lint` at `b581ac1` baseline reported 20 `syconia/no-raw-hex` errors from `tests/unit/tokens.test.ts` (the spec-snapshot table). Resolved via the sanctioned exemption path — `allowedFiles` extended to the test file with justification in `eslint.config.mjs` (the spec table IS the verification source, not production styling). Baseline verified via `git stash`/`pop` before fixing; recorded in M1-T004 evidence per the AGENT truthfulness law.
+### Verification
+- Battery green: 34/34 tests · typecheck clean · lint 0/0 · G-7 PASS · G-8 PASS (fixtures fire + no raw hex outside token layer) · build PASS (3/3 static). Prod-boot smoke on :3100: 2 font preloads in head, `@font-face` swap/400-900/normal served, direct `.ttf` fetch 200 (360440 bytes = exact Fraunces-VF size), `--font-sans/--font-serif` var chains in served CSS, 0 matches for external font hosts.
+### Status after this entry
+M1: 4/18 COMPLETE (T001–T004); totals 7 COMPLETE / 59 NOT_STARTED / 4 BLOCKED. Next eligible: M1-T005 (brand assets), M1-T006 (Motion config), M1-T007 (env validation).
+
 ## [1.0.0] — 2026-09-03
 ### Added
 - Complete AI execution-control system: README (agent workflow, recovery, authority), ROADMAP (M0→M5 lifecycle, dependencies, safe parallelism, blocked conditions), CURRENT-STATE (truthful baseline: documentation-only repo), DECISIONS (D-001…D-004), BLOCKERS (B-001 source gate G-04, B-002 legal review, B-003 hosting AUP), CHANGELOG.

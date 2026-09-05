@@ -12,8 +12,13 @@
  * spec-exact values exist — no extra colors, sizes, or steps anywhere.
  *
  * Type scale is the fluid §5 ladder (clamp() mobile→desktop).
- * Fonts declare the licensed families (Fraunces/Inter, SIL OFL 1.1);
- * self-hosted loading via next/font arrives with M1-T004.
+ * Fonts are the licensed families (Fraunces/Inter, SIL OFL 1.1) loaded
+ * through next/font in app/fonts.ts (M1-T004). The @theme entries below
+ * resolve the next/font CSS variables (--font-fraunces/--font-inter, whose
+ * values are the hashed self-hosted family names injected on <html> by the
+ * root layout); the literal names after var() are inert fallbacks for
+ * non-layout render contexts such as tests — outside a Next build no font
+ * is downloaded either way (PERFORMANCE §2: zero external font requests).
  */
 
 @theme {
@@ -43,10 +48,10 @@
   --color-scrim: rgba(9, 9, 11, 0.56);
   --color-glass: rgba(9, 9, 11, 0.72);
 
-  /* ── §5 Typography · licensed families (loading wired in M1-T004) ─── */
+  /* ── §5 Typography · licensed families (next/font, M1-T004) ───────── */
   --font-*: initial;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces, "Fraunces"), ui-serif, Georgia, serif;
 
   /* ── §5 Typography · fluid scale (clamp mobile→desktop) ──────────── */
   --text-*: initial;
