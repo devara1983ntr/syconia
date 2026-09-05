@@ -1,0 +1,146 @@
+/*
+ * SYCONIA design tokens — the single token layer (DESIGN-SYSTEM §4–§9,
+ * mirrored 1:1 from branding/design-tokens.json v1.0.0 — do not fork).
+ *
+ * THIS FILE IS THE ONLY PLACE raw color hex values may appear (AGENT law 6,
+ * CI-CD G-8; the ESLint rule syconia/no-raw-hex and the CSS pass of
+ * scripts/ci/lint-rules-check.sh both exempt exactly this file).
+ *
+ * Tailwind v4 wiring: every @theme entry is emitted as a CSS custom
+ * property on :root AND generates the matching utility namespace. Default
+ * theme values outside the specification are removed (`: initial`) so only
+ * spec-exact values exist — no extra colors, sizes, or steps anywhere.
+ *
+ * Type scale is the fluid §5 ladder (clamp() mobile→desktop).
+ * Fonts declare the licensed families (Fraunces/Inter, SIL OFL 1.1);
+ * self-hosted loading via next/font arrives with M1-T004.
+ */
+
+@theme {
+  /* ── §4 Color · brand primitives ─────────────────────────────────── */
+  --color-*: initial;
+  --color-brand-emerald: #012A21;
+  --color-brand-obsidian: #09090B;
+  --color-brand-gold: #C5A059;
+  --color-brand-champagne: #E6D3A0;
+  --color-brand-alabaster: #FAF9F6;
+
+  /* ── §4 Color · semantic (dark theme — the only v1 theme) ─────────── */
+  --color-background: #09090B;
+  --color-surface: #121214;
+  --color-surface-elevated: #1A1A1E;
+  --color-surface-emerald: #012A21;
+  --color-text-primary: #FAF9F6;
+  --color-text-secondary: #B9B7B0;
+  --color-text-tertiary: #8A8880;
+  --color-border: #26262B;
+  --color-accent: #C5A059;
+  --color-accent-strong: #E6D3A0;
+  --color-success: #4EC9A0;
+  --color-warning: #E3B341;
+  --color-error: #F08A84;
+  --color-focus: #E6D3A0;
+  --color-scrim: rgba(9, 9, 11, 0.56);
+  --color-glass: rgba(9, 9, 11, 0.72);
+
+  /* ── §5 Typography · licensed families (loading wired in M1-T004) ─── */
+  --font-*: initial;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+
+  /* ── §5 Typography · fluid scale (clamp mobile→desktop) ──────────── */
+  --text-*: initial;
+  --text-display: clamp(34px, 6vw, 64px);
+  --text-display--line-height: 1.05;
+  --text-h1: clamp(26px, 4vw, 40px);
+  --text-h1--line-height: 1.15;
+  --text-h2: clamp(20px, 3vw, 28px);
+  --text-h2--line-height: 1.25;
+  --text-h3: 18px;
+  --text-h3--line-height: 1.4;
+  --text-h3--font-weight: 600;
+  --text-body: 16px;
+  --text-body--line-height: 1.7;
+  --text-meta: 13px;
+  --text-meta--line-height: 1.5;
+  --text-overline: 12px;
+  --text-overline--line-height: 1.2;
+  --text-overline--letter-spacing: 0.12em;
+  --text-overline--font-weight: 500;
+  --text-data: 13px;
+
+  /* ── §6 Spacing · 8px base, spec ladder (D-006) ───────────────────── */
+  --spacing: 8px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 16px;
+  --spacing-4: 24px;
+  --spacing-5: 32px;
+  --spacing-6: 40px;
+  --spacing-7: 48px;
+  --spacing-8: 64px;
+
+  /* §6 section rhythm */
+  --spacing-section-sm: 64px;
+  --spacing-section-md: 96px;
+  --spacing-section-lg: 128px;
+
+  /* ── §6 Radii (radius maps to component class, not mood) ─────────── */
+  --radius-*: initial;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* ── §6 Elevation (shadows only — no glows, no colored shadows) ──── */
+  --shadow-*: initial;
+  --shadow-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-elevation-2: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-elevation-3: 0 16px 48px rgba(0, 0, 0, 0.55);
+
+  /* §6 glass blur (three surfaces only: header-on-scroll, drawer, player) */
+  --blur-*: initial;
+  --blur-glass: 12px;
+
+  /* ── §8 Responsive · breakpoints (min-width, mobile-first) ───────── */
+  --breakpoint-*: initial;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1440px;
+
+  /* §13/D-006 container ladder (spec fixes S-07 max-w 1280) */
+  --container-*: initial;
+  --container-content: 1280px;
+}
+
+/* ── Non-utility tokens (plain custom properties on :root) ──────────── */
+:root {
+  /* D-006 z-index ladder — no z-index value outside this ladder */
+  --z-base: 0;
+  --z-header-sticky: 100;
+  --z-scrim: 200;
+  --z-drawer: 300;
+  --z-modal-sheet: 400;
+  --z-player-failure-overlay: 450;
+  --z-toast: 500;
+  --z-shortcuts-overlay: 600;
+
+  /* §4/ACCESSIBILITY §2 focus construction: 2px champagne ring + 2px Obsidian gap */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  /* §6 hairline weight + grid gutters (16 <1024, 24 ≥1024) */
+  --border-hairline: 1px;
+  --grid-gutter: 16px;
+  --grid-gutter-md: 24px;
+
+  /* ACCESSIBILITY §7 touch targets */
+  --target-min: 44px;
+  --target-nav-row: 48px;
+
+  /* §5 measure rule for long-form text (70–80ch range, applied per component) */
+  --measure-min: 70ch;
+  --measure-max: 80ch;
+}

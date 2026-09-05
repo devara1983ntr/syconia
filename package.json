@@ -2,7 +2,7 @@
   "name": "syconia",
   "version": "0.1.0",
   "private": true,
-  "description": "SYCONIA — hybrid Next.js application (ARCHITECTURE.md §2/§3; scaffold per .ai/tasks/M1/M1-T001.md)",
+  "description": "SYCONIA \u2014 hybrid Next.js application (ARCHITECTURE.md \u00a72/\u00a73; scaffold per .ai/tasks/M1/M1-T001.md)",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "4.3.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^24.3.0",
@@ -39,6 +40,7 @@
     "eslint": "^9.37.0",
     "eslint-config-next": "16.3.4",
     "jsdom": "^30.0.1",
+    "tailwindcss": "4.3.3",
     "typescript": "^5.9.0",
     "typescript-eslint": "^8.46.0",
     "vitest": "^5.0.0"

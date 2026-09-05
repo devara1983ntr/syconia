@@ -33,4 +33,17 @@ if [ "$MISSING" -ne 0 ]; then
   exit 1
 fi
 
-echo "G-8 lint-rule check: PASS — all three custom rules fired on the deliberate fixtures."
+# G-8 CSS pass: raw hex colors in stylesheet sources outside the token layer
+# (app/styles/tokens.css is the sanctioned exemption — DESIGN-SYSTEM §13).
+TOKENS_FILE="app/styles/tokens.css"
+CSS_HITS="$(grep -rniE '#[0-9a-fA-F]{3,8}([^0-9a-zA-Z]|$)' \
+  --include='*.css' app components lib drizzle scripts 2>/dev/null \
+  | grep -v "^${TOKENS_FILE}:" || true)"
+
+if [ -n "$CSS_HITS" ]; then
+  echo "G-8 lint-rule check: FAIL — raw hex outside the token layer:" >&2
+  printf '  %s\n' $CSS_HITS >&2
+  exit 1
+fi
+
+echo "G-8 lint-rule check: PASS — all three custom rules fired on the deliberate fixtures; no raw hex outside the token layer."

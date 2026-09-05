@@ -16,7 +16,7 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 |---|---|---|---|
 | [M1-T001](./tasks/M1/M1-T001.md) | Initialize Next.js + TypeScript strict scaffold | COMPLETE | task file Completion Evidence: `npm run build` PASS (routes `/`+`/_not-found`, 0 warnings), `npm run typecheck` clean, `npm run lint` 0/0, G-7 gate PASS, dev-boot smoke HTTP 200 · lockfile: next 16.3.4 / react 19.2.8 / typescript 5.9.3 strict+noUncheckedIndexedAccess / eslint 9.39.5 flat · commit `feat(app): initialize Next.js + TypeScript strict scaffold (M1-T001)` |
 | [M1-T002](./tasks/M1/M1-T002.md) | Install test/quality toolchain (Vitest, Testing Library, Playwright, axe, custom lint rules) | COMPLETE | task file Completion Evidence: `npm run test` 1/1 green (RTL smoke on real home route) · `ci:lint-rules` PASS (all 3 G-8 rules fire on committed fixtures) · Playwright engines verified launch+render+click (chromium 153 / firefox 155 / webkit 26.6) · lint 0/0 · typecheck clean · build green · commit `feat(test): install Vitest/RTL/Playwright/axe toolchain + G-8 lint rules (M1-T002)` |
-| [M1-T003](./tasks/M1/M1-T003.md) | Implement design tokens layer + Tailwind v4 wiring | NOT_STARTED | — |
+| [M1-T003](./tasks/M1/M1-T003.md) | Implement design tokens layer + Tailwind v4 wiring | COMPLETE | task file Completion Evidence: 17/17 token tests (snapshot + WCAG contrast re-computation) · lint 0/0 · G-8 PASS incl. new CSS hex scan · G-7 PASS · build green · dev-boot CSS var emission verified · commit `feat(design): implement token layer + Tailwind v4 wiring (M1-T003)` |
 | [M1-T004](./tasks/M1/M1-T004.md) | Self-host fonts (Fraunces + Inter) via next/font | NOT_STARTED | — |
 | [M1-T005](./tasks/M1/M1-T005.md) | Integrate official brand assets (favicon, icons, logo components) | NOT_STARTED | — |
 | [M1-T006](./tasks/M1/M1-T006.md) | Configure Motion (motion/react LazyMotion) | NOT_STARTED | — |
@@ -114,4 +114,4 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1: completion
 | [M4-GATE](./gates/M4-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [M5-GATE](./gates/M5-GATE.md) | NOT_STARTED | NOT_STARTED |
 
-**Totals:** 70 tasks — 5 COMPLETE · 61 NOT_STARTED · 4 BLOCKED (M2-T008/T009 ← B-001; M5-T006 ← B-003; M5-T007 ← B-002). Gates: M0 PASS · M2 BLOCKED(B-001) · M1/M3/M4/M5 NOT_STARTED.
+**Totals:** 70 tasks — 6 COMPLETE · 60 NOT_STARTED · 4 BLOCKED (M2-T008/T009 ← B-001; M5-T006 ← B-003; M5-T007 ← B-002). Gates: M0 PASS · M2 BLOCKED(B-001) · M1/M3/M4/M5 NOT_STARTED.
