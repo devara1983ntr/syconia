@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "build/**",
     "coverage/**",
     ".skills/**",
+    // Storybook static build output (`npm run build-storybook`) — a
+    // generated artifact like .next (regenerated per build; never
+    // source). Added at M1-T009 when the gallery landed and the output
+    // started tripping the source-only lint gate.
+    "storybook-static/**",
     // Deliberate G-8 violation fixtures — validated by `npm run ci:lint-rules`
     // (which asserts each rule fires); excluded here so `npm run lint` stays
     // the clean zero-warning gate (G-1).

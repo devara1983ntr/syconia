@@ -56,3 +56,36 @@ export const OSTIOLE_DOT = {
  * `:focus-visible` rule — every interactive element, no per-component
  * wiring). Primitives must never set `outline: none` (ACCESSIBILITY §2).
  */
+
+/* ════════════════════════════════════════════════════════════════════
+ * Batch 2 register — overlays & navigation (M1-T009, D-011).
+ *
+ * DESIGN-SYSTEM §10 names the eleven primitives; the open layout/timing
+ * values they need are fixed HERE (same register pattern as batch 1's
+ * D-006b): every value cites its spec source, and the unit suite pins
+ * them so no ad-hoc value can drift in through a component.
+ *
+ * Spec conflict resolved by D-011 (.ai/DECISIONS.md): SCREENS S-00 and
+ * the SCREENS component-conventions row say "scrim 40%", while §4 —
+ * "the only color source" — fixes `--color-scrim` at rgba(9,9,11,0.56).
+ * The token layer wins (AGENT law: DESIGN-SYSTEM §4 is normative for
+ * color); the 0.56 token is what every overlay scrim renders.
+ * ════════════════════════════════════════════════════════════════════ */
+
+/** S-00 hamburger drawer: "width 88vw max 320px". */
+export const DRAWER_WIDTH = "min(88vw, 320px)" as const;
+
+/** D-011 register: dialog column width (§6/§10 fix no modal width). */
+export const MODAL_WIDTH = "min(92vw, 480px)" as const;
+
+/** D-011 register: sheet tall-content ceiling (sheet body scrolls). */
+export const SHEET_MAX_HEIGHT = "90dvh" as const;
+
+/** §10 Tooltip: "focus+hover, 300ms delay, ESC-dismiss". */
+export const TOOLTIP_DELAY_MS = 300 as const;
+
+/** D-011 register: menu scroll ceiling = 8 rows × the 44px target floor. */
+export const MENU_MAX_HEIGHT = 352 as const;
+
+/** Toast placement (S-00 standard guarantees): bottom-center (≤767px) /
+ * bottom-right (desktop) — encoded in the ToastProvider region classes. */

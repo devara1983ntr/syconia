@@ -210,9 +210,11 @@ export const reducedVariants = {
 /** Variant family names shared by both sets. */
 export type VariantFamily = keyof typeof variants;
 
-/** Select the §9 variant set for the user's motion preference. */
-export function selectVariants(reduced: boolean) {
-  return reduced ? reducedVariants : variants;
+/** Select the §9 variant set for the user's motion preference.
+ * (`useReducedMotion()` is `boolean | null` before hydration — null
+ * coalesces to the full-fidelity set, matching SSR output.) */
+export function selectVariants(reduced: boolean | null) {
+  return (reduced ?? false) ? reducedVariants : variants;
 }
 
 /** §9/P §4: at most 12 animated children per stagger region. */

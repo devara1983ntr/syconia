@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/react-vite";
 
+import { MotionProvider } from "../lib/motion/provider";
+import { ToastProvider } from "../components/ui/toast";
 import "../app/styles/tokens.css";
 import "../app/styles/globals.css";
 
@@ -12,10 +14,25 @@ import "../app/styles/globals.css";
  * a Next build the literal family fallbacks apply, per the M1-T004
  * token wiring note).
  *
+ * Decorators (added at M1-T009): the app root wraps the tree in
+ * MotionProvider (LazyMotion domAnimation strict — the sanctioned m.*
+ * path) and the global toast region; stories render inside the same
+ * contexts so batch-2 overlay/toast primitives behave exactly as in
+ * the product.
+ *
  * Backgrounds use token values only (no raw hex — G-8).
  */
 
 const preview: Preview = {
+  decorators: [
+    (Story) => (
+      <MotionProvider>
+        <ToastProvider>
+          <Story />
+        </ToastProvider>
+      </MotionProvider>
+    ),
+  ],
   parameters: {
     backgrounds: {
       options: {

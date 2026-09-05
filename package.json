@@ -2,7 +2,7 @@
   "name": "syconia",
   "version": "0.1.0",
   "private": true,
-  "description": "SYCONIA \u2014 hybrid Next.js application (ARCHITECTURE.md \u00a72/\u00a73; scaffold per .ai/tasks/M1/M1-T001.md)",
+  "description": "SYCONIA — hybrid Next.js application (ARCHITECTURE.md §2/§3; scaffold per .ai/tasks/M1/M1-T001.md)",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -38,6 +38,7 @@
     "@storybook/react-vite": "10.6.0",
     "@tailwindcss/postcss": "4.3.3",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "14.6.1",
     "@types/node": "^24.3.0",

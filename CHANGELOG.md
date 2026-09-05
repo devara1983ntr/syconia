@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.0] — 2026-09-05 — M1-T009: primitives batch 2 (overlays & navigation)
+
+### Added
+- **Overlay core (`components/ui/overlay.tsx`)** — the shared machinery every overlay layer builds on: module-level ESC-topmost layer stack (GESTURES §62 "ESC closes topmost", modal + transient entries), focus trap with Tab/Shift+Tab wrap, focus return to the pre-open element, reference-counted body scroll lock, SSR-safe document.body Portal, the §9 scrim variant on the `--color-scrim` token, and the D-011 popover surface register.
+- **Modal, Drawer, BottomSheet** — dialog semantics (role/aria-modal, labelled via title-or-label), scrim tap + built-in X + ESC dismissal, §9 motion variants (scale-fade / translate / sheet travel) with the reduced-motion ≤100ms opacity-only set; drawer = the S-00 pattern (min(88vw,320px), glass + 12px blur, elevation-2, --z-drawer); BottomSheet renders only ≤767px (useSyncExternalStore on matchMedia) and auto-dismisses honestly when the viewport grows.
+- **Tooltip** — §10 300ms show delay, aria-describedby wiring while open, ESC-dismiss through the topmost stack, wrapper-level focus/hover detection (child handlers/ref untouched).
+- **Dropdown** — APG menu-button keyboard model (ArrowDown/ArrowUp open+focus, arrows cycle with wrap, Home/End, ESC + trigger focus restore, outside-pointerdown dismissal, Tab-continuation computed before close).
+- **Tabs** — ARIA tablist/tab/tabpanel with cross-wired ids, roving tabIndex, ArrowLeft/Right + Home/End (automatic activation), controlled + uncontrolled modes, gold underline on the active tab.
+- **Toast** — ToastProvider context + `useToast()`; global `role="status"` region (S-00: bottom-center ≤767px / bottom-right desktop, --z-toast); §9 slide-up fade 200ms; 4s auto-dismiss that PAUSES on hover/focus and resumes the remaining time; §7 variant icons; dismiss X.
+- **Alert** (role=alert for warning/error, role=status for info/success; §7 icons; §4 tone borders), **Badge** (outline/solid pills, 13px-legal contrast pairings), **Pagination** (numbered with windowed ellipsis + aria-current + chevron prev/next AND Load-more with the ACCESSIBILITY §3 live-region announcement), **Breadcrumb** (nav>ol>li, aria-current, §7 separators).
+- **D-011 batch-2 register** in `components/ui/states.ts` (DRAWER_WIDTH from S-00, MODAL_WIDTH, SHEET_MAX_HEIGHT, TOOLTIP_DELAY_MS from §10, MENU_MAX_HEIGHT = 8×44px) — unit-pinned; decision recorded in `.ai/DECISIONS.md` (scrim 0.56 token supersedes the SCREENS "40%" figure; anchored-transient z rung mapping; no new ladder rung).
+- 40 new Storybook stories (92 total; preview now mounts the real MotionProvider + ToastProvider); 79 new tests (275/275) incl. axe zero-critical state matrices and RTL keyboard journeys; `@testing-library/jest-dom@6.9.1` pinned + `tests/vitest-setup.ts` via vitest setupFiles.
+
+### Fixed
+- Dialog accname conflict: aria-label + aria-labelledby together made the visible title the computed name (labelledby precedence) — overlays now set exactly one.
+- Dropdown Tab no longer drops focus to body when the focused menuitem unmounts on close (target computed before closing).
+- `storybook-static/**` added to eslint globalIgnores + .gitignore (generated build output, same class as `.next`).
+
 All notable changes to the SYCONIA project are documented here. Format: Keep a Changelog; versioning: SemVer.
 
 ## [2.0.0] — 2026-09-05 — Primitives Batch 1 + Storybook Gallery (M1-T008)
