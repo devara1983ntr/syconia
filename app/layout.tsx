@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { fraunces, inter } from "./fonts";
+import { MotionProvider } from "../lib/motion/provider";
 import "./styles/globals.css";
 
 export const metadata = {
@@ -10,7 +11,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

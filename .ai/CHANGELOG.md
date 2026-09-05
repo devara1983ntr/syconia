@@ -1,5 +1,19 @@
 # Changelog — `.ai/` Execution Control System
 
+## [1.7.0] — 2026-09-05
+### Added (M1-T006 — motion system)
+- **`motion@13.2.0`** (exact, runtime dependency) — the AGENT §3 locked animation package (`motion/react`).
+- **`lib/motion/provider.tsx`** — `LazyMotion features={domAnimation} strict` mounted once at the app root: the PERFORMANCE §3 pattern. `strict` runtime-rejects `motion.*` (all animated components must use `m.*`; test-proven with toThrow).
+- **`lib/motion/variants.ts`** — the §9 motion table as code: `MOTION` timing tokens (durations/easings verbatim: 180/260/200/280/200ms, cubic-bezier(0.22,1,0.36,1), stagger 40ms cap 12, shimmer 1.6s, loader 1.2s scale 1.12) · 10 variant families (page, scrim, drawer, modal, sheet, card, cardVeil, toast, stagger, staggerChild) · `reducedVariants` (opacity-only, exactly 100ms, zero transforms, no loops, empty card hover targets) · `selectVariants(reduced)` switch · `capStaggerChildren`/`STAGGER_CAP` enforcement helper.
+- **Tests (26):** `tests/unit/motion-variants.test.ts` (22 — §9 conformance, transform/opacity-only law walker, reduced-motion laws, cap helper) + `tests/component/motion-provider.test.tsx` (4 — provider animation in jsdom, synchronous §9 initial state, strict rejection, reduced-vs-standard observable difference). NOTE: RTL auto-cleanup is inactive without vitest globals — explicit `afterEach(cleanup)` in render-based suites.
+- **Root layout** now wraps children in `MotionProvider`.
+### G-9 bundle baseline (honest measurement)
+- Home-route gzip first-load JS: 168.3KB without the provider (immutable Next 16 + React 19.2 framework floor) → 190.7KB with — **motion costs +22.4KB gzip** (LazyMotion domAnimation subset). App-controlled JS = 22.4KB. Recorded for the G-9 gate script (arriving with its owning task): the §3 "≤120KB (home)" target must be defined as app-controlled JS — no Next 16 App Router page can be under the framework floor (~168KB).
+### Verification
+- 60/60 tests (5 files) · typecheck clean · lint 0/0 · G-7 PASS · G-8 PASS · build 3/3 static · prod-boot smoke :3100 GET / 200.
+### Status after this entry
+M1: 5/18 COMPLETE (T001–T004, T006); totals 8 COMPLETE / 58 NOT_STARTED / 4 BLOCKED. Next eligible: M1-T005 (brand assets), M1-T007 (env validation).
+
 ## [1.6.0] — 2026-09-05
 ### Added (M1-T004 — self-hosted typography)
 - **`app/fonts.ts`** — next/font/local loading seam for the two licensed families, consumed straight from `branding/fonts/` (no downloads/substitutions): Fraunces (editorial serif) + Inter (interface sans), SIL OFL 1.1. `display: "swap"`, `preload: true`, metric-adjusted system fallbacks (Times New Roman / Arial) for swap-driven CLS compensation; one VF file per family = exactly 2 font files on first load (PERFORMANCE §2).
