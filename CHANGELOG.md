@@ -2,6 +2,18 @@
 
 All notable changes to the SYCONIA project are documented here. Format: Keep a Changelog; versioning: SemVer.
 
+## [1.9.0] — 2026-09-05 — Official Brand-Asset Integration (M1-T005)
+
+### Added
+- **`components/brand/`** — official-artwork renderers: `Logo` (ASSET-LOGO-010 primary lockup; §3 96px artwork floor with height-preserving symbol fallback, `data-fallback`), `LogoSymbol` (ASSET-LOGO-011), `LogoMono` (ASSET-LOGO-012), `LogoMonoSymbol` (ASSET-LOGO-013, decorative per a11y row), `Watermark` (ASSET-WM-001 per branding/README §Watermark verbatim: 128px, 20%, bottom-right, 16px inset, non-interactive, aria-hidden) and `geometry.ts` (measured master bboxes + clear-space math). Server components, zero client JS.
+- **`--space-logo-clear` token** (app/styles/tokens.css) — D-010: the ostiole dot measured 105px on the 615px symbol master → clear space = 0.6829 × emblem width; logo components apply it as per-side `max(0px, calc(token × emblem − margin))` padding that credits the masters' built-in transparent margins (exact 4-dot zone, never doubled).
+- **Favicon/app-icon/PWA wiring** — `app/layout.tsx` metadata.icons per branding/README §Favicon configuration; `app/manifest.ts` (`/manifest.webmanifest`): any 192/512 + maskable 192/512 (D-009), locked name, truthful PRD description, §4 Obsidian theme/background colors (byte-equal to the token; G-8 exemption documented for the manifest-spec literal requirement).
+- **Static serve map** — `public/branding/**` (13 files) + `public/favicon.ico`, every file SHA-256 byte-identical to its pack source; documented in branding/ASSET-MANIFEST.md §Static serve map.
+- **Tests (43, total 145)** — geometry contract (zone-completion property at 7 sizes × 4 masters), serve-map integrity (SHA-256 + IHDR dims + exact-set equality), component contracts (calc strings cross-checked, fallback boundary, override resistance, watermark spec), manifest/metadata wiring, and **6 chromium visual-snapshot baselines** (diff clean; token-sourced canvas color).
+
+### Fixed
+- G-8 discipline: test-source colors are parsed live from tokens.css instead of raw hex (no new exemptions beyond the reviewed manifest.ts one).
+
 ## [1.0.2] — 2026-09-03 — Pre-Implementation Gap-Audit Patch
 
 Applied the 8-group patch plan resolving the gap audit (G-01…G-34). No scope, architecture, brand, or legal changes; documentation-only.

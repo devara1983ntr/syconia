@@ -70,6 +70,28 @@ Wordmark is **not** typeset — official asset only. Italic instances not bundle
 
 No per-icon SVG files are produced — the library is the source (per asset directive §9; avoids duplication and style drift).
 
+## Static serve map (M1-T005 — app public/ mirror)
+
+The application serves the official pack over HTTP via byte-identical copies in `public/branding/` (plus the conventional root `public/favicon.ico`); serve paths mirror the pack paths 1:1. These are **serve-path remaps of existing registered assets, not new pack assets** (README: "serve paths may be re-mapped by the app's static strategy at M1-T005"). Integrity is enforced by `tests/unit/brand-assets.test.ts` — every copy must stay SHA-256-identical to its source below; the served set is asserted to equal exactly this map.
+
+| Served path | Pack source | Asset ID | SHA-256-pinned |
+|---|---|---|---|
+| `/favicon.ico` | `favicon/syconia-favicon.ico` | ASSET-FAV-004 | ✓ |
+| `/branding/favicon/syconia-favicon-16.png` | `favicon/syconia-favicon-16.png` | ASSET-FAV-002 | ✓ |
+| `/branding/favicon/syconia-favicon-32.png` | `favicon/syconia-favicon-32.png` | ASSET-FAV-003 | ✓ |
+| `/branding/app-icon/syconia-app-icon-180.png` | `app-icon/syconia-app-icon-180.png` | ASSET-ICON-003 | ✓ |
+| `/branding/app-icon/syconia-app-icon-192.png` | `app-icon/syconia-app-icon-192.png` | ASSET-ICON-002 | ✓ |
+| `/branding/app-icon/syconia-app-icon-maskable-192.png` | `app-icon/syconia-app-icon-maskable-192.png` | ASSET-ICON-005 | ✓ |
+| `/branding/app-icon/syconia-app-icon-maskable-512.png` | `app-icon/syconia-app-icon-maskable-512.png` | ASSET-ICON-004 | ✓ |
+| `/branding/syconia-app-icon.png` | `syconia-app-icon.png` (root master) | ASSET-ICON-001 | ✓ |
+| `/branding/logo/syconia-logo-primary-transparent.png` | `logo/syconia-logo-primary-transparent.png` | ASSET-LOGO-010 | ✓ |
+| `/branding/logo/syconia-logo-symbol-transparent.png` | `logo/syconia-logo-symbol-transparent.png` | ASSET-LOGO-011 | ✓ |
+| `/branding/logo/syconia-logo-monochrome-on-dark.png` | `logo/syconia-logo-monochrome-on-dark.png` | ASSET-LOGO-012 | ✓ |
+| `/branding/logo/syconia-logo-symbol-monochrome-on-dark.png` | `logo/syconia-logo-symbol-monochrome-on-dark.png` | ASSET-LOGO-013 | ✓ |
+| `/branding/watermark/syconia-watermark-128.png` | `watermark/syconia-watermark-128.png` | ASSET-WM-001 | ✓ |
+
+(ASSET-SOC-001 `social/syconia-og-default.png` is deliberately **not** mirrored yet — OG wiring belongs to M5-T002 per D-007.)
+
 ## Supporting / secondary assets (2026-09-03 audit — see SUPPORTING-ASSETS.md for the full category audit)
 
 | Asset ID | File | Format / Dimensions | Purpose | Source | Verification | Status |

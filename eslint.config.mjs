@@ -26,14 +26,23 @@ const eslintConfig = defineConfig([
     },
     rules: {
       // G-8 custom rules (CI-CD.md §3.2/§4): raw hex only in the token layer,
-      // no dangerouslySetInnerHTML, no `any`. The token-layer spec snapshot
-      // test (tests/unit/tokens.test.ts) quotes the DESIGN-SYSTEM §4/§5
-      // tables verbatim — that is the verification source, not production
-      // styling, so it joins the exemption list (reviewed allowlist per G-8).
+      // no dangerouslySetInnerHTML, no `any`. Two reviewed exemptions:
+      // - tests/unit/tokens.test.ts quotes the DESIGN-SYSTEM §4/§5 tables
+      //   verbatim — that is the verification source, not production
+      //   styling.
+      // - app/manifest.ts must emit literal theme_color/background_color:
+      //   the web-app-manifest spec takes CSS color strings only (var()
+      //   is not a valid manifest value); the values are byte-equal to
+      //   tokens.css §4 Obsidian and unit-asserted against the token
+      //   layer (tests/unit/manifest-metadata.test.ts).
       "syconia/no-raw-hex": [
         "error",
         {
-          allowedFiles: ["app/styles/tokens.css", "tests/unit/tokens.test.ts"],
+          allowedFiles: [
+            "app/styles/tokens.css",
+            "tests/unit/tokens.test.ts",
+            "app/manifest.ts",
+          ],
         },
       ],
       "syconia/no-dangerously-set-inner-html": "error",

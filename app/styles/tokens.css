@@ -148,4 +148,14 @@
   /* §5 measure rule for long-form text (70–80ch range, applied per component) */
   --measure-min: 70ch;
   --measure-max: 80ch;
+
+  /* §3/DESIGN-SYSTEM §3 logo clear space — 4× the ostiole-dot diameter
+   * (decision D-010: the dot is the emblem's central neck opening,
+   * measured 105px on the 615px-wide official symbol master ⇒ this
+   * ratio of the emblem width, ≈0.6829). Logo components apply it as
+   * wrapper padding: var(--space-logo-clear) × emblem-width − the
+   * official masters' built-in transparent margins (clamped ≥ 0), so
+   * every placement reserves exactly the mandated sanctuary
+   * (components/brand/geometry.ts is the measured source). */
+  --space-logo-clear: 0.6829268292682927;
 }
