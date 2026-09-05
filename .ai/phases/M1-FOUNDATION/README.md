@@ -14,7 +14,7 @@
 | [M1-T004](../../tasks/M1/M1-T004.md) | Self-host fonts (Fraunces + Inter) via next/font | COMPLETE | M1-T003 |
 | [M1-T005](../../tasks/M1/M1-T005.md) | Integrate official brand assets (favicon, icons, logo components) | NOT_STARTED | M1-T003, M1-T004 |
 | [M1-T006](../../tasks/M1/M1-T006.md) | Configure Motion (motion/react LazyMotion) | COMPLETE | M1-T001 |
-| [M1-T007](../../tasks/M1/M1-T007.md) | Env validation + Zod boundary schemas (/lib/env.ts, /lib/validation) | NOT_STARTED | M1-T001 |
+| [M1-T007](../../tasks/M1/M1-T007.md) | Env validation + Zod boundary schemas (/lib/env.ts, /lib/validation) | COMPLETE | M1-T001 |
 | [M1-T008](../../tasks/M1/M1-T008.md) | Primitives batch 1 — form controls (Button, IconButton, Input, Select, Textarea, Checkbox, Radio, Switch) | NOT_STARTED | M1-T003, M1-T004, M1-T006 |
 | [M1-T009](../../tasks/M1/M1-T009.md) | Primitives batch 2 — overlays & navigation (Badge, Tooltip, Dropdown, Modal, Drawer, BottomSheet, Tabs, Toast, Alert, Pagination, Breadcrumb) | NOT_STARTED | M1-T008 |
 | [M1-T010](../../tasks/M1/M1-T010.md) | Primitives batch 3 — media/data/states (Card, Avatar, Skeleton, SearchBar combobox, FilterBar, EmptyState, LoadingState, ErrorState, OfflineBanner, chips/badges) | NOT_STARTED | M1-T008, M1-T009 |

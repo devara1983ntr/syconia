@@ -1,5 +1,22 @@
 # Changelog — `.ai/` Execution Control System
 
+## [1.8.0] — 2026-09-05
+### Added (M1-T007 — fail-closed environment layer)
+- **`lib/validation/index.ts`** — the shared Zod schema home (SOP §3 "Zod at every boundary"): `secretSchema` (≥32) · `httpsUrlSchema` · `postgresUrlSchema` · `argon2idHashSchema` (encoded format + SECURITY §11 minimums m≥19456/t≥2/p≥1, boundary-tested) · `positiveIntSchema` · `toSafeIssues` (issues as name+reason, never values).
+- **`lib/env.ts`** — ARCHITECTURE §12 validator: every §12 variable (DATABASE_URL/pool as postgres URLs, 4 HMAC secrets ≥32, ADMIN_USERNAME, ADMIN_PASSWORD_HASH argon2id, SITE_URL + AGE_LEAVE_URL https-only, SITE_NAME default SYCONIA, LOG_LEVEL enum default info) + pattern families via superRefine (RATE_LIMIT_* must be positive ints; SOURCE_<SLUG>_KEY must be ≥32). `parseEnv` (pure, throws safe `EnvValidationError`), `getEnv` (cached), `bootValidateEnv` (log safe message + exit(1); fail-loud re-throw under non-terminating injected exit).
+- **`instrumentation.ts`** — Next boot hook: `register()` runs the fail-closed gate once per server boot on the Node runtime.
+- **`zod@4.5.4`** runtime dependency (locked stack).
+- **Tests (42):** validation primitives (argon2 boundaries m=19455/19456, t=1/2, p=0/1), env schema (it.each missing-var fail-closed over all 10 required vars; weak/http/mysql/argon2/RATE_LIMIT/SOURCE rejections; secrets-never-logged assertions incl. the boot log line), boot gate exit semantics, getEnv caching, `.env.example` §12 coverage parity, instrumentation wiring (nodejs vs edge).
+### Fixed / documented
+- **dotenv-expand pitfall (real finding):** `$word` sequences in .env values are variable-interpolated — argon2id encoded hashes get mangled unless dollars are escaped (`\$`). Verified programmatically; `.env.example` documents the rule (same-commit doc fix). Recorded for M4-T001 (hash-password tooling must emit escaped output).
+### Boot proofs (fresh `next start` servers)
+- WITHOUT `.env.local`: "SYCONIA boot aborted — refusing to start with an invalid environment." + 10 safe issues (names+reasons, zero values) → process exits; ambient non-postgres `DATABASE_URL` correctly rejected. WITH valid env: Ready + GET / 200.
+- Note: `.env.local` values do not override pre-set process.env (dotenv no-override) — sandbox boots need an inline DATABASE_URL; production envs are unaffected.
+### Verification
+- 102/102 tests (8 files) · typecheck clean · lint 0/0 · G-7 PASS · G-8 PASS · build 3/3 static.
+### Status after this entry
+M1: 6/18 COMPLETE (T001–T004, T006, T007); totals 9 COMPLETE / 57 NOT_STARTED / 4 BLOCKED. Next eligible: M1-T005 (brand assets) — unblocks the primitives batches (T008–T010 after T005+T006).
+
 ## [1.7.0] — 2026-09-05
 ### Added (M1-T006 — motion system)
 - **`motion@13.2.0`** (exact, runtime dependency) — the AGENT §3 locked animation package (`motion/react`).
