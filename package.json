@@ -2,7 +2,7 @@
   "name": "syconia",
   "version": "0.1.0",
   "private": true,
-  "description": "SYCONIA — hybrid Next.js application (ARCHITECTURE.md §2/§3; scaffold per .ai/tasks/M1/M1-T001.md)",
+  "description": "SYCONIA \u2014 hybrid Next.js application (ARCHITECTURE.md \u00a72/\u00a73; scaffold per .ai/tasks/M1/M1-T001.md)",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -21,8 +21,8 @@
     "perf:lighthouse": "node scripts/ci/tooling-pending.mjs perf:lighthouse M5-T001",
     "ci:no-placeholder-gate": "bash scripts/ci/no-placeholder-gate.sh",
     "ci:lint-rules": "bash scripts/ci/lint-rules-check.sh",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "storybook dev -p 6006 -c web/.storybook",
+    "build-storybook": "storybook build -c web/.storybook"
   },
   "dependencies": {
     "lucide-react": "1.41.0",

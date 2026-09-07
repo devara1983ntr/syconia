@@ -48,7 +48,7 @@ SYCONIA (pronounced *sy-COHN-ee-uh*, from *syconium* — the enclosed fig bloom)
 /branding/      Official SYCONIA brand assets + asset manifest + design tokens (identity truth)
 /docs/          Documentation index, legal compliance spec, consolidated PDF, release records
 /.ai/           78-record execution-control system (tasks, gates, audits, decisions)
-/web/           [PLANNED — M0-T006] historical web client, isolated later (preserved, superseded as primary client)
+/web/           Web client plane [ISOLATED — M0-T006]: Storybook gallery + stories + web component tests (design-system library shared at root for backend web surfaces)
 /android/       [PLANNED — M1-T001] native Android client (Gradle multi-module — ARCHITECTURE §3); NO implementation exists yet
 /backend/       [PLANNED] backend service (API + admin console + legal/share web + jobs; physically root app/, lib/, drizzle/)
 /.skills/       Cloned development aids (ui-ux-pro-max design skill; advisory only, git-ignored)

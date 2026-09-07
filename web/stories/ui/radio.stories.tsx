@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Radio } from "../choice";
+import { Radio } from "../../../components/ui/choice";
 
 /**
  * Radio stories — DESIGN-SYSTEM §10; native radio-group semantics:

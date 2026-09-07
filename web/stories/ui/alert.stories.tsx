@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Alert, type AlertProps } from "../alert";
+import { Alert, type AlertProps } from "../../../components/ui/alert";
 
 /**
  * Alert stories — DESIGN-SYSTEM §10 "Alert" (ACCESSIBILITY §3:

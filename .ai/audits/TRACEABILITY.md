@@ -91,3 +91,16 @@ Mapping: every retired/superseded task keeps a file with disposition + successor
 | M1-T007 env validation | `f7233a8` | — |
 | M1-T008 form controls | `8d8475a` | `3512db6` |
 | M1-T009 overlays + Storybook | `d03ca32` | `648f39b` |
+
+### M0-T006 web-isolation inventory (2026-09-07 — classification of every root application artifact)
+
+| Class | Paths | Disposition |
+|---|---|---|
+| WEB | `.storybook/` (2 files) · `components/ui/stories/` (19) · `tests/unit/ui-*.test.*` (13) | **moved to /web** (`web/.storybook/`, `web/stories/ui/`, `web/tests/`) via rename-tracked `git mv` |
+| BACKEND | `app/` (28) · `lib/` (12) · `drizzle/` · `scripts/` (4) · `instrumentation.ts` · `next.config.ts` | retained at root (backend plane — D-023; zero function change) |
+| SHARED | `components/**` minus stories (design-system library — future admin-console UI kit) · `public/**` (backend-served brand assets for retained web surfaces) | retained at root, load-bearing for backend web surfaces |
+| TOOLING | `package.json` · `package-lock.json` · `tsconfig.json` · eslint configs (3) · vitest configs (2) · playwright.config.ts · postcss.config.mjs · `tests/vitest-setup.ts` · `tests/lint-fixtures/` | retained at root (single build/test plane; scripts path-adjusted for storybook only) |
+| DOCUMENTATION | canonical `*.md` suite · `docs/` · `.ai/` · `branding/` · `uploads/` | unchanged |
+| GENERATED | `storybook-static/` · `.next/` · `node_modules/` | git-ignored; removed from workspace before commit |
+
+Post-move reconciliation + verification detail: M0-T006 task evidence.

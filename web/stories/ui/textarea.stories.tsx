@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Textarea } from "../field";
+import { Textarea } from "../../../components/ui/field";
 
 /**
  * Textarea stories — DESIGN-SYSTEM §10; hint/error slots; measure rule

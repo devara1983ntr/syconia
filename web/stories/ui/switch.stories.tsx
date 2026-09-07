@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Switch } from "../switch";
+import { Switch } from "../../../components/ui/switch";
 
 /**
  * Switch stories — DESIGN-SYSTEM §10; role="switch" on a native button

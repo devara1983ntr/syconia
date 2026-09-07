@@ -1,5 +1,10 @@
 # Changelog — `.ai/` Execution Control System
 
+## [2.3.0] — 2026-09-07 — M0-T006 COMPLETE: web client plane isolated under /web
+- Physical isolation via rename-tracked `git mv` (34 files): `.storybook/` → `web/.storybook/`, 19 stories → `web/stories/ui/`, 13 ui tests → `web/tests/`. Shared design-system library retained at root (backend web surfaces consume it — D-023).
+- Verification: lint 0/0 · typecheck clean · 276 tests passed/3 skipped (25 files, both planes) · next build green · Storybook build green (Node 22.23.2 environment fix; vitest-5/Node-20 forks-pool incompatibility — no repo change). Playwright e2e not run this session (browsers absent; spec unmoved).
+- Backend plane untouched: app/, lib/, drizzle/, scripts/ verified intact; zero Android artifacts.
+
 ## [2.2.0] — 2026-09-07 — M0-T005: Android identity + platform boundary documentation (D-023)
 - **New tasks:** M0-T005 (this documentation-only phase; blocks M1-T001) · M0-T006 (web isolation under /web — physical move explicitly deferred). Records 76 → 78.
 - **Canonical identity:** `com.syconia.android` (applicationId + namespace) + responsibility matrix + boundaries in ARCHITECTURE §0/§2/§3, README, SECURITY (assetlinks binding); aligned with DEPLOYMENT versioning/distribution truths — nothing invented.

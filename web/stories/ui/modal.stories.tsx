@@ -2,9 +2,9 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Modal } from "../modal";
-import { Button } from "../button";
-import { Input, Textarea } from "../field";
+import { Modal } from "../../../components/ui/modal";
+import { Button } from "../../../components/ui/button";
+import { Input, Textarea } from "../../../components/ui/field";
 
 /**
  * Modal stories — DESIGN-SYSTEM §10 "Modal" (§9 scale .96→1 + fade

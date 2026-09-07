@@ -15,7 +15,7 @@ M0-RECON ─► M1-ANDROID-FOUNDATION ─► M2-CATALOG(backend) ─► M3-WATCH
 ```
 | Phase | Objective | Tasks | Entry | Exit = gate |
 |---|---|---|---|---|
-| **M0-RECON** | Baseline + **platform migration (docs/architecture/roadmap)** + Android identity/platform boundaries (M0-T005, D-023) + web-isolation plan (M0-T006) | M0-T001…T006 | docs v1.1.0 verified | [M0-GATE](./gates/M0-GATE.md) |
+| **M0-RECON** | Baseline + **platform migration (docs/architecture/roadmap)** + Android identity/platform boundaries (M0-T005, D-023) + web isolation executed (M0-T006) | M0-T001…T006 | docs v1.1.0 verified | [M0-GATE](./gates/M0-GATE.md) |
 | **M1-ANDROID-FOUNDATION** | Gradle multi-module scaffold, quality toolchain, SyconiaTheme (M3 from tokens), fonts, adaptive icons, motion, components ×3 batches, age gate (DataStore+attestation), chrome, navigation, legal, system states, E2E harness, gallery, data/domain layer | M1-T001…T019 | M0-GATE PASS + DA-GATE conditions (C-1 satisfied) | [M1-GATE](./gates/M1-GATE.md) |
 | **M2-CATALOG** | Backend: schema/migrations, roles, adapter framework+SSRF+breaker, normalization, sync, jobs, mapping, **source authorization gate (★G-04/B-001 — M2-T008/T009)**, public APIs (videos/search/taxonomy/events/report) | M2-T001…T014 active (+T015…T018 RETIRED→M5/M1 successors) | M1-GATE PASS | [M2-GATE](./gates/M2-GATE.md) — **BLOCKED while B-001 open** |
 | **M3-WATCH** | Android playback: hardened WebView shell (D-013), lifecycle/security, player FSM + failure ladder, watch destination, related rail, beacons, report, interaction suite, discretion (FLAG_SECURE/masking), a11y | M3-T001…T010 | M2-GATE PASS | [M3-GATE](./gates/M3-GATE.md) |

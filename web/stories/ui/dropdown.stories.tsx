@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { Check, RotateCw } from "lucide-react";
 
-import { Dropdown } from "../dropdown";
+import { Dropdown } from "../../../components/ui/dropdown";
 
 /**
  * Dropdown stories — DESIGN-SYSTEM §10 "Dropdown" (S-02 row-overflow

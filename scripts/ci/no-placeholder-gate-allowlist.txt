@@ -17,5 +17,5 @@ scripts/ci/no-placeholder-gate-allowlist.txt
 components/ui/field.tsx
 # Stories demonstrating the attribute with §12-tone sample props
 # (stories are demonstrative surfaces by design; no production copy).
-components/ui/stories/input.stories.tsx
-components/ui/stories/textarea.stories.tsx
+web/stories/ui/input.stories.tsx
+web/stories/ui/textarea.stories.tsx

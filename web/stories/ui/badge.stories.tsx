@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Check } from "lucide-react";
 
-import { Badge, type BadgeProps } from "../badge";
+import { Badge, type BadgeProps } from "../../../components/ui/badge";
 
 /**
  * Badge stories — DESIGN-SYSTEM §10 "Badge (status/count/source)":

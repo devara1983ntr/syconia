@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Tabs, TabsList, TabsPanel, TabsTrigger } from "../tabs";
+import { Tabs, TabsList, TabsPanel, TabsTrigger } from "../../../components/ui/tabs";
 
 /**
  * Tabs stories — DESIGN-SYSTEM §10 "Tabs" (WAI-ARIA tabs pattern:

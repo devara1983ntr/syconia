@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { BottomSheet } from "../bottom-sheet";
-import { Button } from "../button";
+import { BottomSheet } from "../../../components/ui/bottom-sheet";
+import { Button } from "../../../components/ui/button";
 
 /**
  * BottomSheet stories — DESIGN-SYSTEM §10 "BottomSheet (≤767px)".

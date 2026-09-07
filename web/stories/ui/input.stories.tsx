@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Input } from "../field";
+import { Input } from "../../../components/ui/field";
 
 /**
  * Input stories — DESIGN-SYSTEM §10 "Input (with hint/error slots)";

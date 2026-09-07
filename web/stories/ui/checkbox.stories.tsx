@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Checkbox } from "../choice";
+import { Checkbox } from "../../../components/ui/choice";
 
 /**
  * Checkbox stories — DESIGN-SYSTEM §10; 44px row targets

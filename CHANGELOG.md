@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6] — 2026-09-07 — Web client plane isolated under /web (M0-T006)
+### Changed
+- History-preserving `git mv` isolation (all renames tracked): `.storybook/` → `web/.storybook/` · 19 story files → `web/stories/ui/` · 13 web component tests → `web/tests/`. Path reconciliation: story imports, Storybook config (stories glob, staticDirs, `-c web/.storybook` scripts), vitest include, no-placeholder allowlist. Shared design-system library (`components/**`) retained at root — load-bearing for backend web surfaces per D-023.
+### Verified
+- lint 0/0 · typecheck clean · **276 tests passed / 3 skipped (25 files, both planes)** · `next build` green · Storybook build green (Node 22.23.2 provisioned — vitest 5 forks pool incompatible with sandbox Node 20; environment fix, zero repo changes). Playwright e2e not executed this session (browser binaries absent); its spec + snapshots unmoved.
 ## [1.0.5] — 2026-09-07 — Android platform identity and repository boundaries documented
 ### Added
 - Canonical Android identity **`com.syconia.android`** (application ID/namespace, human name SYCONIA) and three-platform repository boundaries (web historical/superseded · android primary-target-future · backend retained) with a platform responsibility matrix — ARCHITECTURE §0/§2/§3, README, SECURITY (D-023). Documentation only: **no Android implementation, configuration, or project files exist**; web isolation under `/web` documented as future task M0-T006 (.ai records 76→78).

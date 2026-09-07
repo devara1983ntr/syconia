@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { ToastProvider, useToast } from "../toast";
-import { Button } from "../button";
+import { ToastProvider, useToast } from "../../../components/ui/toast";
+import { Button } from "../../../components/ui/button";
 
 /**
  * Toast stories — DESIGN-SYSTEM §10 "Toast" (§9 slide-up + fade 200ms,

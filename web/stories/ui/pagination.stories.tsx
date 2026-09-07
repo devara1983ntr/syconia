@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Pagination } from "../pagination";
+import { Pagination } from "../../../components/ui/pagination";
 
 /**
  * Pagination stories — DESIGN-SYSTEM §10 "Pagination (Load-more +

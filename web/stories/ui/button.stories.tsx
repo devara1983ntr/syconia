@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Button, type ButtonProps } from "../button";
+import { Button, type ButtonProps } from "../../../components/ui/button";
 
 /**
  * Button stories — DESIGN-SYSTEM §10: "primary gold / secondary ghost /

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent, within } from "storybook/test";
 
-import { Tooltip } from "../tooltip";
-import { Button, IconButton } from "../button";
+import { Tooltip } from "../../../components/ui/tooltip";
+import { Button, IconButton } from "../../../components/ui/button";
 import { X } from "lucide-react";
 
 /**

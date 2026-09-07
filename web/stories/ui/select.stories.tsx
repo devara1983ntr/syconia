@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
-import { Select, type SelectOption } from "../field";
+import { Select, type SelectOption } from "../../../components/ui/field";
 
 /**
  * Select stories — DESIGN-SYSTEM §10; native <select> semantics

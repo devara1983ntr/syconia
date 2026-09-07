@@ -14,6 +14,7 @@ export default defineConfig({
     setupFiles: ["./tests/vitest-setup.ts"],
     include: [
       "tests/unit/**/*.test.{ts,tsx}",
+      "web/tests/ui-*.test.{ts,tsx}",
       "tests/component/**/*.test.{ts,tsx}",
     ],
   },

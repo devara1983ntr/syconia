@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Breadcrumb } from "../breadcrumb";
+import { Breadcrumb } from "../../../components/ui/breadcrumb";
 
 /**
  * Breadcrumb stories — DESIGN-SYSTEM §10 "Breadcrumb" (nav > ol > li,

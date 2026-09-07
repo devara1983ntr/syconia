@@ -1,9 +1,9 @@
 import type { Preview } from "@storybook/react-vite";
 
-import { MotionProvider } from "../lib/motion/provider";
-import { ToastProvider } from "../components/ui/toast";
-import "../app/styles/tokens.css";
-import "../app/styles/globals.css";
+import { MotionProvider } from "../../lib/motion/provider";
+import { ToastProvider } from "../../components/ui/toast";
+import "../../app/styles/tokens.css";
+import "../../app/styles/globals.css";
 
 /**
  * Preview: the app's token layer + base layer load exactly as in the

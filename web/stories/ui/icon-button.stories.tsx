@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { RotateCw, Search, X } from "lucide-react";
 
-import { IconButton, type IconButtonProps } from "../button";
+import { IconButton, type IconButtonProps } from "../../../components/ui/button";
 
 /**
  * IconButton stories — DESIGN-SYSTEM §10; ACCESSIBILITY §3: icon-only

@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { Eye, Eraser } from "lucide-react";
 
-import { Drawer } from "../drawer";
-import { Button } from "../button";
+import { Drawer } from "../../../components/ui/drawer";
+import { Button } from "../../../components/ui/button";
 
 /**
  * Drawer stories — DESIGN-SYSTEM §10 "Drawer" (S-00: width 88vw max

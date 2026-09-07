@@ -102,10 +102,12 @@ Prohibited: React/web code in the Android client; Android framework imports in d
   syconia-app-icon.png, syconia-favicon.png, syconia-brand-guidelines.pdf
 /docs/                     # DOCUMENTATION-INDEX.md, LEGAL-COMPLIANCE.md, generated PDF
 /.skills/ui-ux-pro-max/    # [EXISTING] cloned UI/UX Pro Max design skill (dev aid; git-ignored)
-/web                       # [FUTURE — M0-T006] historical web client implementation, isolated
-                           #   (currently at repo root: components/, web-client-era configs & tests)
-                           #   superseded as primary client; preserved for audit + M5 retained-surface
-                           #   decisions; physical move deferred to M0-T006 — not performed yet
+/web                       # [EXECUTED — M0-T006, 2026-09-07] web client plane, isolated:
+                           #   .storybook/ gallery harness + stories (19) + web component tests (13).
+                           #   The shared design-system library (components/** minus stories) is
+                           #   retained at root — it is load-bearing for the backend's retained web
+                           #   surfaces (admin/legal/share SSR consume it; D-023 matrix). Superseded
+                           #   as primary client; preserved for audit + M5 retained-surface decisions.
 /android                   # [FUTURE — M1-T001] native Android client (Gradle multi-module)
                            #   NO implementation exists yet — documented boundary only
   app/                     # MainActivity, navigation graph, Hilt app, build variants
