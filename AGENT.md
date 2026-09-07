@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | AGENT.md · v1.0.2 · 2026-09-03 |
+| Document | AGENT.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Audience | AI coding agents (and humans) implementing this repository. Read this file fully before writing any code. |
 | Policy | §2.1 Zero-Placeholder / Zero-Dummy Implementation Policy — **permanent**, added 2026-09-03 |
 
@@ -35,7 +35,7 @@ Production implementation **must not contain** placeholders, dummy implementatio
 
 **2.1.4 Logos / branding** — No placeholder or fake logo; no recreated/approximated SYCONIA logo while an official asset exists; no substitute brand mark; no random icon in place of an official asset — use the official `/branding/` assets per DESIGN-SYSTEM §2–3.
 
-**2.1.5 Icons** — No emoji or random Unicode symbols as fake icons; no arbitrary iconography where the design system specifies an icon; use lucide-react or official project assets per DESIGN-SYSTEM §7; every icon must have an intentional semantic or functional purpose.
+**2.1.5 Icons** — No emoji or random Unicode symbols as fake icons; no arbitrary iconography where the design system specifies an icon; use the approved icon system (Material Symbols on Android per DESIGN-SYSTEM §7 v1.1.0) or official project assets; every icon must have an intentional semantic or functional purpose.
 
 **2.1.6 Code** — No `TODO`/`FIXME`/`XXX`/`HACK` markers; no commented-out unfinished implementation; no empty function bodies unless explicitly required by a framework/interface contract and documented as such; no fake return values (`null`, `[]`, `{}`, `false`, `true`, `"TODO"`, `"Coming soon"`, `"Not implemented"`) used to bypass required implementation; no hard-coded values simulating backend behavior when real logic is required; no swallowed errors or ignored exceptions (`catch {}` to hide failures is forbidden); no disabling validation to make tests pass; no bypassing authentication/authorization/security controls; no mock service secretly wired into production behavior; no development-only shortcuts in production paths; no dead code implying incomplete functionality; no unreachable “future implementation” branches; no commented-out code kept as a substitute for implementation.
 
@@ -47,14 +47,14 @@ Production implementation **must not contain** placeholders, dummy implementatio
 
 **2.1.10 No “temporary” production implementations** — Never use “temporary”, “for now”, “later”, “replace this”, “will implement”, “coming soon”, “stub”, “placeholder”, “mock for now”, “fake for demo” (or equivalents) as a substitute for completing required functionality. If a requirement cannot legitimately be implemented because an external dependency, authorization, credential, provider decision, or specification gate (e.g., G-04) is unresolved: (1) do not fabricate the missing functionality or data; (2) implement the correct documented gated/unavailable/error state; (3) follow the corresponding specification and this file; (4) clearly report the blocked dependency to the developer; (5) never silently downgrade the requirement.
 
-**2.1.11 Completeness gate (before declaring ANY task complete)** — Run a repository-wide quality scan for: TODO/FIXME/HACK/XXX markers · placeholder text · fake/dummy/demo content · fake API responses · mock services in production paths · placeholder images/media/logos/icons · unfinished or empty implementations · hard-coded simulated backend behavior · commented-out unfinished code · dead/incomplete branches · disabled validation/security checks · non-functional UI controls · fabricated production data (`npm run ci:no-placeholder-gate`, G-7). Do not claim completion while any prohibited item remains.
+**2.1.11 Completeness gate (before declaring ANY task complete)** — Run a repository-wide quality scan for: TODO/FIXME/HACK/XXX markers · placeholder text · fake/dummy/demo content · fake API responses · mock services in production paths · placeholder images/media/logos/icons · unfinished or empty implementations · hard-coded simulated backend behavior · commented-out unfinished code · dead/incomplete branches · disabled validation/security checks · non-functional UI controls · fabricated production data (`npm run ci:no-placeholder-gate` (backend) · `./gradlew verifyNoPlaceholders` (android), G-7). Do not claim completion while any prohibited item remains.
 
 **2.1.12 No cosmetic completion** — Never optimize for “the screen looks finished.” A feature is complete only when: UI · interaction behavior · data contract · backend/API/database behavior (where required) · validation · loading/error/empty/offline states · accessibility · security requirements · passing tests · documentation consistency are **all** implemented. A visually polished but functionally fake feature is INCOMPLETE.
 
 **2.1.13 Not a prohibition on legitimate artifacts** — This policy does not prohibit: loading indicators, skeleton loaders, empty/error/offline states, accessibility labels, test fixtures/mocks, development tooling, deterministic test data, or framework-required stubs/interfaces (documented). The rule targets unfinished, deceptive, fabricated, or placeholder implementation being treated as completed production functionality.
 
 ## 3. Stack (exact — do not substitute)
-Next.js 15+ App Router · TypeScript 5 strict · PostgreSQL 16+ · Drizzle ORM (+ drizzle-kit) · `motion` package (`motion/react`) for animation · TanStack Query v5 for client data · Tailwind CSS v4 (token layer) · Zod · lucide-react · Vitest/Testing Library/Playwright/axe-core · fonts: Fraunces + Inter (OFL, self-hosted via next/font).
+**Android client (v1.1.0):** Kotlin · Jetpack Compose · Material 3 (SYCONIA-themed) · Clean Architecture · MVVM/UDF · Coroutines/Flow · Hilt · Navigation Compose · Retrofit/OkHttp/kotlinx-serialization · Coil · DataStore (Room only task-justified) · WebView embed shell (playback, gated B-001) · JUnit/Turbine/MockK/Espresso/Compose UI tests/Macrobenchmark · detekt/ktlint · fonts: Fraunces + Inter (OFL, bundled from branding/fonts). **Backend service:** Node.js 20+ · TypeScript 5 strict · Next.js (backend-only role: API + admin console + legal/share web) · PostgreSQL 16+ · Drizzle ORM (+ drizzle-kit) · Zod · Vitest/Playwright (backend tests).
 
 ## 4. Build order (milestones — PRD §12; complete each before the next)
 **M0 (done):** documentation suite (this baseline).
@@ -71,7 +71,7 @@ Each milestone ends: all gates G-1…G-12 green, PRE-RELEASE rows for its scope 
 2. Write the real implementation + tests (four states) + doc deltas. 3. Run the full gate set locally (§6 commands). 4. Open PR with reviewer checklist (SOP §2). 5. Address CI failures completely — never weaken a test to pass it; if a test is wrong, fix the test *and* the spec together. 6. Before reporting completion, run the §2.1.11 completeness scan; report genuinely blocked items (with their gates) instead of pretending they are complete — never invent missing requirements, never invent production data, never substitute fake functionality for an unresolved dependency.
 
 ## 6. Commands (canonical)
-`npm ci` · `npm run dev` · `npm run lint` · `npm run typecheck` · `npm run test` (unit) · `npm run test:integration` · `npm run test:e2e` · `npm run build` · `npm run db:migrate` / `db:generate` · `npm run hash-password` · `npm run ci:no-placeholder-gate` · `npm run perf:lighthouse`.
+**Android (from /android):** `./gradlew assembleDebug` · `./gradlew detekt ktlintCheck` · `./gradlew testDebugUnitTest` · `./gradlew connectedDebugAndroidTest` · `./gradlew bundleRelease` · `./gradlew verifyNoPlaceholders` (G-7 android scan). **Backend (from /backend):** `npm ci` · `npm run dev` · `npm run lint` · `npm run typecheck` · `npm run test` · `npm run test:integration` · `npm run test:e2e` · `npm run build` · `npm run db:migrate`/`db:generate` · `npm run hash-password` · `npm run ci:no-placeholder-gate` · `npm run perf:api`.
 
 ## 7. Design guidance sources (priority order)
 1. `/branding/syconia-brand-guidelines.pdf` + DESIGN-SYSTEM.md (brand — absolute). 2. SCREENS/UX-FLOWS/GESTURES (behavior — absolute). 3. `/.skills/ui-ux-pro-max` (craft heuristics — advisory only; brand tokens override any suggestion). Never import skill data into app code.

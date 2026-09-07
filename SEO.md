@@ -1,8 +1,10 @@
-# SYCONIA — SEO Strategy (Technical, On-Page, Structured Data)
+# SYCONIA — Web Discoverability (scope-reduced v1.1.0) 
+
+> **Platform migration scope decision (D-018):** SYCONIA's public discovery surface is now the **native Android app**; crawler-based discovery SEO for public catalog pages is **retired with the web UI**. This document now governs: (1) the remaining backend web surfaces — legal/info pages (still indexable, §6 decision unchanged), the minimal `/watch/[slug]` **share/OG preview pages** (noindex, honest OG tags, "Open in app" + open-at-source), and the admin console (noindex); (2) **Android App Links** (`assetlinks.json`, verified deep links `syconia://`→https share URLs), share URL shape, and web-to-app continuity. Sitemaps cover legal pages only; `WebSite/SearchAction`, CollectionPage/ItemList and VideoObject-on-our-domain artifacts are **retired** (an honest `VideoObject` may appear on share pages pointing at the source embed). RTA labelling continues on web surfaces; in-app content rating + Play data-safety disclose adult scope honestly. T-66…T-69 map to these reduced checks.
 
 | Field | Value |
 |---|---|
-| Document | SEO.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` |
+| Document | SEO.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` |
 
 Reality note: adult-content discoverability in general web search is constrained by SafeSearch and platform policies; this strategy maximizes what is legitimately indexable while following search-engine guidelines strictly (no cloaking, no sneaky redirects — brand-discretion measures that alter *presentation*, not *content vs crawler*, are documented in §7).
 

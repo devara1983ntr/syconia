@@ -2,8 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Document | TESTING.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` |
-| Stack | Vitest (unit) · Testing Library (component) · Playwright (E2E + API) · axe-core (a11y) · Lighthouse CI (perf) · Zod contract tests |
+| Document | TESTING.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` |
+| Platform | **Android (Kotlin/Compose) + backend (Node/TS)** · v1.1.0 |
+| Stack | **Android:** JUnit · Turbine (Flow) · MockK/assertk · Compose UI tests (createAndroidComposeRule) · Espresso · kotlinx-serialization contract tests · Macrobenchmark (startup/scroll) · screenshot/visual tests · Playwright **kept for the backend web console + API plane** · axe equivalents via Compose semantics + manual TalkBack passes · detekt/ktlint (Android lint chain) |
 
 ---
 
@@ -13,23 +14,25 @@
 3. Every feature ships with its four states tested (loading/empty/error/offline).
 4. Matrix below is the traceability source of truth: PRs add/extend rows, never delete coverage.
 
-## 2. Levels
-- **Unit (Vitest):** services (`/lib/services`), adapters (`normalize`, `probe`), validators, ranking math (PRD2 §3), cursor signing, rate-limit windows, sanitizers, slug/redirect helpers.
-- **Component (RTL):** every design-system primitive × states (default/hover/focus/disabled/loading); keyboard operation; tokens applied.
-- **Integration:** route handlers against ephemeral Postgres (drizzle migrations applied in CI) — schema, indexes (EXPLAIN asserts index usage on hot paths), retention/purge jobs, breaker state machine, age middleware, admin session lifecycle.
-- **E2E (Playwright):** multi-browser, multi-viewport user journeys + a11y + perf assertions.
-- **Manual/BrowserStack:** iOS Safari + Android Chrome device matrix per release (§9).
+## 2. Levels (v1.1.0)
+- **Domain unit (Android):** use cases, ranking math consumption, cursor handling, E-state mapping — pure Kotlin, fast JVM tests.
+- **ViewModel tests:** Turbine Flow assertions; state reduction (loading/success/empty/error/offline/retry/pagination/refresh); event side-effects.
+- **Repository/data tests:** Retrofit services against contract-accurate recorded fixtures; DTO→domain mappers; cache TTL behavior; error mapping.
+- **Compose UI tests:** every design-system component × states; semantics/content descriptions; touch-target sizes; navigation flows; four-states per feature.
+- **Instrumentation:** WebView shell policy (allowlist loads, blocked intents), Coil image pipeline, DataStore/Keystore behaviors, deep links.
+- **Backend unit/integration (retained):** services, adapters, validators against ephemeral Postgres (drizzle migrations in CI) — schema, EXPLAIN asserts, retention/purge jobs, breaker, age/attestation middleware, admin session lifecycle.
+- **E2E:** Compose-driven app journeys on emulator matrix + Playwright (retained) for backend web console and API contract journeys.
+- **Manual device passes:** TalkBack, font-scale 200%, external keyboard, dark/light system, foldables/tablet layout passes per release (§9).
 
-## 3. Browser & viewport matrix
-| Browser | Roles |
+## 3. Device & window matrix (v1.1.0 — replaces the browser matrix for the app; backend web console keeps a Chrome/Firefox/WebKit smoke matrix)
+| Device class | Roles |
 |---|---|
-| Chrome (latest + latest−1) | full E2E, perf, a11y |
-| Firefox (latest) | full E2E |
-| Safari macOS (latest) | E2E core journeys (Playwright WebKit) |
-| Safari iOS 16+/17+ (BrowserStack) | manual checklist + player matrix (GESTURES §7 divergences) |
-| Chrome Android (emulator + BrowserStack) | E2E mobile suite |
-| Edge (latest) | smoke suite |
-Viewports (all suites): 320, 375, 390, 430, 768, 1024, 1280, 1440, 1920. No horizontal overflow at any (asserted per page).
+| Compact phone (small minSdk-era devices, 360dp width) | full journey E2E, a11y, perf |
+| Medium phone (Pixel-class) | full E2E + Macrobenchmark (startup/scroll) |
+| Large phone / small tablet (expanded width) | layout-adaptation tests (lists→grids, rail↔grid) |
+| Tablet + foldable (expanded) | two-pane/adaptive behavior where specced |
+| Landscape | player/orientation behaviors (GESTURES) |
+Emulators in CI (API 26…current); physical-device manual passes per release. Backend console: Chromium + Firefox + WebKit smoke (Playwright, retained).
 
 ## 4. Route coverage table (every route ≥1 E2E)
 | Route | Tests |

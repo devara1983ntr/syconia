@@ -1,8 +1,10 @@
-# SYCONIA — Navigation & User Workflows
+# SYCONIA — UX Flows (v1.1.0 — behaviors unchanged; Android semantics)
+
+> Platform mapping: browser-back → **system back** (predictive back); tab-title masking → **app-label masking + FLAG_SECURE discretion** (exact behavior at M3-T009, UX §14 intent preserved: nothing on-screen identifies content after leaving the watch surface); localStorage hints → DataStore; "pages" → destinations. All flow content below is product-spec unchanged.
 
 | Field | Value |
 |---|---|
-| Document | UX-FLOWS.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` target behavior |
+| Document | UX-FLOWS.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` target behavior |
 
 Screens: [SCREENS.md](./SCREENS.md) · Interaction physics: [GESTURES.md](./GESTURES.md) · States: [ERROR-STATES.md](./ERROR-STATES.md)
 

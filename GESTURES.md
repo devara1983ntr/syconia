@@ -1,8 +1,10 @@
-# SYCONIA — Interaction & Gesture Specification (touch, mouse, keyboard, video player)
+# SYCONIA — Gesture & Interaction Specification (v1.1.0 — Compose/touch semantics)
+
+> Platform mapping: pointer events → Compose `pointerInput` detect* APIs; mouse/touch rows unify as touch unless a pointer-type distinction matters; keyboard shortcuts (§5) apply to **external/hardware keyboards** (tablets, Chromebooks where supported) — all functionality remains touch-reachable (§7 law); web `touch-action` rules → Compose gesture exclusion/system gesture exclusion zones at screen edges (never intercept Android system back/home gestures). Player WebView gestures: delegated capabilities only (capability model unchanged); double-tap seek etc. remain `player_api`-gated. Content unchanged in intent and constraints.
 
 | Field | Value |
 |---|---|
-| Document | GESTURES.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` target behavior |
+| Document | GESTURES.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` target behavior |
 
 ---
 

@@ -1,8 +1,10 @@
-# SYCONIA — Loading, Empty, Error, Offline & Recovery States
+# SYCONIA — Error-State Taxonomy & Recovery (v1.1.0 — taxonomy unchanged; Compose rendering)
+
+> Platform mapping: states render in Compose (LoadingState/EmptyState/ErrorState/OfflineBanner components; skeleton shimmer → Compose shimmer honoring reduced-motion); HTTP codes still originate from the API (contract unchanged); "offline" additionally covers airplane/metered transitions via ConnectivityManager observation. No fake content ever fills a state.
 
 | Field | Value |
 |---|---|
-| Document | ERROR-STATES.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` catalogue — every async surface maps to ≥1 E-XX |
+| Document | ERROR-STATES.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` catalogue — every async surface maps to ≥1 E-XX |
 
 ---
 

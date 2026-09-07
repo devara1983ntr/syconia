@@ -2,25 +2,22 @@
 
 | Field | Value |
 |---|---|
-| Document | PRE-RELEASE.md · v1.0.2 · 2026-09-03 |
+| Document | PRE-RELEASE.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Rule | Release ships only when every line below is **PASS**. Any FAIL blocks release; N/A requires written justification by the owner (Roshan) recorded in the release record. Evidence column cites the artifact (CI run URL, dashboard, screenshot, report). |
 
 Legend: ☐ pending · ✅ PASS · ❌ FAIL · ➖ N/A(+justification). This template is completed per release and archived in `/docs/releases/` `[REQUIRED] artifact`.
 
 ---
 
-## 1. Build & static quality
-☐ `npm ci` clean from lockfile — evidence: CI run
-☐ `next build` zero errors **and zero warnings**
-☐ Bundle budgets (home ≤220KB, watch ≤180KB compressed JS) — G-9
-☐ ESLint zero (incl. custom design-system rules) — G-8
-☐ `tsc --noEmit` strict clean — G-2
-☐ No-placeholder gate G-7 green (no TODO/FIXME/mock/dummy/lorem in production paths)
+## 1. Build & static quality (v1.1.0)
+☐ Android: Gradle wrapper validated · detekt+ktlint zero · Kotlin warnings-as-errors clean · `assembleRelease`/AAB built in CI · R8 mapping artifact archived · APK/AAB size budget green — G-9
+☐ Backend: `npm ci` clean · build zero errors **and zero warnings** · `tsc --noEmit` strict clean
+☐ No-placeholder gate G-7 green across **android/** + backend production paths (no TODO/FIXME/mock/dummy/lorem)
 
 ## 2. Tests
 ☐ Unit suite green — G-3
 ☐ Integration suite green (migrations applied on clean + populated DB)
-☐ E2E matrix green (Chromium/Firefox/WebKit × 375/1280; nightly full matrix green within 7 days)
+☐ App journey matrix green on emulator set (compact/medium/expanded; API 26…current) + backend console smoke (Chromium/Firefox/WebKit)
 ☐ Player interaction matrix (GESTURES §9) executed incl. documented divergences
 ☐ Visual regression: zero unapproved diffs
 ☐ Flaky quarantine list reviewed (nothing silently skipped)

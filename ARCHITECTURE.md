@@ -2,14 +2,34 @@
 
 | Field | Value |
 |---|---|
-| Document | ARCHITECTURE.md · v1.0.2 · 2026-09-03 |
+| Document | ARCHITECTURE.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Status | Target architecture. **No application code exists yet in this repository** — every element below is `[REQUIRED]` unless marked `[EXISTING]` (brand assets) or `[PROPOSED]`. |
 
 ---
 
-## 1. Architecture style — hybrid
+## 0. Architecture style — client/server (v1.1.0)
 
-SYCONIA uses a **hybrid architecture**: a Next.js application that unifies (a) **server-rendered, CDN-cached frontend delivery** (App Router, RSC), (b) a **co-located backend plane** (Route Handlers acting as the internal API), and (c) an **asynchronous platform plane** (scheduled ingestion jobs + rollups) that talks to external sources. One deployable, three planes, clean seams:
+SYCONIA v1.1.0 uses a **client/server architecture**:
+
+- **Android client (Kotlin + Jetpack Compose + Material 3)** — the public product surface: discovery, search, taxonomy, watch experience. Clean Architecture layers (`ui → domain → data`), MVVM + Unidirectional Data Flow, Coroutines/Flow, Hilt DI, Navigation Compose. Playback via a hardened WebView embed shell (official source embeds only — D-013). No media storage, no accounts.
+- **Backend service (Node.js + TypeScript)** — the retained server plane: public JSON API (API.md §4), admin web console + admin API (§5), minimal legal/contact/share web surface, ingestion jobs, PostgreSQL 16+ via Drizzle ORM. It hosts **no public discovery web UI** (retired with the web client).
+- **PostgreSQL 16+** — backend-only. Never embedded in the app.
+
+```
+┌────────────────────────┐        HTTPS (TLS, pinned config)        ┌──────────────────────────┐
+│  ANDROID APP (Kotlin)  │ ───────────────────────────────────────► │   BACKEND SERVICE        │
+│  Compose UI (M3 theme) │ ◄───────────── JSON API (§4) ───────────│  Node.js + TS            │
+│  ViewModel/StateFlow   │                                          │  API · Admin web · Legal │
+│  UseCase · Repository  │                                          │  Jobs (cron): sync,      │
+│  Room/DataStore (only  │                                          │  probe, rollup, purge    │
+│  where justified)      │                                          │  Drizzle → PostgreSQL 16+│
+│  WebView embed shell   │                                          └───────────┬──────────────┘
+└────────────────────────┘                                                      │ allowlisted egress only
+                                                                    ┌───────────▼──────────────┐
+                                                                    │ EXTERNAL SOURCES          │
+                                                                    │ (official embeds/feeds)   │
+                                                                    └───────────────────────────┘
+```
 
 ```
                     ┌────────────────────────────────────────────────┐
@@ -42,24 +62,35 @@ SYCONIA uses a **hybrid architecture**: a Next.js application that unifies (a) *
 
 ## 2. Technology stack (locked)
 
+### Client (Android) — locked
 | Layer | Choice | Rationale |
 |---|---|---|
-| Framework | **Next.js 15+ (App Router)** `[REQUIRED]` | RSC + streaming, ISR/tag revalidation, route handlers, middleware for age-gate enforcement |
-| Language | **TypeScript 5 (strict)** `[REQUIRED]` | End-to-end type safety; `noUncheckedIndexedAccess` on |
-| Database | **PostgreSQL 16+** (Neon primary; self-hosted alt) `[REQUIRED]` | tsvector + pg_trgm search, JSONB, row-level durability |
-| ORM | **Drizzle ORM + drizzle-kit** `[REQUIRED]` (approved library #1) | Typed SQL, migrations as code, zero-runtime overhead |
-| Animation | **`motion` (Framer Motion, `motion/react`)** `[REQUIRED]` (user-selected) | Transform/opacity-only animation, layout transitions, reduced-motion aware |
-| Client data | **TanStack Query v5** `[REQUIRED]` (approved library #2) | Cursor-paginated infinite queries, caching, retries for client islands |
-| Styling | Tailwind CSS v4 (token layer only) `[REQUIRED]` | Implements DESIGN-SYSTEM tokens; no ad-hoc colors |
-| Validation | Zod `[REQUIRED]` | Every API boundary + DTO validation |
-| Icons | lucide-react + official brand SVG/PNGs `[REQUIRED]` | Licensed icon set + official assets only |
-| Fonts | next/font self-hosted OFL fonts (Fraunces serif / Inter sans) `[REQUIRED]` | Legal licensing (SIL OFL); zero layout shift; brand-guidelines typography direction |
-| Testing | Vitest, Testing Library, Playwright, axe-core `[REQUIRED]` | TESTING.md |
-| Hosting | Vercel + Neon (primary) / Docker + VPS (alt) `[REQUIRED]` | DEPLOYMENT.md |
+| Language | **Kotlin** (JVM; strategy: pin current stable at scaffold — D-016) | Coroutines-native, null-safety, Compose |
+| UI | **Jetpack Compose + Material 3** (BOM pinned at scaffold) | Declarative UI; M3 themed from SYCONIA tokens (DESIGN-SYSTEM §13) — no generic Material demo look |
+| Architecture | **Clean Architecture + MVVM/UDF** | UI → ViewModel → UseCase → Repository → DataSources; domain free of Android UI deps |
+| Async | **Coroutines + Flow** | Structured concurrency; StateFlow state exposure |
+| DI | **Hilt** | Standard Android DI; compile-time graph validation |
+| Navigation | **Navigation Compose** | Destinations, deep links (App Links), predictive back |
+| Networking | **Retrofit 2 + OkHttp + kotlinx-serialization** (D-011) | Contract-first against API.md; TLS/network-security-config |
+| Imaging | **Coil** (D-012) | Compose-native, allowlisted hosts |
+| Playback | **WebView embed shell** (hardened, D-013) | Official source embeds are iframe/JS — WebView is the honest mechanism; capability chrome in Compose |
+| Persistence | **DataStore** (prefs/session); **Room only where a task justifies it with evidence** (D-014) | No local media ever |
+| Fonts | Bundled OFL **Fraunces + Inter** variable TTFs (from branding/fonts) | Licensing + brand typography; Compose font scaling |
+| Min/target SDK | **minSdk 26; targetSdk = Play-current at release** (D-016) | Device coverage vs API level |
 
-Prohibited: jQuery, moment, CSS-in-RN-style runtimes, untyped `any` escapes, hard-coded brand colors outside the token layer.
+### Backend (service) — retained from v1.0.2
+| Layer | Choice | Rationale |
+|---|---|---|
+| Runtime | **Node.js 20+ / TypeScript 5 (strict)** | Retained server plane |
+| Framework | **Next.js (backend-only role)** — API handlers, admin console, legal/contact web surface, share/OG pages; **no public discovery web UI** (D-010) | Preserves DATABASE/API/admin specs verbatim; least invention |
+| Database / ORM | **PostgreSQL 16+ · Drizzle ORM + drizzle-kit** | Backend concern only — never in the app |
+| Validation | Zod at every boundary | Unchanged |
+| Jobs | Platform cron → job endpoints (registry §5) | Unchanged |
+| Hosting | Vercel + Neon (primary) / Docker + VPS (alt) | DEPLOYMENT.md (B-003 unchanged) |
 
-## 3. Repository layout (target)
+Prohibited: React/web code in the Android client; Android framework imports in domain layer; `Composable → Retrofit/Room` calls; untyped escapes; hard-coded brand colors outside the theme; libraries added without a recorded decision.
+
+## 3. Repository layout (target — v1.1.0)
 
 ```
 /                          # repo root — all project .md specs (this suite)
@@ -68,52 +99,52 @@ Prohibited: jQuery, moment, CSS-in-RN-style runtimes, untyped `any` escapes, har
   syconia-app-icon.png, syconia-favicon.png, syconia-brand-guidelines.pdf
 /docs/                     # DOCUMENTATION-INDEX.md, LEGAL-COMPLIANCE.md, generated PDF
 /.skills/ui-ux-pro-max/    # [EXISTING] cloned UI/UX Pro Max design skill (dev aid; git-ignored)
-/app                       # [REQUIRED] Next.js App Router
-  (public)/                # age-gated public route group
-    page.tsx               # home
-    search/page.tsx
-    categories/page.tsx, categories/[slug]/page.tsx
-    tags/page.tsx, tags/[slug]/page.tsx
-    watch/[slug]/page.tsx
-    (legal)/terms|privacy|dmca|2257|cookies|about|contact/page.tsx
-    offline/page.tsx
-  admin/                   # noindex route group; its own layout+auth guard
-    login/page.tsx, page.tsx (dashboard), videos/, categories/, tags/,
-    sources/, mappings/, takedowns/, settings/, audit/
-  api/                     # route handlers (API.md)
-  sitemap.ts, robots.ts, not-found.tsx, error.tsx, global-error.tsx
-/components                # design-system primitives + composites (DESIGN-SYSTEM §13)
-  /ui (primitives)  /layout (header, drawer, footer)  /player (shell)
-  /cards (VideoCard…)  /states (Empty, Error, Skeleton…)  /admin
-/lib                       # db (drizzle), adapters/, auth/, rate-limit/, cache/,
-                           # analytics/, validation/ (zod schemas), seo/, env.ts
-/middleware.ts             # age-gate + security headers + admin auth seam
-/drizzle                   # migrations + relational schema
-/tests                     # unit / integration / e2e (Playwright) per TESTING.md
-/scripts                   # sync runner entry, seed-* (structure only, no fake data),
-                           # purge/rollup jobs, ci/no-placeholder-gate.sh
+/android                   # [REQUIRED] native Android client (Gradle multi-module)
+  app/                     # MainActivity, navigation graph, Hilt app, build variants
+  core/common/             # result types, dispatchers, errors → E-state mapping
+  core/designsystem/       # SyconiaTheme (M3 from tokens), typography, icons, components
+  core/model/              # shared plain models (no framework deps)
+  core/network/            # Retrofit/OkHttp/kotlinx-serialization, DTOs, API services
+  core/security/           # network config, WebView hardening, secure prefs, keystore use
+  core/ui/                 # shared composables: states (loading/empty/error/offline), chrome
+  data/repository/         # repository implementations (remote + cache mappers)
+  data/local/              # DataStore (session/age/settings); Room ONLY if task-justified
+  domain/                  # use cases + repository contracts + domain models (pure Kotlin)
+  feature/home|search|categories|tags|watch|settings|legal   # feature modules (UI+ViewModel)
+/backend                   # [REQUIRED] retained server plane (Next.js backend-only role)
+  /app/api/*               # API.md handlers (public §4 + admin §5)
+  /app/admin/*             # admin web console (A-01…A-10, noindex, auth-guarded)
+  /app/(legal)/*           # legal/contact web + /watch/[slug] OG share pages
+  /lib                     # db (drizzle), adapters/, auth/, rate-limit/, cache/, validation/
+  /drizzle                 # migrations + schema
+  /scripts                 # jobs registry, ci/no-placeholder-gate.sh
+/branding, /docs, /.ai     # unchanged
+/.skills                   # git-ignored dev aid (unchanged)
+
+Dependency direction (enforced by module graph + convention plugins + review):
+`feature/* → core/* → domain ← data/*` — UI never touches Retrofit/Room/DTOs; domain has no Android UI imports; DTO→domain mapping only in data/; database entities never cross into presentation.
 ```
 
-## 4. Rendering strategy per route
+## 4. Delivery strategy (v1.1.0) — API endpoints & web surfaces
 
-| Route | Strategy | Cache | Reason |
+**Android client:** all public surfaces are in-app destinations (Navigation Compose — SCREENS.md destination map); data arrives via the JSON API with repository-layer caching (TTL matrix PRD2 §5); UI states per ERROR-STATES taxonomy (loading/empty/error/offline) rendered in Compose. Age gate is a first-run in-app gate persisted in DataStore (FR-1 preserved client-side; server still enforces age affirmation for its web surfaces and API — SECURITY §6A).
+
+**Backend web surfaces (remaining):**
+| Surface | Strategy | Cache | Reason |
 |---|---|---|---|
-| `/` | ISR (120s) + streaming | CDN, tag `home` | Fast LCP, fresh rails |
-| `/search` | SSR first page + client pages 2+ | no-store (dynamic) | Query freshness; crawlers get p1 only, `noindex` on parameterized URLs |
-| `/categories`, `/categories/[slug]`, `/tags/[slug]` | ISR 300s | tags `taxonomy:*` | Stable, cache-heavy |
-| `/watch/[slug]` | ISR 600s (shell only; embed lazy) | tag `video:{id}` | Instant watch start; hide purge <60s |
-| Legal/about | Static (SG) | immutable-ish | Never changes unannounced |
-| `/admin/**` | Dynamic SSR, `noindex`, auth-guarded | private | Fresh ops data |
-| `/api/*` | Route handlers | 30s where safe (PRD2 §5) | Data plane |
+| `/api/*` (API.md §4/§5) | HTTP handlers | 30s micro-cache where safe (PRD2 §5) | Data plane for app + admin |
+| `/legal/*`, `/about`, `/contact` | Static | CDN | Compliance surfaces (SEO §6 indexing decision unchanged) |
+| `/watch/[slug]` | Minimal OG/share-preview page (noindex; OG tags + "Open in app" + open-at-source) | tag `video:{id}` | Share URLs & OG previews for shared links (SEO §1 v1.1.0) |
+| `/admin/**` | Dynamic SSR, `noindex`, auth-guarded | private | Ops console |
 
-Error boundaries: `error.tsx` per route group; `global-error.tsx` last resort; player failures isolated in the stage region only (ERROR-STATES.md).
+Error handling: API error envelopes (API.md §3); app renders E-states; player failures isolated to the stage region (ERROR-STATES.md).
 
 ## 5. Backend/server architecture
 
-- **API plane** = Next.js Route Handlers under `/app/api`, thin controllers: parse (Zod) → authorize (age cookie / admin session) → rate-limit → service (`/lib/services`) → respond. No business logic in handlers.
+- **API plane** = backend HTTP handlers under `/app/api` (Next.js in backend-only role — D-010), thin controllers: parse (Zod) → authorize (age cookie / admin session) → rate-limit → service (`/lib/services`) → respond. No business logic in handlers.
 - **Services layer**: `catalogService` (list/get/related), `searchService`, `taxonomyService`, `ingestService`, `analyticsService`, `takedownService`, `adminService`. Pure functions over Drizzle — unit-testable without HTTP.
 - **Jobs plane** (canonical registry — single source of truth): `scripts/jobs/*` invoked by platform cron (Vercel Cron / GitHub Actions / system crontab on VPS): `sync-sources` (per-source, isolated), `probe-availability`, `rollup-daily`, `purge-expired`, `refresh-trending`, `mapping-backfill` (on-demand after mapping-rule create/update — UX-FLOWS §9), `sitemap-refresh` (post-sync — CI-CD §7). All idempotent, all write `sync_runs`/`audit_log` rows, all kill-switchable via `system_settings`.
-- **Middleware** (edge): ① age-cookie enforcement on public content + `/api` (PRD FR-1), ② security headers (SECURITY.md §4), ③ admin session redirect, ④ request-id injection for log correlation.
+- **Backend middleware**: ① age-affirmation enforcement for web surfaces + API (PRD FR-1; Android app passes the affirmed-age attestation header — SECURITY §6A), ② security headers on web surfaces (SECURITY.md §4), ③ admin session redirect, ④ request-id injection. (No browser middleware exists in the Android client; its concerns map to in-app gates + network config.)
 
 ## 6. Adapter architecture (external sources)
 
@@ -123,10 +154,10 @@ Error boundaries: `error.tsx` per route group; `global-error.tsx` last resort; p
 - **Embed rendering:** server components validate `embed.url` against the source manifest before emitting the iframe; attributes locked: `sandbox="allow-scripts allow-same-origin allow-presentation"`, `allowfullscreen`, `referrerpolicy="strict-origin-when-cross-origin"`, `loading="lazy"`. No third-party `<script>` ever loads on our origin.
 
 ## 7. Data flow — watch session
-1. RSC renders watch shell from DB (ISR) with reserved 16:9 stage → 2. client island initializes embed per adapter capability set → 3. anonymous session id (cookie `sy_sid`, uuid v4) ties beacons → 4. quartile beacons POST `/api/events/watch` (batched, `keepalive` on hide) → 5. rollups nightly. No PII anywhere in the chain. **`sy_sid` lifecycle (normative):** 30-day expiry from issuance, **no renewal** (a fresh `sy_sid` is minted after expiry — continuity of analytics is deliberately sacrificed for privacy); rotated immediately by the “Clear session traces” control (UX-FLOWS §14).
+1. Watch destination renders from API data (repository cache) with reserved 16:9 stage → 2. WebView embed shell initializes per adapter capability set → 3. anonymous app session id (`sy_sid` equivalent: UUID v4 held in DataStore, never a cookie — same lifecycle) ties beacons → 4. quartile beacons POST `/api/events/watch` (batched; flushed on app backgrounding) → 5. rollups nightly. No PII anywhere in the chain. **`sy_sid` lifecycle (normative):** 30-day expiry from issuance, **no renewal** (a fresh `sy_sid` is minted after expiry — continuity of analytics is deliberately sacrificed for privacy); rotated immediately by the “Clear session traces” control (UX-FLOWS §14).
 
 ## 8. Caching architecture
-Layered: CDN/ISR (tag purge via `revalidateTag`) → route-handler micro-cache → Drizzle prepared statements → TanStack Query client cache. TTLs and invalidation events: single source of truth in PRD2 §5. Invariant: **admin hide/takedown purges `video:{id}` + listing tags and is effective ≤60s end-to-end** (E2E-verified).
+Layered: CDN for web surfaces (tag purge via `revalidateTag`) → API micro-cache → Drizzle prepared statements → **app repository-layer cache (replaces TanStack Query; TTLs from PRD2 §5 applied client-side)**. TTLs and invalidation events: single source of truth in PRD2 §5. Invariant: **admin hide/takedown purges `video:{id}` + listing tags and is effective ≤60s end-to-end** (E2E-verified).
 
 ## 9. Rate limiting & abuse controls
 Sliding-window counters (Upstash Redis on Vercel path; Postgres-backed fallback on VPS path) keyed by truncated IP + route class: `suggest` 60/min, `search` 30/min, `events` 120/min, `report` 5/hour, admin login 5/15min then lockout. 429 + `Retry-After`; client backs off with jitter. Full policy: SECURITY.md §10.
@@ -137,7 +168,7 @@ Zod schemas shared by client forms and server handlers (single definition in `/l
 ## 11. Logging, monitoring, error boundaries
 - Structured JSON logs, one line per request: `{ts, level, requestId, route, status, ms, source?, code?}`. No PII, no full IPs (truncation rule PRD2 §9). Log levels: `error` (page failure, adapter hard failure), `warn` (breaker half-open, rate-limit hits, normalization drift), `info` (sync summaries), `debug` (dev only, stripped in prod).
 - Uptime/health: `/api/health` (liveness: process) and `/api/ready` (readiness: DB ping + breaker states). External uptime monitor pings 60s `[REQUIRED]`; on-call alert channel documented in SOP.md §9.
-- Client error reporting: window `onerror` → beacon to `/api/events/client-error` (throttled 5/session, no stack in URL, sampled).
+- Client error reporting: Android uncaught-error handler → beacon to `/api/events/client-error` (throttled 5/session, no stack in URL, sampled; web surface keeps its equivalent onerror beacon).
 
 ## 12. Environment configuration
 All configuration via environment variables validated at boot by `/lib/env.ts` (Zod; process exits on invalid — fail-closed):
@@ -162,8 +193,8 @@ Build pipeline, environments (preview/staging/prod), migration policy (drizzle-k
 |---|---|---|
 | Search | Postgres tsvector + pg_trgm | No extra service at this catalog scale; upgrade path to external search engine noted `[PROPOSED]` >200k items |
 | Rate limiting | Upstash Redis (Vercel) / PG table (VPS) | Managed simplicity vs self-host parity |
-| Thumbnails proxy | next/image with remotePatterns allowlist | Optimization + SSRF-safe, no media storage (caches transforms only — never source video/media) |
+| Thumbnails proxy | backend image proxy with allowlist (`next/image` retained server-side; Android consumes proxied URLs via Coil) | Optimization + SSRF-safe, no media storage (caches transforms only — never source video/media) |
 | Analytics | First-party pipeline (F-12) | Privacy posture + zero third-party script risk |
 
 ## 15. Architectural invariants (audited per release)
-1. No media file storage anywhere in the system (static analysis gate G-7 also greps for mp4/m3u8 writes). 2. No route renders content without the age cookie. 3. No third-party scripts on our origin. 4. All external egress via the allowlisted adapter client. 5. All admin mutations audited. 6. Tokens are the only color source. 7. No placeholder/mock data (G-7). 8. Every feature ships with its four states (loading/empty/error/offline).
+1. No media file storage anywhere in the system (static analysis gate G-7 also greps for mp4/m3u8 writes). 2. No content renders before the in-app age gate (and no web surface serves content without age affirmation). 3. No third-party scripts on our origin; the app loads third-party scripts only inside the sandboxed player WebView (D-013). 4. All external egress via the allowlisted adapter client. 5. All admin mutations audited. 6. Tokens are the only color source. 7. No placeholder/mock data (G-7). 8. Every feature ships with its four states (loading/empty/error/offline).

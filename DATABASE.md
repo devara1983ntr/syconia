@@ -1,8 +1,10 @@
-# SYCONIA — Database Design (PostgreSQL 16+ / Drizzle ORM)
+# SYCONIA — Database Specification (v1.1.0 — backend-only concern, unchanged)
+
+> PostgreSQL 16+ lives exclusively in the backend service (Drizzle ORM). The Android client never touches this database (no embedded DB beyond task-justified local caching per ARCHITECTURE §2/D-014). Schema, migrations, roles, retention policies below are unchanged from v1.0.2.
 
 | Field | Value |
 |---|---|
-| Document | DATABASE.md · v1.0.2 · 2026-09-03 |
+| Document | DATABASE.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Status | Target schema `[REQUIRED]` — no database exists yet; this document is the authoritative implementation spec for `drizzle-kit` migrations. |
 
 Conventions: `snake_case` identifiers; UUID PKs (`gen_random_uuid()`); `created_at/updated_at timestamptz NOT NULL DEFAULT now()`; soft-state enums as Postgres enums; all FKs `ON DELETE` explicit; all timestamps UTC. Money features absent by design (no payments — PRD §3.2). **No media blobs, ever.**

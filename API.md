@@ -1,8 +1,10 @@
-# SYCONIA — API Specification (Internal API + External Adapter Contracts)
+# SYCONIA — API Specification (v1.1.0 — contracts unchanged; consumers updated)
+
+> Consumers: **Android app (primary)** via Retrofit/kotlinx-serialization against these exact contracts, and the **backend admin console** (web). Client consumption guidance: DTO mapping happens only in the app's data layer (never in UI/domain); cursor pagination via the same signed cursors (tamper→400); error envelopes map 1:1 to app E-states; retries with jitter+backoff on 5xx/timeout only (idempotent GETs); caching honors the PRD2 §5 TTL matrix at the repository layer; age attestation header per SECURITY §6A; beacons batch and flush on background. §4/§5 contract text below is authoritative and unchanged.
 
 | Field | Value |
 |---|---|
-| Document | API.md · v1.0.2 · 2026-09-03 |
+| Document | API.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Status | Target contract `[REQUIRED]`. Base URL: same-origin `/api`. All endpoints HTTPS-only. |
 
 Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope `{ error: { code, message, requestId } }`; cursor pagination per PRD2 §4; every response carries `x-request-id`. **Global precondition:** all `/api/*` except `/api/health`, `/api/ready`, `/api/csp-report`, `/api/admin/login` require the signed age cookie (`sy_age_ok`) — enforced by middleware (403 `age_verification_required` otherwise).
@@ -32,7 +34,7 @@ Conventions: JSON bodies; Zod-validated requests; RFC-7807-style error envelope 
 - **200:** `{ items: VideoCardDTO[≤48], nextCursor: string|null, notice?: string }` where `notice` is an optional human-readable degradation banner key (e.g., `some_sources_unavailable`, `filters_cleared`) and `VideoCardDTO = { slug, title, durationSeconds|null, thumbUrl (proxied), sourceName, publishedAt|null, categories: string[] (slugs, ≤3), tags: string[] (slugs, ≤5) }`.
 - **Behavior:** 30s micro-cache; queries hit indexes (DATABASE §5); hidden/unavailable excluded at SQL level.
 - **Errors:** `validation_failed` (unknown enum → sanitized to default + 200 with `notice` field — never hard-fail browsing), `rate_limited`.
-- **Timeout/retry:** server-side p50 budget 80ms; client TanStack retry ×2 (backoff 500ms/2s) on 5xx/network only.
+- **Timeout/retry:** server-side p50 budget 80ms; client retry ×2 (backoff 500ms/2s) on 5xx/network only — app repository layer / admin console fetch layer.
 
 ### 4.2 `GET /api/videos/{slug}` — watch payload
 - **Auth:** P0. **200:** `WatchDTO = { slug, title, description, durationSeconds, publishedAt, viewCount, source: { slug, name, provenanceUrl }, embed: { url (validated vs manifest), type, capabilities: [] }, categories[], tags[], relatedCursor }`. **`relatedCursor` continuation contract (normative):** the Related rail is ordered by the stable composite key `(bucket, shared_tag_count, trending_score, id)` (composition PRD2 §2.5); `relatedCursor` is a signed cursor over that key; continuation calls `GET /api/videos?related=<slug>&cursor=<relatedCursor>` and walks the identical ordering — deterministic across requests; live exclusions (hidden/unavailable/blocked) are re-applied at each page. `viewCount` = `views_total` (semantics PRD2 §2.6; display rounding client-side).

@@ -2,12 +2,13 @@
 
 | Field | Value |
 |---|---|
-| Document | DEPLOYMENT.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` |
+| Document | DEPLOYMENT.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` |
 
 ---
 
-## 1. Topology (primary path)
-**Vercel** (app + ISR/CDN + edge middleware) + **Neon Postgres** (serverless DB, PITR) + **Upstash Redis** (rate limiting) + platform cron → job endpoints. Zero self-managed servers; every component HTTPS/TLS-native.
+## 1. Topology (v1.1.0)
+**Backend service:** **Vercel** (backend-only Next.js: API + admin console + legal/share web surfaces) + **Neon Postgres** (PITR) + **Upstash Redis** (rate limiting) + platform cron → job endpoints. Unchanged from v1.0.2 except the public web UI no longer exists.
+**Android distribution (honestly scoped — nothing invented):** v1 targets **internal APK + internal testing track** (installed via signed artifact; `.ai` task M5-T006 decides Play/open distribution with operator sign-off — B-003-class decision). No release process beyond internal sideload/testing is claimed. Signing keys live only in CI/machine keystores — never in the repo (CI-CD G-6). Versioning: `versionCode` monotonic + `versionName` semver aligned with releases; staged rollout/Play listing defined only if/when Play distribution is chosen (recorded as a new decision then).
 
 Alternative path (§7): Docker images on a VPS behind Caddy/Traefik — for jurisdictions/hosts where the primary path is unavailable (adult-content policy of the host must permit the service — see §2; never misrepresent the service to any provider, per LEGAL-COMPLIANCE §3).
 
@@ -37,7 +38,7 @@ Deploy = migrations → app rollout → G-11 smoke (health/ready, age gate, home
 Multi-stage build: deps → build (Next standalone output) → runtime (non-root user, `NODE_ENV=production`, healthcheck `/api/health`, exposed 3000). Reverse proxy (Caddy recommended: automatic HTTPS via ACME, same header set enforced at proxy too). Process manager: systemd or container orchestration; jobs via system cron hitting `CRON_SECRET` endpoints. Images published with immutable digests; SBOM attached `[PROPOSED]`.
 
 ## 8. Post-deploy verification checklist (first boot + every release)
-□ `/api/health` 200 · `/api/ready` 200 (DB + breakers) · headers present (SECURITY §17 test) · age gate enforced (T-70 class probe) · admin login works + lockout active · rate limits live (429 probe) · sitemap/robots resolve · CSP report endpoint receiving · uptime monitor registered (60s) · error-rate dashboard live · rollback artifact (previous image/tag) verified present.
+□ `/api/health` 200 · `/api/ready` 200 (DB + breakers) · headers present (SECURITY §17 test) · age attestation enforced on API + web surfaces (T-70 class probe) · admin login works + lockout active · rate limits live (429 probe) · legal sitemap/robots resolve · assetlinks.json valid · CSP report endpoint receiving · uptime monitor registered (60s) · error-rate dashboard live · rollback artifact (previous image/tag) verified present · current APK/AAB installs on a clean device (smoke journey green).
 
 ## 9. Operational calendar
 Daily: takedown queue check (SLA), dashboards glance. Weekly: dependency PRs, unmapped-terms triage, pg_stat review. Monthly: restore drill, dependency audit report, capacity review. Quarterly: pen-test refresh, key rotation (SOP §10), provider AUP re-verification.

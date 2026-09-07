@@ -2,17 +2,14 @@
 
 | Field | Value |
 |---|---|
-| Document | SOP.md · v1.0.2 · 2026-09-03 · Owner: Roshan |
+| Document | SOP.md · v1.1.0 · 2026-09-03 (Android platform migration) · Owner: Roshan |
 
 ---
 
-## 1. Local development setup `[REQUIRED]` (when implementation begins)
-1. Prerequisites: Node 20+ (`node -v`), npm 10+, PostgreSQL 16 local (or Neon branch), Git.
-2. `git clone <repo>` → `npm ci` (lockfile-only; never `npm install` on main).
-3. Copy `.env.example` → `.env.local`; fill: `DATABASE_URL` (local/branch DB), `AGE_SECRET`/`CURSOR_SECRET`/`SESSION_SECRET` (32+ random chars, dev-only values), `ADMIN_USERNAME` + `ADMIN_PASSWORD_HASH` (generate: `npm run hash-password`), `SITE_URL=http://localhost:3000`, `SITE_NAME=SYCONIA`.
-4. `npm run db:migrate` (drizzle-kit) → `npm run dev`.
-5. Verify: `/api/health` 200; age gate appears; `/admin/login` rejects bad creds with lockout counter.
-6. Adapters in dev run against **recorded fixtures** by default (`SOURCE_MODE=fixed`); live egress only with explicit `SOURCE_MODE=live` + your own API keys (never commit them).
+## 1. Local development setup `[REQUIRED]` (v1.1.0 — Android client + backend)
+**Android app:** 1. Prerequisites: JDK 17+ (Temurin), Android Studio (current stable) with SDK platform for `targetSdk` + build-tools, emulator/device (API 26…current), Git. 2. Open `/android` in Android Studio → Gradle sync (wrapper-provisioned Gradle; never a system Gradle). 3. Run configurations: `app` (debug variant) — local backend endpoint or recorded-contract mode. 4. Verify: app launches → age gate → honest empty/offline states (no fake data).
+**Backend:** 1. Node 20+, npm 10+, PostgreSQL 16 local (or Neon branch). 2. `cd backend` → `npm ci`. 3. `.env.local` per `.env.example` (secrets 32+ chars dev-only; `ADMIN_PASSWORD_HASH` via `npm run hash-password`). 4. `npm run db:migrate` → `npm run dev`. 5. Verify `/api/health` 200; `/admin/login` lockout counter active.
+**Fixtures:** adapters and app repository tests run against **recorded contract fixtures** by default (`SOURCE_MODE=fixed` / local fixture JSON); live egress only explicitly with your own keys (never commit them).
 
 ## 2. Repository conventions
 - Trunk-based; branch `feat|fix|chore|docs/…`; conventional commits (`feat(player): …`).
@@ -21,7 +18,7 @@
 - Never commit: secrets, node_modules, `.env*`, build output (gitignore enforced), or unofficial logo recreations.
 
 ## 3. Coding standards
-TypeScript strict; server components default; no `any`; tokens only for colors/spacing/motion (G-8); imports ordered (lint); error handling per ERROR-STATES taxonomy (no swallowed errors); every admin mutation wraps `audit()`; every external fetch via the adapter client (no direct fetch); Zod at every boundary; comments explain *why*, never narrate *what*; zero `TODO/FIXME/mock` markers (tracking issues instead).
+Kotlin: explicit API mode on domain/core modules; no Android imports in domain; Compose state hoisting per MVVM/UDF; TypeScript strict on backend; no `any`; tokens only (G-8, both stacks); imports ordered (ktlint/ESLint); error handling per ERROR-STATES taxonomy (no swallowed errors); every admin mutation wraps `audit()`; every external fetch via the adapter client (no direct fetch); Zod at every boundary; comments explain *why*, never narrate *what*; zero `TODO/FIXME/mock` markers (tracking issues instead).
 
 ## 4. Testing SOP
 - Write tests with the feature, not after (TDD encouraged for services/adapters).

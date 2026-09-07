@@ -1,4 +1,6 @@
-# SYCONIA — Advanced Technical & Product Specification (PRD 2)
+# SYCONIA — Advanced Product Specification (v1.1.0 — platform-neutral data/behavior spec)
+
+> Platform mapping: client-side behaviors (cursors, cache TTLs, race policies, session) are consumed by the **Android repository/UseCase layer** (replacing TanStack Query); `sy_sid` = app anonymous session id (same lifecycle); beacons flush on app backgrounding. All math, contracts and policies unchanged.
 
 | Field | Value |
 |---|---|
@@ -31,7 +33,7 @@ PRD.md defines *what* SYCONIA is and *who* it serves. This document defines *how
 | Rising | `views_24h / max(views_7d,1)` ratio, min threshold 50 views/24h |
 
 ### 2.3 URL state contract (search/listings)
-- Every filter/sort/page state lives in the URL (`?q= &cat= &tag= &src= &dur= &sort= &cursor=`). Back/forward must restore state *and scroll position* (scroll restoration via Next.js router + persisted rail offsets; verified in E2E).
+- Every filter/sort/page state lives in destination state + deep-link arguments (pattern `?q= &cat= &tag= &src= &dur= &sort= &cursor=` retained for share URLs). System back must restore state *and scroll position* (saved-state + lazy-list first-visible-item restoration; verified in E2E).
 - Canonical URLs exclude cursor/page parameters (SEO.md §4).
 
 ### 2.4 Discretion behaviors
@@ -52,7 +54,7 @@ Global exclusions across all buckets: `V` itself, `is_hidden`, `is_available=fal
 - Display rounding (watch page + admin): `<1000` exact · `1,000–999,999` → `X.Xk` · `≥1,000,000` → `X.XM`.
 
 ### 2.7 Stale-request / race / cancellation policy (normative — G-08 resolution)
-- Every URL/query param change produces a new TanStack Query cache key → automatic query supersession; in-flight fetches are **aborted** on key change (`AbortController`); responses arriving for abandoned keys are discarded (last-write-wins rendering).
+- Every query/filter change produces a new repository request key → automatic request supersession; in-flight coroutines are **cancelled** on key change; responses arriving for abandoned keys are discarded (last-write-wins collection).
 - Suggest endpoint: each request carries a client `seq`; responses with `seq` < latest rendered `seq` are dropped (out-of-order guard).
 - Duplicate/idempotent beacons: no cancellation (safe by §2.6 aggregation dedupe).
 - Mutations (report/contact): single-flight — submit button disabled while in-flight; duplicate submits impossible; retries only after network-class failure with unchanged payload.
@@ -94,7 +96,7 @@ Raw `watch_events`, `interaction_events` and `search_queries` aggregate nightly 
 | Route handler | suggest | 30s | none |
 | Adapter | source fetch | source-defined (min 300s) | breaker |
 | DB | rollup tables | hourly job | job |
-| Client (TanStack Query) | lists | staleTime 60s, gcTime 5m | cursor-keyed |
+| Client (app repository cache) | lists | staleTime 60s, memory 5m | cursor-keyed |
 | Images | thumbnails | 30d immutable | URL-hash changes |
 
 ## 6. Adapter architecture contract (summary — full API in API.md §6)

@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Document | DESIGN-SYSTEM.md · v1.0.2 · 2026-09-03 |
+| Document | DESIGN-SYSTEM.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Branding source of truth | `/branding/syconia-brand-guidelines.pdf` (v1.0, Sept 2026) + `/branding/` assets — `[EXISTING]` |
 | Conflicts | PDF §5 "Corporate Decoy" rejected (PRD §17 C-2); unrelated business units out of scope (C-3) |
 
@@ -65,8 +65,8 @@ Watermark variant (128px, 6pt refined lines, 20% opacity) is derived from the sy
 Rules: derived neutrals are lightness steps of the brand hues only — no new hues. Status colors are functional-only and visually harmonized (desaturated toward the palette). **All ratios above are computed per the WCAG relative-luminance formula against Obsidian `#09090B` and are re-verified by unit test (TESTING §6); they are normative for conformance.** Branding-source discrepancy **B-1 (documented per PRD §17 policy):** the brand-guidelines PDF's own contrast figures — Ostiole Gold "3.2:1", Night Emerald "12.8:1", Champagne "2.1:1", Obsidian "19.5:1" (all vs white) — do not match computed WCAG values (2.46:1, 15.5:1, 1.48:1, 19.9:1 respectively). The guidelines remain the *aesthetic* authority; the computed math governs *conformance*. **Gold-as-text law (corrected):** on Obsidian — the only v1 theme — Ostiole Gold computes 8.1:1 and Champagne 13.4:1, so **both pass WCAG AA for normal-size text on dark surfaces** and may be used for text accents, links, labels and emphasis; body copy nevertheless remains Alabaster/secondary as an editorial-hierarchy rule (brand restraint, not contrast necessity). On light surfaces (Alabaster print/letterhead contexts) gold fails (2.46:1 vs white) and is restricted to large or decorative use only. No other colors may appear anywhere; CI gate greps for raw hex outside the token file (CI-CD §4 G-8).
 
 ## 5. Typography
-- **Primary (editorial serif):** **Fraunces** (SIL OFL 1.1) — licensed, self-hosted via `next/font`. Chosen as the legally-safe embodiment of the guidelines' direction (which names proprietary Canela/Ogg as *examples*, never bundled).
-- **Secondary (sans):** **Inter** (SIL OFL 1.1) — explicitly shortlisted by the guidelines ("Satoshi, Inter, Roboto").
+- **Primary (editorial serif):** **Fraunces** (SIL OFL 1.1) — licensed, bundled in the app (`branding/fonts/`, Compose `FontFamily`; variable axes pinned per D-008/AG-013). Chosen as the legally-safe embodiment of the guidelines' direction (which names proprietary Canela/Ogg as *examples*, never bundled).
+- **Secondary (sans):** **Inter** (SIL OFL 1.1) — guidelines-shortlisted; bundled the same way. Font scaling: all type respects Android user font-scale (sp units; no fixed-px text); min body 16sp.
 - **Scale (fluid, clamp between mobile/desktop):** display `clamp(34px,6vw,64px)/1.05` serif · h1 `clamp(26px,4vw,40px)/1.15` serif · h2 `clamp(20px,3vw,28px)/1.25` serif · h3 `18px/1.4` sans-semibold · body `16px/1.7` sans · meta `13px/1.5` sans · overline `12px/0.12em uppercase` sans-medium · data `13px tabular-nums` sans.
 - **Usage:** serif = hero headlines, section titles, editorial/legal page titles, major numbers; sans = everything else (nav, buttons, forms, tables, metadata, admin). Wordmark remains the official asset (not typeset).
 - **Rules:** min body 16px; 70–80ch measure; no font weights below 400 for text; `text-wrap: balance` on headings.
@@ -79,12 +79,12 @@ Rules: derived neutrals are lightness steps of the brand hues only — no new hu
 - **Borders:** 1px hairlines (`--color-border`); gold hairline reserved for active nav rail + focus ring only.
 
 ## 7. Iconography
-lucide-react (1.5px stroke, 20/24px) for UI icons; color inherits `currentColor`; brand symbols exclusively from `/branding/`. Custom icons prohibited except line-art exports of the official emblem. Icon+label always for destructive/ambiguous actions.
+**UI icons (v1.1.0 — D-015):** Material Symbols/Icons (Outlined, thin/regular weight class ≈1.5–2px stroke, 20/24dp default) for UI icons — the Android-continuous embodiment of the v1.0.2 lucide line-icon principle; tint follows `LocalContentColor`. ICON-SYSTEM.md maps every specced surface to a Material Symbol name. Brand symbols exclusively from `/branding/` (logo ≠ UI icon). No emoji, no Unicode-substitute icons, no mixed styles. Custom icons prohibited except line-art exports of the official emblem. Icon+label always for destructive/ambiguous actions.
 
-## 8. Responsive system
-Breakpoints: `480 / 768 / 1024 / 1280 / 1440` (min-width, mobile-first) with designed audits at 320, 375, 390, 430, 768, 1024, 1280, 1440, 1920. Fluid type/spacing via `clamp()`. Grids 2→6 columns (SCREENS S-02). Invariants: no horizontal overflow at 320px; touch targets ≥44px; wordmark swaps to symbol-only <480px; hero/media maintain 16:9; all motion transform/opacity only.
+## 8. Responsive/adaptive system (v1.1.0 — window-size classes; CSS breakpoints retired)
+**Mapping (documented transition):** compact <600dp (was <480/768) → medium 600–839dp (was 768/1024) → expanded ≥840dp (was 1280/1440+); audits additionally at 320dp-class small phones and foldables/tablets postures. Layout laws: compact = single-column, bottom navigation pattern, symbol-only brand; medium = 2–3 column grids, rail navigation option; expanded = up to 6-column grids (SCREENS S-02), permanent nav rail, two-pane where specced. Invariants: touch targets ≥48dp (ACCESSIBILITY §7); wordmark swaps to symbol-only on compact; hero/media maintain 16:9; all motion transform/opacity only; no fixed pixel assumptions — dp/sp + window-size classes.
 
-## 9. Motion specification (implemented with `motion/react`)
+## 9. Motion specification (v1.1.0 — implemented with Compose animation APIs; spec values unchanged)
 | Transition | Spec |
 |---|---|
 | Page/route | opacity 0→1 (180ms, ease-out) + translateY 8→0 |
@@ -114,8 +114,8 @@ Cinematic composition, deep shadows, controlled highlights, sophisticated framin
 - Buttons: specific verbs (“Enter”, “Watch”, “Retry”, “Report”, “Copy link”). No exclamation marks, no clickbait, no vulgar phrasing, no corporate filler.
 - Microcopy ≤ 8 words for actions; explanations ≤ 2 sentences.
 
-## 13. Theming architecture
-Tokens live in one CSS-variables layer (`/app/styles/tokens.css`) consumed by Tailwind v4 `@theme` and `motion` variants. Themes = token value swaps only (components untouched): `theme-night` (default/only v1); future `theme-seasonal`, `theme-light` `[PROPOSED]`. The internal admin panel consumes the same token layer (operational surfaces only); no other theming hooks exist in v1.
+## 13. Theming architecture (v1.1.0 — Material 3)
+Tokens live in `branding/design-tokens.json` (source of truth) → compiled into **one Compose theme** (`core/designsystem/SyconiaTheme`): SYCONIA tokens → M3 `ColorScheme` (dark-only v1: background Obsidian, surface #121214, surfaceVariant/elevated #1A1A1E, primary Ostiole Gold, secondary Champagne, onPrimary/onSecondary Obsidian or Alabaster per computed contrast, error #F08A84…), `Typography` (Fraunces/Inter mapped to M3 slots per §5 scale), `Shapes` (6/10/16dp per §6), dimensions/spacing scale, and component defaults — all overriding generic Material demo styling. Themes = token value swaps only; `theme-night` (default/only v1); seasonal/light remain `[PROPOSED]`. The backend admin console consumes the same token values via its CSS layer. No other theming hooks exist in v1.
 
 ## 14. Brand quality gate (audit before any release — PRE-RELEASE §9)
 □ Logo fidelity (official assets only) □ clear-space rule honored □ no logo below 96px (wordmark) □ brand-color fidelity (raw hex only in tokens file) □ typography consistency (2 families only) □ gold-as-accent law □ component/token compliance □ favicon/app-icon correct □ glass limited to 3 surfaces □ motion transform/opacity only □ reduced-motion honored □ loading ostiole present □ empty/error states branded □ no SaaS-generic nor tube-site styling anywhere □ watermark placement correct □ SEO uses official spelling.

@@ -4,7 +4,7 @@
 |---|---|
 | Project | SYCONIA — premium adult media discovery & streaming platform |
 | Document | PRD.md (master product requirements) |
-| Version | 1.0.2 — Gap-Audit Patch |
+| Version | 1.1.0 — Android Platform Migration (web implementation baseline superseded) |
 | Date | 2026-09-03 |
 | Product owner | Roshan (developer & credit holder) |
 | Status legend | `[EXISTING]` verified present in repository · `[REQUIRED]` must be implemented · `[PROPOSED]` approved future phase · `[CONFLICT]` documented conflict, see §17 |
@@ -46,14 +46,14 @@ Implementation status: **the repository currently contains brand assets and this
 
 ### 3.1 In scope `[REQUIRED]`
 
-- Public website: age gate, home/discovery, search, categories, tags, watch page, legal pages.
+- Native **Android application** (Kotlin/Compose, Material 3): age gate, home/discovery, search, categories, tags, watch experience, in-app legal; plus a **backend service** (API, admin console, legal/contact web surface, ingestion) — v1.1.0 platform baseline.
 - Video playback via approved third-party embed players only (never proxied or downloaded).
 - Metadata ingestion pipeline (adapters + normalization + PostgreSQL cache) for approved sources.
 - Taxonomy system: admin-managed categories, tags, and source→local mapping rules.
 - Anonymous, privacy-preserving first-party analytics (trending, admin dashboards).
 - Admin panel (authenticated) with full operations tooling and audit log.
 - Dark/night theme only; responsive 320px → 1920px+; HTTPS only.
-- SEO fundamentals, WCAG 2.2 AA target, Core Web Vitals budgets, CI/CD, E2E tests, pre-release gates.
+- Android performance/stability budgets + backend API SLOs, WCAG 2.2 AA principles via Android accessibility, App Links/share URLs, web-surface discoverability (SEO scope-reduced — SEO.md v1.1.0), CI/CD (dual track), E2E tests, pre-release gates.
 
 ### 3.2 Explicitly out of scope (product decisions, permanent for v1)
 
@@ -69,7 +69,7 @@ Implementation status: **the repository currently contains brand assets and this
 
 - On-device (localStorage) watch history and favorites with zero server sync.
 - Collections/curated playlists (non-premium).
-- Installable PWA with offline shell.
+- (retired with the web client — v1.1.0 platform migration; see F-21).
 - Optional jurisdiction-aware age-verification provider hook (see docs/LEGAL-COMPLIANCE.md).
 - Seasonal campaign theming via design tokens (no component changes).
 
@@ -77,9 +77,9 @@ Implementation status: **the repository currently contains brand assets and this
 
 | Persona | Device | Needs | Success looks like |
 |---|---|---|---|
-| **The Discreet Viewer** | Mobile (iOS/Android Chrome/Safari), evening | Fast, private, tasteful experience; no traces; no popups | Age gate once; instant playback; blur-until-tap discretion mode on thumbnails; history-less browsing |
-| **The Binge Browser** | Desktop Chrome/Firefox | Long sessions, keyboard-driven, dense grids | Instant search, keyboard player shortcuts, infinite scroll without jank |
-| **The Operator (Admin/Roshan)** | Desktop | Keep catalog fresh, sources healthy, takedowns processed | Dashboard with source health; one-screen takedown action; full audit trail |
+| **The Discreet Viewer** | Android phone, evening | Fast, private, tasteful experience; no traces; no popups | Age gate once; instant playback; blur-until-tap discretion mode on thumbnails; history-less browsing |
+| **The Binge Browser** | Android phone/tablet (+ external keyboard where available) | Long sessions, dense grids | Instant search, dense grids, smooth infinite scroll without jank |
+| **The Operator (Admin/Roshan)** | Desktop (backend admin console — web) | Keep catalog fresh, sources healthy, takedowns processed | Dashboard with source health; one-screen takedown action; full audit trail |
 
 ## 5. Legal & compliance requirements (normative detail: docs/LEGAL-COMPLIANCE.md)
 
@@ -110,12 +110,12 @@ Implementation status: **the repository currently contains brand assets and this
 | F-13 | Admin panel: auth, dashboard, videos, categories, tags, sources, mappings, takedowns, settings, audit log | `[REQUIRED]` | Operations |
 | F-14 | State system: loading skeletons, empty, error, offline states everywhere | `[REQUIRED]` | Quality |
 | F-15 | Accessibility (WCAG 2.2 AA), reduced motion, keyboard operability | `[REQUIRED]` | Quality |
-| F-16 | SEO: metadata, canonicals, sitemaps, robots, structured data | `[REQUIRED]` | Growth |
+| F-16 | Discoverability: Android App Links + share URLs + OG share pages; legal-surface SEO (scope-reduced v1.1.0 — SEO.md) | `[REQUIRED]` | Growth |
 | F-17 | Performance budgets & Core Web Vitals enforcement | `[REQUIRED]` | Quality |
 | F-18 | CI/CD pipeline with quality gates (incl. no-placeholder-code gate) | `[REQUIRED]` | Engineering |
 | F-19 | On-device favorites & watch history | `[PROPOSED]` | Discovery |
 | F-20 | Collections / curated playlists | `[PROPOSED]` | Discovery |
-| F-21 | PWA offline shell | `[PROPOSED]` | Platform |
+| F-21 | ~~PWA offline shell~~ — **retired (platform-specific, v1.1.0)**; Android offline behavior is an architecture concern (honest offline states; any offline caching decided per D-014) | RETIRED | Platform |
 
 ## 7. Major feature specifications
 
@@ -284,10 +284,10 @@ First-party only. Events: `age_ack`, `page_view`, `rail_impression`, `card_open`
 
 ## 11. Constraints & dependencies
 
-- Node 20+, Next.js 15+ (App Router), TypeScript 5 strict, PostgreSQL 16+, Drizzle ORM, `motion` (Framer Motion's current package) + TanStack Query (the two approved companion libraries), Tailwind CSS v4 for token implementation.
+- **Android (v1.1.0):** Kotlin + Jetpack Compose + Material 3, Clean Architecture/MVVM-UDF, Coroutines/Flow, Hilt, Navigation Compose; Retrofit/OkHttp/kotlinx-serialization, Coil, DataStore (decisions D-010…D-016). **Backend:** Node 20+, TypeScript 5 strict, Next.js (backend-only role), PostgreSQL 16+, Drizzle ORM.
 - Approved brand assets in `/branding/` (from `/uploads/`) are the only permitted logo sources.
 - External dependency: availability & terms of chosen sources (risk register PRD2.md §11).
-- Deployment: Vercel + Neon (primary) or Docker/VPS (alternative) — DEPLOYMENT.md.
+- Deployment: backend on Vercel + Neon (primary) or Docker/VPS (alternative); Android via internal APK/testing (distribution decision M5-T006) — DEPLOYMENT.md.
 
 ## 12. Release plan
 

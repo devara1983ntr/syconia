@@ -1,8 +1,10 @@
-# SYCONIA — Screen-by-Screen UI/UX Specification
+# SYCONIA — Screen Specifications (v1.1.0 — destinations)
+
+> **Platform mapping:** every former URL route is an **Android destination** in the Navigation Compose graph; the URL patterns survive as **App Links/deep-link patterns** (share URLs continue to resolve on the backend's minimal web surface). `Route:` lines below read as `Destination (+deep-link pattern):`. Viewport references map to window-size classes (DESIGN-SYSTEM §8). Chrome semantics: header→top bar, drawer→modal navigation drawer, back arrow→system back (predictive back enabled), footer→drawer/legal section + settings screen. Product behavior per screen is unchanged.
 
 | Field | Value |
 |---|---|
-| Document | SCREENS.md · v1.0.2 · 2026-09-03 |
+| Document | SCREENS.md · v1.1.0 · 2026-09-03 (Android platform migration) |
 | Status | All screens `[REQUIRED]` (no UI code exists yet). Layouts reference DESIGN-SYSTEM.md tokens; flows reference UX-FLOWS.md; states reference ERROR-STATES.md. |
 | Viewports | Mobile 320–479 · Phablet 480–767 · Tablet 768–1023 · Desktop 1024–1535 · Wide ≥1536 (design tokens scale fluidly; all layouts are mobile-first) |
 

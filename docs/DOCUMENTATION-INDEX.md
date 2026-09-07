@@ -1,6 +1,6 @@
 # SYCONIA — Documentation Index
 
-Version 1.0.2 · 2026-09-03 · Owner: Roshan · Consolidated PDF: [SYCONIA-PROJECT-SPECIFICATION.pdf](./SYCONIA-PROJECT-SPECIFICATION.pdf)
+Version 1.1.0 (Android platform migration) · 2026-09-03 · Owner: Roshan · Consolidated PDF: [SYCONIA-PROJECT-SPECIFICATION.pdf](./SYCONIA-PROJECT-SPECIFICATION.pdf) · **Baseline:** native Android client (Kotlin/Compose/M3) + Node/TS backend service (ARCHITECTURE.md §0; .ai/DECISIONS D-010…D-019)
 
 ## Reading order (recommended)
 

@@ -2,21 +2,29 @@
 
 | Field | Value |
 |---|---|
-| Document | SECURITY.md · v1.0.2 · 2026-09-03 · `[REQUIRED]` controls |
+| Document | SECURITY.md · v1.1.0 · 2026-09-03 (Android platform migration) · `[REQUIRED]` controls |
 
 ---
 
 ## 1. Security objectives
 Protect: visitors (privacy, discretion), the platform (integrity, availability), the operator (compliance posture), and partners/sources (no abuse of their services). Posture: assume hostile internet; zero-trust toward all external data (source metadata is untrusted input); least privilege everywhere.
 
-## 2. Trust boundaries
-1. Browser ↔ SYCONIA origin (HTTPS-only). 2. SYCONIA server ↔ external source APIs (outbound, allowlisted). 3. SYCONIA server ↔ database (scoped roles). 4. Third-party embed iframe (inside player stage — treated as untrusted content in a sandboxed frame). 5. Admin ↔ admin plane (authenticated).
+## 2A. Android client security model (v1.1.0 — ADDS to, does not replace, the server sections)
+- **No secrets in the app:** the client ships zero API keys/secrets; all privileged operations stay server-side. BuildConfig limited to non-secret endpoint config; verified by CI secret scan of APK contents (G-6).
+- **Transport:** HTTPS-only (`network_security_config`: no cleartext, TLS 1.2+, system + (if justified at M5-T003) pinning decision recorded then — no unverified claims).
+- **WebView (playback shell, D-013):** loads only manifest-allowlisted embed URLs (validated at API response and again before load); JS enabled only for embed function, no file access, no universal access from file URLs, third-party cookies/partitioned storage disabled in the shell where possible, safe-browsing enabled, external links intercepted → Custom Tabs/open-at-source with referrer hygiene.
+- **Session/age state:** DataStore (non-sensitive flags) + Android Keystore for any token that must survive (admin is NOT in the app — admin console is backend web; the app has no authenticated surface at all: no accounts, no login).
+- **Exported components:** none beyond the launcher activity; deep links (App Links) via verified `assetlinks.json` on the backend domain (SEO §1A); intent handling validates inputs.
+- **Discretion:** FLAG_SECURE on the watch/player experience (blocks screenshots/recents preview — mapped from the web tab-mask behavior; exact scope decided at M3-T009 with a11y tradeoffs recorded); backup rules exclude all app data (`allowBackup=false` + no cloud backup of any identifier).
+- **Logging:** never logs URLs-with-tokens, session ids, or user content; crash reports sampled, scrubbed (matches §12).
+- **Release hygiene:** debug/release separation, minified release build, R8, signing via CI secrets only (never committed — CI-CD §keystores).
+1. Android app ↔ SYCONIA backend (HTTPS-only; WebView embeds additionally sandboxed per §2A). 2. Backend ↔ external source APIs (outbound, allowlisted). 3. Backend ↔ database (scoped roles). 4. Third-party embed content (inside the app's hardened WebView / web frame — untrusted). 5. Admin ↔ admin plane (authenticated web console on the backend).
 
 ## 3. Transport & HTTPS
 - HTTPS everywhere, HSTS `max-age=63072000; includeSubDomains; preload` (submitted to preload list after launch); no plaintext listeners; HTTP → HTTPS 308 redirect at edge; TLS 1.2+ (1.3 preferred), modern cipher suite only; certificates managed by platform (DEPLOYMENT §3). Secure cookies flagged (`Secure`) exclusively.
 - Internal service-to-service (jobs) still TLS when crossing hosts; DB connections TLS required.
 
-## 4. Security headers (middleware, every response — CSP is the centerpiece)
+## 4. Security headers (backend web surfaces — CSP is the centerpiece; the Android client's equivalents are §2A network/WebView controls)
 ```
 Content-Security-Policy:
   default-src 'self';
@@ -42,13 +50,19 @@ Cache-Control: no-store                      /* on /api/admin/** and watch beaco
 ```
 `frame-src` is generated from *enabled* sources' manifests — disabling a source removes it from CSP at the next deployment window; CSP violations are logged (report-only first on any change — SOP §7).
 
-## 5. XSS prevention
+## 5. Injection prevention (web surfaces keep XSS controls; Android adds the following)
+- Compose renders untrusted text as plain text by default (no HTML interpretation); any rich text from sources is sanitized server-side at ingestion (unchanged) and rendered via safe annotated/limited spans only.
+- WebView: no `loadData` with untrusted HTML; URL validation before every load; JS bridge (if ever required) is `@JavascriptInterface`-minimal and reviewed — none exists in v1 by default.
 - React/JSX text interpolation everywhere (auto-escaping); `dangerouslySetInnerHTML` is banned by lint rule (CI gate G-8) — legal pages are rendered from React MDX components, not raw HTML strings.
 - Source-provided text (titles, descriptions) treated as untrusted: normalized at ingestion (charset normalization, control-char strip, length clamps) and rendered as text nodes; the rare rich field passes a strict server-side sanitizer (allowlist: `p br strong em a[rel]`) before storage.
 - URL fields validated twice (ingestion + render) against manifest host allowlists (https, no userinfo, standard ports, no `javascript:`/`data:` schemes possible by construction).
 - CSP as second line (§4). No third-party scripts at all — analytics is first-party.
 
-## 6. CSRF, session tokens & cookie contracts
+## 6. Session & attestation contracts (v1.1.0: web cookies retained for the backend console; the Android app uses header attestation — no cookies)
+
+**6A. Android app:** no accounts, no login, no cookies. (a) **Age attestation:** first-run 18+ gate stored in DataStore; API requests from the app carry a signed-at-build-time-NO — a simple, non-forgeable-for-value `x-sy-age: affirmed` header plus the server-side app-client identification via API key rotated per release; final mechanism (including replay considerations) is an M1-T011/M2-T010 security-review deliverable — this document does not claim it exists yet. (b) **Anonymous session id:** UUID v4 in DataStore, 30-day expiry, no renewal, rotated by Clear-session-traces (same policy as the former `sy_sid` cookie). (c) Public report/contact from the app use the same endpoints with rate limits + honeypot equivalents.
+
+**6B. Backend web console (unchanged from v1.0.2):**
 State-changing endpoints are admin-only (cookie `SameSite=Strict` + per-session CSRF token + Origin check) and public `POST /api/report` + `POST /api/contact` (double-submit token + Origin check + rate limit). Age cookie is `SameSite=Lax` (never authorizes writes). Beacons are idempotent inserts with no privilege.
 
 **Cookie contracts (normative):**
@@ -81,7 +95,7 @@ No accounts; anonymous rotating `sy_sid` (30d) for aggregate analytics only; IPs
 Every adapter payload is untrusted: Zod-validated field-wise (PRD2 §6), size/duration plausibility-checked, embed URLs allowlist-checked at ingestion **and** render (defense in depth), unknown fields quarantined to JSONB never rendered raw. Terms verification gate before any source is enabled (API.md §6.1; LEGAL-COMPLIANCE §4). No source HTML is ever parsed for playback URLs — official embed endpoints only (anti-scraping posture + ToS compliance).
 
 ## 14. Dependency & supply-chain security
-Lockfile-only installs (`npm ci`); weekly `npm audit` + automated dependency PRs (SOP §11); CI gate G-5 blocks High/CRIT advisories; pinned action hashes in CI; SBOM generated per release `[PROPOSED]`; no runtime `eval`-class code; fonts from audited SIL-OFL sources (Fraunces, Inter); icons via lucide-react (ISC license); brand assets are project-proprietary (guidelines PDF §"Confidential & Proprietary") — license compliance recorded per dependency in the release record.
+Backend lockfile-only installs (`npm ci`); Android dependency verification + pinned versions; weekly audits both stacks (`npm audit` + OSV/dependency-check) + automated PRs (SOP §11); CI gate G-5 blocks High/CRIT advisories; pinned action hashes in CI; SBOM generated per release `[PROPOSED]`; no runtime `eval`-class code; fonts from audited SIL-OFL sources (Fraunces, Inter); icons via lucide-react (ISC license); brand assets are project-proprietary (guidelines PDF §"Confidential & Proprietary") — license compliance recorded per dependency in the release record.
 
 ## 15. Threat model (STRIDE summary)
 | Threat | Vector | Control |

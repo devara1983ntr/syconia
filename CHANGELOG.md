@@ -62,3 +62,21 @@ Applied the 8-group patch plan resolving the gap audit (G-01…G-34). No scope, 
 
 ### Not implemented (by design, this release)
 - All application code, database, and deployments — this baseline is documentation-only; implementation begins at milestone M1 per `AGENT.md` §4.
+
+
+## [1.0.3] — 2026-09-03 — ANDROID PLATFORM MIGRATION (v1.1.0 baseline)
+
+SYCONIA's implementation target migrates from the web-oriented baseline (Next.js full-stack) to **native Android (Kotlin + Jetpack Compose + Material 3, Clean Architecture, MVVM/UDF, Coroutines/Flow, Hilt, Navigation Compose)** with a retained **Node/TypeScript backend service** (public API, admin console, legal/contact/share web surfaces, ingestion jobs; PostgreSQL 16+/Drizzle unchanged, backend-only). Product scope, laws, gates and the zero-placeholder policy are unchanged. No application code exists — documentation/architecture migration only.
+
+### Migration classification (web-specific → disposition; full registry in .ai/DECISIONS D-010…D-019)
+- **KEEP (product/platform-neutral):** all product features F-01…F-15/F-17/F-18; E-state taxonomy; DATABASE.md; API.md contracts; PRD2 math/cursors/TTLs; security server controls; admin console (as backend web); legal surfaces; G-04/B-001/B-002/B-003 gates; AGENT.md §2.1.
+- **MODIFY:** AGENT (stack/commands) · SOP (Android+backend setup) · SCREENS (routes→destinations+deep links) · UX-FLOWS (system back, masking→FLAG_SECURE+label masking) · GESTURES (Compose/touch semantics, hardware keyboards) · DESIGN-SYSTEM (§5 fonts→Compose, §7 icons→Material Symbols D-015, §8 window-size classes, §13 M3 theme) · ACCESSIBILITY (Compose/TalkBack/font-scale) · TESTING (Android pyramid + retained backend tests) · CI-CD (dual android+backend tracks; G-gates re-mapped) · DEPLOYMENT (backend topology + honest Android internal-distribution scope) · PRE-RELEASE (build/test rows) · PERFORMANCE (Android budgets + API SLOs) · SEO (scope-reduced: web surfaces + App Links; discovery-web SEO retired — D-018) · PRD (§3.1, F-16, F-21, personas, NFR row) · ARCHITECTURE (client/server rewrite; backend-only Next.js — D-010).
+- **REPLACE with Android equivalent:** Next.js routing→Navigation Compose; React components→Compose; React state→ViewModel+StateFlow; TanStack Query→repository/UseCase layer; Tailwind→M3 theme from tokens; browser storage→DataStore (+Keystore); cookies→attestation/session strategy (SECURITY §6A); favicon→adaptive launcher icon (branding pack + AG-001 note); viewport breakpoints→window-size classes; DOM a11y→Compose semantics; service-worker/PWA→retired (F-21); Lighthouse-first→Macrobenchmark/API budgets.
+- **REMOVE as platform-specific:** PWA install/offline shell ([PROPOSED] item retired); public web discovery UI (superseded by the app; minimal share/OG web surface retained); web-specific rendering rows (ISR/SSR for public pages); lucide-react (Android equivalent per D-015).
+- **BLOCKED (unchanged):** G-04/B-001 source authorization (M2-T008/T009, M2-GATE); B-002 legal finalization; B-003 hosting AUP; AG-001 SVG masters; AG-014 doc screenshots (pending real UI).
+
+### New decisions
+D-010 platform architecture & backend retention · D-011 Retrofit/OkHttp/kotlinx-serialization · D-012 Coil · D-013 WebView embed shell · D-014 DataStore-first persistence (Room only task-justified; no local media) · D-015 Material Symbols icons · D-016 version strategy (pin-at-scaffold; minSdk 26; targetSdk Play-current) · D-017 app age attestation approach (mechanism finalized at M1-T011/M2-T010) · D-018 SEO scope reduction · D-019 milestone/task reconciliation model. Recorded in `.ai/DECISIONS.md`.
+
+### Artifacts
+Canonical docs migrated in place (no duplicate doc system created). `.ai` execution system reconciled: 75 task records (71 active + 4 retired-with-successor), dispositions recorded per task; roadmap/gates/audits/checklist updated; PDF regenerated from the migrated suite.
