@@ -8,7 +8,7 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 |---|---|---|---|---|
 | [M0-T001](./tasks/M0/M0-T001.md) | Create `.ai/` execution-control system | COMPLETE | KEEP (historical web-era COMPLETE; content superseded by v1.1.0 regeneration) | migration commit chain (v1.1.0) |
 | [M0-T002](./tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | KEEP (historical COMPLETE) | migration commit chain (v1.1.0) |
-| [M0-T003](./tasks/M0/M0-T003.md) | Verify Android + backend toolchain prerequisites | READY | MODIFY (was: web toolchain; redefined for Android v1.1.0) | pending (M0-T003) |
+| [M0-T003](./tasks/M0/M0-T003.md) | Verify Android + backend toolchain prerequisites | BLOCKED | MODIFY (was: web toolchain; redefined for Android v1.1.0) | B-004 (emulator AC; build path verified 2026-09-07 — evidence in task file) |
 | [M0-T004](./tasks/M0/M0-T004.md) | Platform migration: documentation + architecture + roadmap (web → Android) | COMPLETE | NEW (v1.1.0) | migration commit chain (v1.1.0) |
 
 ## M1-ANDROID-FOUNDATION — [M1-GATE](./gates/M1-GATE.md)
@@ -120,4 +120,4 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 | [M5-GATE](./gates/M5-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [DA-GATE](./gates/DA-GATE.md) | PASS WITH CONDITIONS | C-1 satisfied 2026-09-03 (AG-002 closed); C-2 (AG-001) open — non-blocking |
 
-**Totals (v1.1.0):** 75 task records — 3 COMPLETE · 1 READY · 64 NOT_STARTED · 4 BLOCKED (B-001 ×2, B-002, B-003) · 4 RETIRED (successors: M5-T010/011/012, M1-T019).
+**Totals (v1.1.0):** 76 task records — 3 COMPLETE · 65 NOT_STARTED · 5 BLOCKED (M0-T003←B-004, M2-T008/T009←B-001, M5-T006←B-003, M5-T007←B-002) · 4 RETIRED (successors: M5-T010/011/012, M1-T019).

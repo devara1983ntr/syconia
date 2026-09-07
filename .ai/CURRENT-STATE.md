@@ -4,17 +4,17 @@
 
 | Field | Value |
 |---|---|
-| Current phase | **M0-RECON — closed (gate PASS incl. platform-migration rows)** → next **M1-ANDROID-FOUNDATION** |
+| Current phase | **M0 closed (gate PASS); M0-T003 executed 2026-09-07 → BLOCKED (B-004: emulator impossible in sandbox; build path fully verified)** — M1 build-path work eligible pending remote publication of the migration commits |
 | Platform (v1.1.0) | Native Android client (Kotlin/Compose/M3, Clean+MVVM/UDF, Coroutines/Flow, Hilt, Navigation Compose) + Node/TS backend service (API, admin console, legal/share web, jobs) + PostgreSQL. See ARCHITECTURE §0 + DECISIONS D-010…D-019 |
 | Implementation state | **Documentation-only repository** — no app code (neither Android nor backend) exists. M0-T004 (migration) is documentation work, not application implementation |
 | Current/active task | none in flight |
 | Last verified commit | 6d3cdd3 (sign-off) → 902a8b6 (canonical docs migration) → this series (.ai + PDF) — see CHANGELOG |
 | Gate status | M0-GATE **PASS** · DA-GATE **PASS WITH CONDITIONS** (C-1 satisfied; C-2 = AG-001 open) · M1–M5 **NOT_STARTED**; M2-GATE **structurally BLOCKED (B-001)** |
-| Blocked tasks | M2-T008/T009 (B-001 — source authorization G-04; never unblock by inventing a provider) · M5-T006 (B-003 hosting/distribution) · M5-T007 (B-002 counsel) |
+| Blocked tasks | M0-T003 (B-004 — emulator capability; build path verified, see task evidence) · M2-T008/T009 (B-001 — source authorization G-04; never unblock by inventing a provider) · M5-T006 (B-003 hosting/distribution) · M5-T007 (B-002 counsel) |
 | Retired tasks | M2-T015/016/017/018 (web-era screen/query tasks → successors M5-T010/011/012 + M1-T019) |
-| Next eligible tasks | **M0-T003** (Android+backend toolchain prerequisites) → M1-T001 (Gradle scaffold) |
+| Next eligible tasks | M0-T003 executed (BLOCKED on B-004 emulator AC only) → **M1-T001 (Gradle scaffold — not blocked by B-004 per dependency analysis)**; instrumented-test tasks await B-004 resolution |
 | Completed tasks | M0-T001, M0-T002 (web-era, historical), **M0-T004 (platform migration)** |
-| Known risks | B-001 indefinite until operator acts; B-003/B-002 release-side; AG-001 vector masters; Android toolchain availability in the execution environment (verify at M0-T003 — record honestly if absent) |
+| Known risks | **Migration commits (902a8b6, adeb80d, 459ed80) + M0-T003 commit are NOT yet pushed — no GitHub credential exists in this environment (all storage locations probed 2026-09-07; push blocked honestly per §7)** · B-001 indefinite until operator acts; B-003/B-002 release-side; AG-001 vector masters; Android toolchain availability in the execution environment (verify at M0-T003 — record honestly if absent) |
 | Unresolved decisions | None beyond blockers (D-010…D-019 recorded; version pinning intentionally deferred to scaffold per D-016) |
 
 ## Task status summary (regenerate from MASTER-CHECKLIST.md)

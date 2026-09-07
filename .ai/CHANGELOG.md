@@ -51,3 +51,10 @@ All asset checks are programmatic (round-trip composite vs master ≤18 max chan
 - CURRENT-STATE rewritten (truthful: documentation-only; migration = documentation work, not implementation). ROADMAP/MASTER-CHECKLIST regenerated. DECISIONS +D-010…D-019. TRACEABILITY §10 + COVERAGE v2 + QUALITY migration log + ASSET-GAPS/BLOCKERS platform notes.
 ### Preserved
 - Product scope/laws; zero-placeholder policy (AGENT §2.1); gates G-04/B-001, B-002, B-003; blocker semantics; DA-GATE C-1 sign-off; historical evidence (web-era commits cited, never rewritten).
+
+
+## [2.0.1] — 2026-09-07 — M0-T003 toolchain verification (post-migration recovery)
+- **Local state re-verified independently:** commits 902a8b6 → adeb80d → 459ed80 intact, descendants of 6d3cdd3; working tree clean.
+- **GitHub push BLOCKED honestly (§7):** no fresh credential exists in this environment — every standard + ZCode credential location probed (names only; nothing printed). The three migration commits (plus this one) remain local on `main`. No fabrication, no force-push, no history change. Remote publication resumes the moment a credential is provided through a secure channel.
+- **M0-T003 executed with real outputs:** Android build path VERIFIED (JDK 17.0.20 Temurin; SDK cmdline-tools + platform-tools 37.0.1 + platforms;android-35 + build-tools 35.0.0 — sdkmanager lists platform; Gradle 8.10.2; wrapper diagnostic PASS incl. the settings-file note; AGP/Kotlin/Compose compatibility matrix satisfied, pins at M1-T001 per D-016). Backend VERIFIED (Node 20.20.2, npm 10.8.2, git 2.47.3, **PostgreSQL 17.11 server started + accepting connections**, registries reachable). Skills: ui-ux-pro-max present; Motion skill ABSENT (recorded, not fabricated). **Status: BLOCKED (B-004)** — emulator/AVD boot structurally impossible in this sandbox (no /dev/kvm; 2 vCPU/2 GB); dependency analysis: M1 build-path tasks NOT blocked; connected/instrumented tasks blocked until B-004 resolved (operator hardware or KVM-capable CI).
+- Environment persistence caveat recorded honestly: /opt-level installs are session-scoped; the evidence contains the full re-provisioning command set.
