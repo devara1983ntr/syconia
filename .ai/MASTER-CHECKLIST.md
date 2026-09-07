@@ -8,22 +8,21 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 |---|---|---|---|---|
 | [M0-T001](./tasks/M0/M0-T001.md) | Create `.ai/` execution-control system | COMPLETE | KEEP (historical web-era COMPLETE; content superseded by v1.1.0 regeneration) | migration commit chain (v1.1.0) |
 | [M0-T002](./tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | KEEP (historical COMPLETE) | migration commit chain (v1.1.0) |
-| [M0-T003](./tasks/M0/M0-T003.md) | Verify Android + backend toolchain prerequisites | BLOCKED | MODIFY (was: web toolchain; redefined for Android v1.1.0) | B-004 (emulator AC; build path verified 2026-09-07 — evidence in task file) |
+| [M0-T003](./tasks/M0/M0-T003.md) | Verify Android + backend toolchain prerequisites | BLOCKED† | MODIFY (was: web toolchain; redefined for Android v1.1.0) | B-004 (emulator AC; build path verified 2026-09-07 — evidence in task file) |
 | [M0-T004](./tasks/M0/M0-T004.md) | Platform migration: documentation + architecture + roadmap (web → Android) | COMPLETE | NEW (v1.1.0) | migration commit chain (v1.1.0) |
-
 ## M1-ANDROID-FOUNDATION — [M1-GATE](./gates/M1-GATE.md)
 
 | Task | Title | Status | Disposition | Evidence |
 |---|---|---|---|---|
-| [M1-T001](./tasks/M1/M1-T001.md) | Android Gradle scaffold (Kotlin, Compose, Hilt, multi-module) | NOT_STARTED | REPLACE (was Next.js scaffold) | — |
-| [M1-T002](./tasks/M1/M1-T002.md) | Android quality toolchain (detekt, ktlint, unit/emulator harness, CI android track) | NOT_STARTED | MODIFY (was web tooling) | — |
-| [M1-T003](./tasks/M1/M1-T003.md) | SyconiaTheme: Material 3 theme from SYCONIA tokens | NOT_STARTED | REPLACE (was tokens.css/Tailwind wiring) | — |
-| [M1-T004](./tasks/M1/M1-T004.md) | Bundled fonts (Fraunces + Inter) in Compose | NOT_STARTED | MODIFY (was next/font self-hosting) | — |
-| [M1-T005](./tasks/M1/M1-T005.md) | Launcher + adaptive icons from official assets | NOT_STARTED | REPLACE (was favicon wiring) | — |
-| [M1-T006](./tasks/M1/M1-T006.md) | Motion spec in Compose (DS §9 values) | NOT_STARTED | MODIFY (was motion/react config) | — |
-| [M1-T007](./tasks/M1/M1-T007.md) | App config + secure defaults (endpoint config, no secrets) | NOT_STARTED | MODIFY (was env.ts) | — |
-| [M1-T008](./tasks/M1/M1-T008.md) | Component batch 1 — controls (Button, IconButton, TextField, Select, Checkbox, Switch, Slider) | NOT_STARTED | MODIFY (was web primitives) | — |
-| [M1-T009](./tasks/M1/M1-T009.md) | Component batch 2 — overlays & navigation (Badge, Tooltip, Dropdown, Modal/Dialog, DrawerSheet, BottomSheet, Tabs, Toast, Alert, Pagination, Breadcrumb) | NOT_STARTED | MODIFY | — |
+| [M1-T001](./tasks/M1/M1-T001.md) | Android Gradle scaffold (Kotlin, Compose, Hilt, multi-module) | NOT_STARTED† | REPLACE (was Next.js scaffold) | — |
+| [M1-T002](./tasks/M1/M1-T002.md) | Android quality toolchain (detekt, ktlint, unit/emulator harness, CI android track) | NOT_STARTED† | MODIFY (was web tooling) | — |
+| [M1-T003](./tasks/M1/M1-T003.md) | SyconiaTheme: Material 3 theme from SYCONIA tokens | NOT_STARTED† | REPLACE (was tokens.css/Tailwind wiring) | — |
+| [M1-T004](./tasks/M1/M1-T004.md) | Bundled fonts (Fraunces + Inter) in Compose | NOT_STARTED† | MODIFY (was next/font self-hosting) | — |
+| [M1-T005](./tasks/M1/M1-T005.md) | Launcher + adaptive icons from official assets | NOT_STARTED† | REPLACE (was favicon wiring) | — |
+| [M1-T006](./tasks/M1/M1-T006.md) | Motion spec in Compose (DS §9 values) | NOT_STARTED† | MODIFY (was motion/react config) | — |
+| [M1-T007](./tasks/M1/M1-T007.md) | App config + secure defaults (endpoint config, no secrets) | NOT_STARTED† | MODIFY (was env.ts) | — |
+| [M1-T008](./tasks/M1/M1-T008.md) | Component batch 1 — controls (Button, IconButton, TextField, Select, Checkbox, Switch, Slider) | NOT_STARTED† | MODIFY (was web primitives) | — |
+| [M1-T009](./tasks/M1/M1-T009.md) | Component batch 2 — overlays & navigation (Badge, Tooltip, Dropdown, Modal/Dialog, DrawerSheet, BottomSheet, Tabs, Toast, Alert, Pagination, Breadcrumb) | NOT_STARTED† | MODIFY | — |
 | [M1-T010](./tasks/M1/M1-T010.md) | Component batch 3 — media/data/states (Card, Skeleton, SearchField, FilterBar, EmptyState, ErrorState, OfflineBanner, chips, DurationBadge, MetaRow, ProvenanceChip) | NOT_STARTED | MODIFY | — |
 | [M1-T011](./tasks/M1/M1-T011.md) | Age gate: first-run 18+ gate + DataStore persistence + API attestation header | NOT_STARTED | MODIFY (was middleware+cookie) | — |
 | [M1-T012](./tasks/M1/M1-T012.md) | Age Gate screen S-01 (Compose) | NOT_STARTED | MODIFY (was web S-01) | — |
@@ -34,7 +33,6 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 | [M1-T017](./tasks/M1/M1-T017.md) | E2E smoke suite (golden journeys) on emulator | NOT_STARTED | MODIFY (was Playwright smoke) | — |
 | [M1-T018](./tasks/M1/M1-T018.md) | Component gallery: previews + screenshot regression baselines | NOT_STARTED | MODIFY (was Storybook) | — |
 | [M1-T019](./tasks/M1/M1-T019.md) | Data/domain architecture layer (Retrofit services, DTO mapping, repositories, DataStore) | NOT_STARTED | REPLACE (supersedes retired M2-T018 TanStack layer) | — |
-
 ## M2-CATALOG — [M2-GATE](./gates/M2-GATE.md)
 
 | Task | Title | Status | Disposition | Evidence |
@@ -120,4 +118,6 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 | [M5-GATE](./gates/M5-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [DA-GATE](./gates/DA-GATE.md) | PASS WITH CONDITIONS | C-1 satisfied 2026-09-03 (AG-002 closed); C-2 (AG-001) open — non-blocking |
 
-**Totals (v1.1.0):** 76 task records — 3 COMPLETE · 65 NOT_STARTED · 5 BLOCKED (M0-T003←B-004, M2-T008/T009←B-001, M5-T006←B-003, M5-T007←B-002) · 4 RETIRED (successors: M5-T010/011/012, M1-T019).
+**Totals (v1.1.0):** 76 task records — 3 COMPLETE · 64 NOT_STARTED · 5 BLOCKED (M0-T003←B-004, M2-T008/T009←B-001, M5-T006←B-003, M5-T007←B-002) · 4 RETIRED (successors: M5-T010/011/012, M1-T019).
+
+**† (10 records)** Web-platform predecessor COMPLETE — executed 2026-09-05 on the web stack, superseded by the Android v1.1.0 redefinition, web implementation retained in-tree (M5 web track). Records: M0-T003, M1-T001–M1-T009. Full evidence: each task file's predecessor section + the 2026-09-07 reconciliation merge (D-022).

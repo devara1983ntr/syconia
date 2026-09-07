@@ -55,7 +55,7 @@ Watermark variant (128px, 6pt refined lines, 20% opacity) is derived from the sy
 | `--color-border` | `#26262B` | — | Hairlines, dividers |
 | `--color-accent` | `#C5A059` | 8.1:1 | Active nav, links, highlights |
 | `--color-accent-strong` | `#E6D3A0` | 13.4:1 | Focus ring, emphasis text |
-| `--color-success` | `#4EC9A0` | 9.6:1 | Positive status (emerald-harmonized) |
+| `--color-success` | `#4EC9A0` | 9.7:1 | Positive status (emerald-harmonized) |
 | `--color-warning` | `#E3B341` | 10.2:1 | Caution, SLA amber |
 | `--color-error` | `#F08A84` | 8.2:1 | Errors, destructive (soft coral; never pure red glow) |
 | `--color-focus` | `#E6D3A0` | — | 2px ring + 2px Obsidian offset |

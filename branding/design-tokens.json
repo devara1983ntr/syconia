@@ -36,7 +36,7 @@
       "border":            { "value": "#26262B", "use": "hairlines, dividers" },
       "accent":            { "value": "#C5A059", "contrast_on_obsidian": "8.1:1",  "use": "active nav, links, highlights" },
       "accent-strong":     { "value": "#E6D3A0", "contrast_on_obsidian": "13.4:1", "use": "focus ring, emphasis text" },
-      "success":           { "value": "#4EC9A0", "contrast_on_obsidian": "9.6:1",  "use": "positive status" },
+      "success":           { "value": "#4EC9A0", "contrast_on_obsidian": "9.7:1",  "use": "positive status" },
       "warning":           { "value": "#E3B341", "contrast_on_obsidian": "10.2:1", "use": "caution, SLA amber" },
       "error":             { "value": "#F08A84", "contrast_on_obsidian": "8.2:1",  "use": "errors, destructive" },
       "focus":             { "value": "#E6D3A0", "use": "focus ring color" },

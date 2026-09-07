@@ -1,0 +1,76 @@
+/*
+ * SYCONIA global stylesheet — Tailwind v4 entry + base-layer token
+ * application. Colors appear ONLY through tokens (raw hex lives solely in
+ * ./tokens.css per G-8; this file references CSS variables exclusively).
+ */
+
+@import "tailwindcss";
+@import "./tokens.css";
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  /* §5: text-wrap balance on headings (serif display classes set by §5 usage). */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  /* §4/ACCESSIBILITY §2 focus ring: 2px champagne + 2px Obsidian offset —
+     never remove outlines without this replacement. */
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  /* §9 reduced motion: durations 0, opacity-only transitions ≤100ms. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+ * Component layer — shared primitive state classes (D-006b values,
+ * tokens only). Classes are prefixed `sy-` and consumed by
+ * components/ui/*; stories/tests pin them.
+ */
+@layer components {
+  /* Pressed state for controls: scale via the --press-scale token
+     (§9: transform-only; the reduced-motion base rule above collapses
+     durations to ~0 for motion-safe degradation). */
+  .sy-press {
+    transition-property: transform, background-color, border-color, color,
+      filter;
+    transition-duration: 120ms;
+    transition-timing-function: ease-out;
+  }
+  .sy-press:active {
+    transform: scale(var(--press-scale));
+  }
+}

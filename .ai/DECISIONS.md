@@ -24,3 +24,12 @@ Material implementation decisions recorded during execution. None of these may o
 | D-017 | 2026-09-03 | App→API age enforcement | cookie reuse vs header attestation vs none | **DataStore gate + attestation header; final mechanism security-reviewed at M1-T011/M2-T010** | Cookies are web mechanics; the mechanism is specified as a deliverable, not claimed to exist |
 | D-018 | 2026-09-03 | SEO scope after web-UI retirement | keep full web SEO vs delete SEO.md vs scope-reduce | **Scope-reduce: legal (indexable) + noindex share/OG watch pages + admin noindex + App Links/assetlinks; discovery-web SEO retired with the web UI** | Public discovery lives in the app; honest minimal web surface preserves share previews and legal discoverability |
 | D-019 | 2026-09-03 | Roadmap reconciliation model | keep 70 web tasks verbatim vs full renumber vs ID-preserving dispositions | **ID-preserving dispositions (KEEP/MODIFY/REPLACE/RETIRE + successors); milestone count kept at 6 with redefined scopes; 76 records** | History/traceability preserved (AGENT §2.1); §36's 8-milestone model was not forced (dependency graph favored 6) |
+
+## Web-platform decisions (merged from origin/main 2026-09-07 — renumbered: web D-010→D-020, D-011→D-021 due to ID collision with Android D-010/D-011; web source files referencing the legacy IDs are retained verbatim)
+
+| ID | Date | Issue | Options | Decision | Rationale | Affects | References | Evidence |
+|---|---|---|---|---|---|---|---|---|
+D-010
+D-011
+
+| D-022 | 2026-09-07 | Diverged remote: completed web M1 phase (15 commits, 2026-09-05) vs local Android v1.1.0 migration — same task IDs, two platforms; fast-forward impossible | (a) merge preserving both truths, (b) side branch, (c) Android ledger wins outright | **(a) — owner-directed: merge commit; web code retained in-tree untouched (M5 web track); web completions recorded as predecessor-COMPLETE-superseded sections; Android redefinitions stay the active plan; web D-010/D-011 renumbered D-020/D-021; repo verified PRIVATE and kept private per owner decision** | Nothing deleted, both histories reachable, ledger truthful on both platforms | All M1 Android tasks, M5 web track, MASTER-CHECKLIST † convention | origin/main `648f39b`, merge of `5a16944` | Task-file predecessor sections + TRACEABILITY commit map |

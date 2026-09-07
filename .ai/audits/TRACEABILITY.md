@@ -70,3 +70,24 @@ Orphan analysis (assets): every delivered asset traces to a spec requirement abo
 ## 10. Platform-migration reconciliation (v1.1.0 — 2026-09-03)
 
 Mapping: every retired/superseded task keeps a file with disposition + successor. M2-T015→M5-T010 (home) · M2-T016→M5-T011 (search) · M2-T017→M5-T012 (categories/tags) · M2-T018→M1-T019 (data/domain layer). TanStack Query→repository/Flow (PRD2 §2.7 reinterpreted, math unchanged). F-01…F-18 map to the same or successor tasks; F-16 scope-reduced per SEO v1.1.0 (D-018); F-21 retired (platform-specific). Gates: G-04/B-001 unchanged on M2-T008/T009+M2-GATE; all other G-gates re-hosted (CI-CD v1.1.0 rows). New traceability spine: ARCHITECTURE §0–§3 v1.1.0 → modules → M1 tasks; API.md contracts → M1-T019/M2-T010…T014; SECURITY §2A/§6A → M1-T007/T011, M2-T010; ACCESSIBILITY v1.1.0 → M1-T008…T010/T018, M3-T010, M5-T004; PERFORMANCE §1 v1.1.0 → M5-T001.
+
+### Web-platform records (merged from origin/main 2026-09-07 — M5 web track)
+
+### Scaffold traceability note (2026-09-05, M1-T001)
+- ARCHITECTURE §3 tree = *target* layout. M1-T001 delivered the full directory skeleton + framework-required root files (`app/layout.tsx`, `app/(public)/page.tsx` stripped home, configs, canonical scripts, G-7 gate). Route files for screens, `middleware.ts`, `sitemap.ts`/`robots.ts`, `not-found`/`error`/`global-error` land with their owning tasks (M1-T011/T014/T016; M5-T002) — no divergence, staged delivery per task scope ("scaffold + config only; no business logic; no sample content").
+- AGENT §6 canonical commands: declared in `package.json` from M1-T001; commands owned by later tasks fail closed via `scripts/ci/tooling-pending.mjs` (exit 2 + owning task id) — honest gated state per AGENT §2.1.10, replaced by real toolchains as M1-T002/M2-T001/M4-T001/M5-T001 land.
+
+### Web-platform predecessor → evidence commit map (2026-09-05 execution; reconciled 2026-09-07)
+
+| Task (web definition) | Feat commit | Evidence commit |
+|---|---|---|
+| M0-T003 web toolchain verification | — | `a925278` |
+| M1-T001 Next.js scaffold | `277a491` | `f206a39` |
+| M1-T002 test toolchain | `2c5158c` | — |
+| M1-T003 tokens + Tailwind v4 | `b581ac1` | — |
+| M1-T004 self-hosted fonts | `dcd3ec4` | — |
+| M1-T005 brand asset integration | `2915f05` | `50dc14a` |
+| M1-T006 motion system | `e273ab8` | — |
+| M1-T007 env validation | `f7233a8` | — |
+| M1-T008 form controls | `8d8475a` | `3512db6` |
+| M1-T009 overlays + Storybook | `d03ca32` | `648f39b` |
