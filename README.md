@@ -40,14 +40,17 @@ SYCONIA (pronounced *sy-COHN-ee-uh*, from *syconium* — the enclosed fig bloom)
 **Agents & governance:** [AGENT.md](./AGENT.md) · [CHANGELOG.md](./CHANGELOG.md) · [docs/DOCUMENTATION-INDEX.md](./docs/DOCUMENTATION-INDEX.md) · [docs/LEGAL-COMPLIANCE.md](./docs/LEGAL-COMPLIANCE.md) · [.ai/](./.ai) (execution-control system)
 **Consolidated:** [docs/SYCONIA-PROJECT-SPECIFICATION.pdf](./docs/SYCONIA-PROJECT-SPECIFICATION.pdf)
 
+**Primary client & identity (D-023):** Android (`com.syconia.android` — canonical application ID/namespace; Kotlin · Compose · Material 3) is the **current primary client implementation target**. The web implementation is **historical/superseded, preserved** (isolation under `/web` planned as task M0-T006). The backend stays a separate service plane. **No Android implementation exists yet** — foundation begins at M1-T001; nothing in `/android` may exist before that task explicitly starts.
+
 ## Repository layout
 
 ```
 /branding/      Official SYCONIA brand assets + asset manifest + design tokens (identity truth)
 /docs/          Documentation index, legal compliance spec, consolidated PDF, release records
-/.ai/           75-record execution-control system (tasks, gates, audits, decisions)
-/android/       [PLANNED] native Android client (Gradle multi-module — ARCHITECTURE §3)
-/backend/       [PLANNED] backend service (API + admin console + legal/share web + jobs)
+/.ai/           78-record execution-control system (tasks, gates, audits, decisions)
+/web/           [PLANNED — M0-T006] historical web client, isolated later (preserved, superseded as primary client)
+/android/       [PLANNED — M1-T001] native Android client (Gradle multi-module — ARCHITECTURE §3); NO implementation exists yet
+/backend/       [PLANNED] backend service (API + admin console + legal/share web + jobs; physically root app/, lib/, drizzle/)
 /.skills/       Cloned development aids (ui-ux-pro-max design skill; advisory only, git-ignored)
 ```
 

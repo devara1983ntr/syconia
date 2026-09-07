@@ -1,5 +1,11 @@
 # Changelog — `.ai/` Execution Control System
 
+## [2.2.0] — 2026-09-07 — M0-T005: Android identity + platform boundary documentation (D-023)
+- **New tasks:** M0-T005 (this documentation-only phase; blocks M1-T001) · M0-T006 (web isolation under /web — physical move explicitly deferred). Records 76 → 78.
+- **Canonical identity:** `com.syconia.android` (applicationId + namespace) + responsibility matrix + boundaries in ARCHITECTURE §0/§2/§3, README, SECURITY (assetlinks binding); aligned with DEPLOYMENT versioning/distribution truths — nothing invented.
+- **M1-T001** gains prerequisite M0-T005; Android foundation remains NOT_STARTED — zero Android artifacts exist (an out-of-scope scaffold attempt was fully quarantined out of the repository before this phase; nothing committed).
+- **ROADMAP:** M0 row → T001…T006; record-count arithmetic corrected (75→78).
+
 ## [2.1.0] — 2026-09-07 — Reconciliation merge: web M1 completion + Android v1.1.0 baseline
 
 - **Merge** of local `5a16944` (Android migration docs + M0-T003 evidence) and origin `648f39b` (web M1-T001–T009 COMPLETE, 2026-09-05) — owner-directed option (a): both truths preserved; fast-forward push after merge; nothing deleted or rewritten.

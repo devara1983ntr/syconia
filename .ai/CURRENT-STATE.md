@@ -1,13 +1,13 @@
 # SYCONIA — Current Project State (single source of truth — v1.1.0)
 
-**Last updated:** 2026-09-07 (reconciliation merge: completed web M1 phase merged from origin/main; Android v1.1.0 baseline active) · **Maintainer rule:** update after every meaningful transition; never fabricate progress.
+**Last updated:** 2026-09-07 (M0-T005 documentation phase: Android identity `com.syconia.android` + three-platform boundaries documented, D-023; reconciliation merge earlier same day) · **Maintainer rule:** update after every meaningful transition; never fabricate progress.
 
 | Field | Value |
 |---|---|
 | Current phase | **M0 closed (gate PASS); M0-T003 executed 2026-09-07 → BLOCKED (B-004: emulator impossible in sandbox; build path fully verified)** — M1 build-path work eligible pending remote publication of the migration commits |
 | Platform (v1.1.0) | Native Android client (Kotlin/Compose/M3, Clean+MVVM/UDF, Coroutines/Flow, Hilt, Navigation Compose) + Node/TS backend service (API, admin console, legal/share web, jobs) + PostgreSQL. See ARCHITECTURE §0 + DECISIONS D-010…D-019 |
 | Implementation state | Web-platform M1 implementation EXISTS in-tree (merged from origin/main 2026-09-07: web M1-T001–T009 COMPLETE — Next.js scaffold, tokens, fonts, brand, motion, env, form controls, overlays; `app/`, `components/`, `lib/`, `tests/`) and is the M5 web track. Android implementation: none yet — M1-T001 (Android scaffold) is the next active task |
-| Current/active task | none in flight |
+| Current/active task | none in flight (M0-T005 documentation phase COMPLETE 2026-09-07 — STOP condition honored). Next queued: **M0-T006** (web isolation — deferred physical move), then **M1-T001** (Android foundation — explicitly NOT started; zero Android artifacts exist) |
 | Last verified commit | 6d3cdd3 (sign-off) → 902a8b6 (canonical docs migration) → this series (.ai + PDF) — see CHANGELOG |
 | Gate status | M0-GATE **PASS** · DA-GATE **PASS WITH CONDITIONS** (C-1 satisfied; C-2 = AG-001 open) · M1–M5 **NOT_STARTED**; M2-GATE **structurally BLOCKED (B-001)** |
 | Blocked tasks | M0-T003 (B-004 — emulator capability; build path verified, see task evidence) · M2-T008/T009 (B-001 — source authorization G-04; never unblock by inventing a provider) · M5-T006 (B-003 hosting/distribution) · M5-T007 (B-002 counsel) |

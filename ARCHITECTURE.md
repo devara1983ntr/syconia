@@ -15,6 +15,8 @@ SYCONIA v1.1.0 uses a **client/server architecture**:
 - **Backend service (Node.js + TypeScript)** — the retained server plane: public JSON API (API.md §4), admin web console + admin API (§5), minimal legal/contact/share web surface, ingestion jobs, PostgreSQL 16+ via Drizzle ORM. It hosts **no public discovery web UI** (retired with the web client).
 - **PostgreSQL 16+** — backend-only. Never embedded in the app.
 
+**Platform boundaries (v1.1.0 — D-023):** Android is the **current primary client implementation target**. The web client is **historical/superseded** — its completed web-track M1 work (2026-09-05) is preserved in-tree at the repository root pending isolation under `/web` (task M0-T006; history preserved, nothing rewritten or deleted). The backend remains a separate server plane (Next.js in backend-only role + PostgreSQL via Drizzle; boundary `/backend`). **No Android implementation exists yet** — `/android` is a documented future boundary only until the foundation task M1-T001 explicitly begins.
+
 ```
 ┌────────────────────────┐        HTTPS (TLS, pinned config)        ┌──────────────────────────┐
 │  ANDROID APP (Kotlin)  │ ───────────────────────────────────────► │   BACKEND SERVICE        │
@@ -77,6 +79,7 @@ SYCONIA v1.1.0 uses a **client/server architecture**:
 | Persistence | **DataStore** (prefs/session); **Room only where a task justifies it with evidence** (D-014) | No local media ever |
 | Fonts | Bundled OFL **Fraunces + Inter** variable TTFs (from branding/fonts) | Licensing + brand typography; Compose font scaling |
 | Min/target SDK | **minSdk 26; targetSdk = Play-current at release** (D-016) | Device coverage vs API level |
+| Identity | **Application ID / namespace: `com.syconia.android`** · human-readable name **SYCONIA** — canonical (D-023) | One identity across documentation, future build config, App Links and release artifacts; alternate IDs prohibited |
 
 ### Backend (service) — retained from v1.0.2
 | Layer | Choice | Rationale |
@@ -99,7 +102,12 @@ Prohibited: React/web code in the Android client; Android framework imports in d
   syconia-app-icon.png, syconia-favicon.png, syconia-brand-guidelines.pdf
 /docs/                     # DOCUMENTATION-INDEX.md, LEGAL-COMPLIANCE.md, generated PDF
 /.skills/ui-ux-pro-max/    # [EXISTING] cloned UI/UX Pro Max design skill (dev aid; git-ignored)
-/android                   # [REQUIRED] native Android client (Gradle multi-module)
+/web                       # [FUTURE — M0-T006] historical web client implementation, isolated
+                           #   (currently at repo root: components/, web-client-era configs & tests)
+                           #   superseded as primary client; preserved for audit + M5 retained-surface
+                           #   decisions; physical move deferred to M0-T006 — not performed yet
+/android                   # [FUTURE — M1-T001] native Android client (Gradle multi-module)
+                           #   NO implementation exists yet — documented boundary only
   app/                     # MainActivity, navigation graph, Hilt app, build variants
   core/common/             # result types, dispatchers, errors → E-state mapping
   core/designsystem/       # SyconiaTheme (M3 from tokens), typography, icons, components
@@ -112,6 +120,8 @@ Prohibited: React/web code in the Android client; Android framework imports in d
   domain/                  # use cases + repository contracts + domain models (pure Kotlin)
   feature/home|search|categories|tags|watch|settings|legal   # feature modules (UI+ViewModel)
 /backend                   # [REQUIRED] retained server plane (Next.js backend-only role)
+                           #   (physically: root app/ API+admin+legal surfaces, lib/, drizzle/,
+                           #   scripts/ — no physical move authorized in this phase)
   /app/api/*               # API.md handlers (public §4 + admin §5)
   /app/admin/*             # admin web console (A-01…A-10, noindex, auth-guarded)
   /app/(legal)/*           # legal/contact web + /watch/[slug] OG share pages
@@ -124,6 +134,41 @@ Prohibited: React/web code in the Android client; Android framework imports in d
 Dependency direction (enforced by module graph + convention plugins + review):
 `feature/* → core/* → domain ← data/*` — UI never touches Retrofit/Room/DTOs; domain has no Android UI imports; DTO→domain mapping only in data/; database entities never cross into presentation.
 ```
+
+### Platform responsibility matrix (D-023)
+
+| Concern | Web (`/web` — historical, superseded) | Android (`/android` — primary client target, future) | Backend (`/backend` — retained) |
+|---|---|---|---|
+| UI rendering | Browser (historical Next.js/React client) | Jetpack Compose + Material 3 | Admin/legal/share SSR surfaces only |
+| Navigation | Web routing (historical) | Navigation Compose, Android back stack | API routing |
+| Metadata/SEO | n/a (historical) | App Links deep links | Legal indexability, share/OG pages, admin noindex |
+| Media playback | Historical embed approach | Hardened WebView embed shell (D-013) + Compose chrome | Server-side source adapters only |
+| Local persistence | Browser storage (historical) | DataStore; Room only where task-justified (D-014); never media | PostgreSQL only |
+| Accessibility | WCAG web (historical) | Android accessibility semantics | — |
+| Release artifacts | Web deploy (historical) | Signed APK/AAB (M5; keys never committed) | Backend deploys (DEPLOYMENT.md) |
+| Business logic | — | Presentation + domain layers (Clean Architecture) | Services, jobs, adapters, rate limiting, server security |
+
+No responsibility is duplicated across the three planes; the Android column is the current implementation target, the Web column is preserved history.
+
+### Android identity (canonical — D-023)
+
+| Field | Value |
+|---|---|
+| Application name (human-readable) | **SYCONIA** |
+| Application ID / namespace | **`com.syconia.android`** |
+| Platform / language | Android · Kotlin |
+| UI / design system | Jetpack Compose · Material 3 (SyconiaTheme from SYCONIA tokens) |
+| Architecture | Clean Architecture · MVVM + UDF · Coroutines/Flow · Hilt · Navigation Compose |
+| minSdk / targetSdk | minSdk 26 · targetSdk = Play-current at release (D-016) |
+| Versioning | `versionCode` monotonic · `versionName` semver aligned with releases (DEPLOYMENT.md — already established) |
+| Build variants | debug + release (R8/minify configuration lands with the quality-toolchain task M1-T002) |
+| Signing | Keys only in CI/machine keystores — **never committed** (CI-CD G-6); Play App Signing decided with distribution (M5-T006) |
+| Distribution | v1: internal APK + internal testing track; Play/open distribution is an explicit operator decision at M5-T006 (B-003-class — DEPLOYMENT.md) |
+| Deep links | Android App Links over the backend HTTPS domain; `assetlinks.json` served by the backend, bound to `com.syconia.android` (SECURITY §2, SEO §1A) |
+| Notifications | Not in current PRD scope; adding one requires a recorded decision |
+| Client analytics | None in current scope (PRD analytics are server-side); any client telemetry requires a recorded decision |
+
+These are documentation decisions only: **no Android source, manifest, or Gradle configuration exists at the time of writing** (M0-T005, documentation phase). They become build configuration exclusively in M1-T001+.
 
 ## 4. Delivery strategy (v1.1.0) — API endpoints & web surfaces
 

@@ -10,6 +10,8 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 | [M0-T002](./tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | KEEP (historical COMPLETE) | migration commit chain (v1.1.0) |
 | [M0-T003](./tasks/M0/M0-T003.md) | Verify Android + backend toolchain prerequisites | BLOCKED† | MODIFY (was: web toolchain; redefined for Android v1.1.0) | B-004 (emulator AC; build path verified 2026-09-07 — evidence in task file) |
 | [M0-T004](./tasks/M0/M0-T004.md) | Platform migration: documentation + architecture + roadmap (web → Android) | COMPLETE | NEW (v1.1.0) | migration commit chain (v1.1.0) |
+| [M0-T005](./tasks/M0/M0-T005.md) | Android identity + platform boundary documentation (DOCUMENTATION ONLY) | COMPLETE | NEW 2026-09-07 (D-023) | evidence in task file; PDF 105pp; zero Android artifacts |
+| [M0-T006](./tasks/M0/M0-T006.md) | Isolate historical web implementation under /web (deferred move) | NOT_STARTED | NEW 2026-09-07 | executes D-023 boundaries; move NOT performed |
 ## M1-ANDROID-FOUNDATION — [M1-GATE](./gates/M1-GATE.md)
 
 | Task | Title | Status | Disposition | Evidence |
@@ -118,6 +120,6 @@ Every COMPLETE requires cited evidence in the task file (AGENT §2.1). Gates lin
 | [M5-GATE](./gates/M5-GATE.md) | NOT_STARTED | NOT_STARTED |
 | [DA-GATE](./gates/DA-GATE.md) | PASS WITH CONDITIONS | C-1 satisfied 2026-09-03 (AG-002 closed); C-2 (AG-001) open — non-blocking |
 
-**Totals (v1.1.0):** 76 task records — 3 COMPLETE · 64 NOT_STARTED · 5 BLOCKED (M0-T003←B-004, M2-T008/T009←B-001, M5-T006←B-003, M5-T007←B-002) · 4 RETIRED (successors: M5-T010/011/012, M1-T019).
+**Totals (v1.1.0):** 78 task records — 4 COMPLETE · 65 NOT_STARTED · 5 BLOCKED (M0-T003←B-004, M2-T008/T009←B-001, M5-T006←B-003, M5-T007←B-002) · 4 RETIRED (successors: M5-T010/011/012, M1-T019).
 
 **† (10 records)** Web-platform predecessor COMPLETE — executed 2026-09-05 on the web stack, superseded by the Android v1.1.0 redefinition, web implementation retained in-tree (M5 web track). Records: M0-T003, M1-T001–M1-T009. Full evidence: each task file's predecessor section + the 2026-09-07 reconciliation merge (D-022).

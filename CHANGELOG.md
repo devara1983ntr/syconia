@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.5] — 2026-09-07 — Android platform identity and repository boundaries documented
+### Added
+- Canonical Android identity **`com.syconia.android`** (application ID/namespace, human name SYCONIA) and three-platform repository boundaries (web historical/superseded · android primary-target-future · backend retained) with a platform responsibility matrix — ARCHITECTURE §0/§2/§3, README, SECURITY (D-023). Documentation only: **no Android implementation, configuration, or project files exist**; web isolation under `/web` documented as future task M0-T006 (.ai records 76→78).
 ## [1.0.4] — 2026-09-07 — Baseline reconciliation merge
 
 ### Added

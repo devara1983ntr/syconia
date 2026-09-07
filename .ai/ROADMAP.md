@@ -1,6 +1,6 @@
 # SYCONIA — Master Execution Roadmap (v1.1.0 — Android platform)
 
-Version 2.0.0 · 2026-09-03 · Authority: AGENT.md §4 + PRD §12 (v1.1.0). **Platform migration (D-010…D-019) reconciled this roadmap from the web-era 70-task graph to a 75-record graph (71 active + 4 retired-with-successor); task IDs preserved where practical.** Product scope, gates and zero-placeholder law unchanged.
+Version 2.0.0 · 2026-09-03 · Authority: AGENT.md §4 + PRD §12 (v1.1.0). **Platform migration (D-010…D-019) reconciled this roadmap from the web-era 70-task graph to a 78-record graph (74 active + 4 retired-with-successor; M0-T005/M0-T006 added 2026-09-07 per D-023); task IDs preserved where practical.** Product scope, gates and zero-placeholder law unchanged.
 
 ## Project objective
 Implement SYCONIA — premium 18+ adult-media discovery/streaming **native Android application** (Kotlin/Compose/M3) + **backend service** (API, admin console, legal/share web, ingestion; PostgreSQL) — embed-only playback via authorized sources (never stored), with zero placeholders and evidence-based completion.
@@ -15,7 +15,7 @@ M0-RECON ─► M1-ANDROID-FOUNDATION ─► M2-CATALOG(backend) ─► M3-WATCH
 ```
 | Phase | Objective | Tasks | Entry | Exit = gate |
 |---|---|---|---|---|
-| **M0-RECON** | Baseline + **platform migration (docs/architecture/roadmap)** | M0-T001…T004 | docs v1.1.0 verified | [M0-GATE](./gates/M0-GATE.md) |
+| **M0-RECON** | Baseline + **platform migration (docs/architecture/roadmap)** + Android identity/platform boundaries (M0-T005, D-023) + web-isolation plan (M0-T006) | M0-T001…T006 | docs v1.1.0 verified | [M0-GATE](./gates/M0-GATE.md) |
 | **M1-ANDROID-FOUNDATION** | Gradle multi-module scaffold, quality toolchain, SyconiaTheme (M3 from tokens), fonts, adaptive icons, motion, components ×3 batches, age gate (DataStore+attestation), chrome, navigation, legal, system states, E2E harness, gallery, data/domain layer | M1-T001…T019 | M0-GATE PASS + DA-GATE conditions (C-1 satisfied) | [M1-GATE](./gates/M1-GATE.md) |
 | **M2-CATALOG** | Backend: schema/migrations, roles, adapter framework+SSRF+breaker, normalization, sync, jobs, mapping, **source authorization gate (★G-04/B-001 — M2-T008/T009)**, public APIs (videos/search/taxonomy/events/report) | M2-T001…T014 active (+T015…T018 RETIRED→M5/M1 successors) | M1-GATE PASS | [M2-GATE](./gates/M2-GATE.md) — **BLOCKED while B-001 open** |
 | **M3-WATCH** | Android playback: hardened WebView shell (D-013), lifecycle/security, player FSM + failure ladder, watch destination, related rail, beacons, report, interaction suite, discretion (FLAG_SECURE/masking), a11y | M3-T001…T010 | M2-GATE PASS | [M3-GATE](./gates/M3-GATE.md) |
