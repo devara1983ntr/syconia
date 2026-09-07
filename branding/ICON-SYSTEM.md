@@ -50,3 +50,24 @@
 ## Verification
 
 Mapping audited against SCREENS.md (S-00/S-03/S-07/S-07R), GESTURES.md (§2 capabilities, §3 gestures, §4 pointer, §5 shortcuts), UX-FLOWS.md, ERROR-STATES.md (state icons), DESIGN-SYSTEM.md §7/§10/§12. Exact React export names verified against the pinned `lucide-react` version when the dependency is installed (M1-T002) — kebab IDs above are stable library identifiers.
+
+## Appendix — Android mapping (v1.1.0, decision D-015)
+
+The web library (lucide) has no Android distribution; the production icon system on Android is **Material Symbols (Outlined style, weight 200–300 class ≈ the 1.5px-stroke principle, 20/24dp)**. Semantics map 1:1 with the table above:
+
+| Concept | Web (v1.0.2) | Android (v1.1.0) |
+|---|---|---|
+| menu / close / back / search | `menu` / `x` / `arrow-left` / `search` | `menu` / `close` / `arrow_back` / `search` |
+| chevrons | `chevron-right/down/left` | `chevron_right` / `chevron_down` / `chevron_left` |
+| keyboard overlay | `keyboard` | `keyboard` |
+| filter / sort | `filter` / `arrow-up-down` | `tune` / `swap_vert` |
+| fullscreen / theater | `maximize` / `rectangle-horizontal` | `fullscreen` / `fullscreen_exit` / `rectangle` (custom slot if Symbol absent — decided at M1-T002, no fabrication now) |
+| report / share / external | `flag` / `share-2` / `external-link` | `flag` / `share` / `open_in_new` |
+| play / pause / volume / settings | `play` / `pause` / `volume-2` / `volume-x` / `settings` | `play_arrow` / `pause` / `volume_up` / `volume_off` / `settings` |
+| captions / speed | `captions` / `gauge` | `closed_caption` / `speed` |
+| success / warning / error / info | `check` / `triangle-alert` / `circle-alert` / `info` | `check` / `warning` / `error` / `info` |
+| offline / retry | `wifi-off` / `rotate-cw` | `wifi_off` / `refresh` |
+| discretion | `eye` / `eye-off` / `eraser` | `visibility` / `visibility_off` / `delete_sweep` (clear-traces) |
+| copy link | `copy` | `content_copy` |
+
+Rules carried over unchanged: no emoji, no Unicode-substitute icons, tint from content color, icon+label for destructive/ambiguous actions, loading = ostiole dot (never a spinner icon), brand symbols from `/branding/` only. Exact availability of each Symbol name is verified when the dependency is wired (M1-T002); any gap is decided then and recorded — not pre-claimed.

@@ -1,13 +1,12 @@
-# Phase M0-RECON
+# Phase M0-RECON (v1.1.0)
 
-**Objective (AGENT.md §4):** Project baseline: verified docs, execution-control system, toolchain prerequisites.
+**Objective:** recon + platform migration (docs truth, toolchain readiness).
 
-**Entry:** M0: docs baseline verified · **Exit:** [M0-GATE](../../gates/M0-GATE.md) with evidence
+**Entry:** docs baseline verified · **Exit:** [M0-GATE](../../gates/M0-GATE.md) with evidence
 
-**Tasks:**
-
-| ID | Title | Status | Depends on |
-|---|---|---|---|
-| [M0-T001](../../tasks/M0/M0-T001.md) | Create `.ai/` execution-control system | COMPLETE | -,  , n, o, n, e |
-| [M0-T002](../../tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | -,  , M, 0, -, T, 0, 0, 1 |
-| [M0-T003](../../tasks/M0/M0-T003.md) | Verify M1 toolchain prerequisites | READY | -,  , M, 0, -, T, 0, 0, 2 |
+| ID | Title | Status | Deps | Disposition |
+|---|---|---|---|---|
+| [M0-T001](../../tasks/M0/M0-T001.md) | Create `.ai/` execution-control system | COMPLETE | — | KEEP (historical web-era COMPLETE; content superseded by v1.1.0 regeneration) |
+| [M0-T002](../../tasks/M0/M0-T002.md) | Record truthful project baseline (current state + audits) | COMPLETE | — | KEEP (historical COMPLETE) |
+| [M0-T003](../../tasks/M0/M0-T003.md) | Verify Android + backend toolchain prerequisites | READY | M0-T004 | MODIFY (was: web toolchain; redefined for Android v1.1.0) |
+| [M0-T004](../../tasks/M0/M0-T004.md) | Platform migration: documentation + architecture + roadmap (web → Android) | COMPLETE | M0-T002 | NEW (v1.1.0) |

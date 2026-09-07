@@ -65,3 +65,8 @@ Orphan analysis (assets): every delivered asset traces to a spec requirement abo
 | PWA installability (manifest icons incl. maskable) | PRD §72; SEO.md §Favicons/app-icons | ASSET-ICON-002/003/004/005 | M1-T005 | safe-zone radius check (203.65 ≤ 204.8), corners, bytes | DA-3 (addendum 2) |
 | Category visual system (deterministic token meshes) | DESIGN-SYSTEM §11 | ASSET-SPEC-001 (spec; zero files by design) | M2-T017 (generator), M2-T018 (perf trigger) | determinism + contrast unit tests (task ACs) | M2-GATE 2.9-adjacent |
 | Secondary-category restraint (nothing unnecessary) | DESIGN-SYSTEM §1; supporting directives | ASSET-SPEC-002 audit (9 rejections cited) | — (governance doc) | audit table row-by-row | DA-GATE DA-15 scope |
+
+
+## 10. Platform-migration reconciliation (v1.1.0 — 2026-09-03)
+
+Mapping: every retired/superseded task keeps a file with disposition + successor. M2-T015→M5-T010 (home) · M2-T016→M5-T011 (search) · M2-T017→M5-T012 (categories/tags) · M2-T018→M1-T019 (data/domain layer). TanStack Query→repository/Flow (PRD2 §2.7 reinterpreted, math unchanged). F-01…F-18 map to the same or successor tasks; F-16 scope-reduced per SEO v1.1.0 (D-018); F-21 retired (platform-specific). Gates: G-04/B-001 unchanged on M2-T008/T009+M2-GATE; all other G-gates re-hosted (CI-CD v1.1.0 rows). New traceability spine: ARCHITECTURE §0–§3 v1.1.0 → modules → M1 tasks; API.md contracts → M1-T019/M2-T010…T014; SECURITY §2A/§6A → M1-T007/T011, M2-T010; ACCESSIBILITY v1.1.0 → M1-T008…T010/T018, M3-T010, M5-T004; PERFORMANCE §1 v1.1.0 → M5-T001.

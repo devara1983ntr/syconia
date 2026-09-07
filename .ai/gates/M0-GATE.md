@@ -1,12 +1,13 @@
-# M0-GATE — RECON / Baseline (PASS required before M1)
+# M0-GATE — RECON + PLATFORM MIGRATION (v1.1.0)
 
-**Status: PASS** · Closed 2026-09-03 · Evidence cited below. A gate is PASS only with objective evidence.
+**Status: PASS** (baseline 2026-09-03; extended 2026-09-03 with platform-migration rows).
 
-| # | Criterion | Evidence |
-|---|---|---|
-| 0.1 | Documentation suite v1.0.2 verified (forensic + gap audits) | commits `40e710e` (gap patch), `dc19d01`, `ac5ccc9`; audits recorded in CHANGELOG.md root |
-| 0.2 | Repository is the verified publication baseline | commit `76c648e`; remote tree audit (40/40 files) 2026-09-03 |
-| 0.3 | Zero-placeholder policy enforced for agents | AGENT.md §2.1 (commit `e5b838e`) |
-| 0.4 | `.ai/` execution system exists and validates (unique IDs, acyclic deps, statuses legal, M2 gate intact, coverage/traceability audits present) | `.ai` validation run 2026-09-03 (see QUALITY.md §validation log); this commit |
-| 0.5 | Current state truthful (no fabricated progress) | CURRENT-STATE.md: 2/70 tasks COMPLETE, both evidenced by this deliverable; repo contains no application code (verified by inspection) |
-| 0.6 | Zero-placeholder scan of `.ai/` itself | validation grep: no TODO/FIXME/HACK/XXX as unfinished work; markers appear only inside policy/gate specification text (quoted, intentional) |
+| # | Criterion | Evidence | Result |
+|---|---|---|---|
+| 0.1 | Docs suite verified | v1.0.2 verification (42/42 G-probes; commits 40e710e…6d3cdd3) | PASS |
+| 0.2 | `.ai` execution system exists | 50f0b0b (web-era) → regenerated v1.1.0 (76 records) | PASS |
+| 0.3 | Truthful baseline | CURRENT-STATE.md (live; rewritten v1.1.0) | PASS |
+| 0.4 | Traceability + coverage audits | TRACEABILITY/COVERAGE (reconciled v1.1.0 rows) | PASS |
+| 0.5 | Asset readiness | DA-GATE PASS WITH CONDITIONS (C-1 satisfied; C-2 open) | PASS |
+| 0.6 | **Platform migration executed** (M0-T004): canonical docs migrated in place; classification registry (CHANGELOG §1.0.3); architecture rewritten client/server; decisions D-010…D-019; roadmap reconciled (IDs preserved where practical; 4 retired with successors); PDF regenerated | Migration commits (902a8b6 + this series); QUALITY §migration log | PASS |
+| 0.7 | No app code introduced by migration | git diff scope = docs + .ai + PDF only | PASS |

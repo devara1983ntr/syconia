@@ -42,3 +42,12 @@ All asset checks are programmatic (round-trip composite vs master ≤18 max chan
 - **AG-002 → CLOSED / PASS:** operator (Roshan) personally visually inspected the supplied production assets and approved the derived production asset pack — scope: logo variants, transparent logo/symbol assets, favicon 16/32/ICO, app icons, maskable PWA icons, watermark, monochrome assets, OG asset, overall visual consistency.
 - DA-GATE: condition C-1 satisfied (addendum 3); status PASS WITH CONDITIONS with only C-2 (AG-001) open — non-fabrication condition, does not block M1.
 - Unchanged by instruction: **AG-001 OPEN/DEFERRED** (official SVG masters; none traced/generated), **AG-003 BLOCKED BY AG-001**, **AG-014 PENDING real UI**. Roadmap untouched (70 tasks, 2/1/63/4); M0-T003 not started; no code, no new assets. Files: ASSET-GAPS, DA-GATE, ASSET-MANIFEST (header note), CURRENT-STATE, MASTER-CHECKLIST, this log. TRACEABILITY/COVERAGE carry no AG-002 references — correctly left untouched.
+
+
+## [2.0.0] — 2026-09-03 — ANDROID PLATFORM MIGRATION
+### Changed
+- Roadmap reconciled per D-019: **76 task records (72 active + 4 RETIRED with recorded successors)**; IDs preserved where practical; milestone count kept at 6 with redefined scopes (M1 Android foundation incl. data/domain layer; M2 backend catalog; M3 Android watch; M4 backend admin; M5 discovery screens + release). Disposition recorded in every task file.
+- All gates rewritten for the dual-stack reality; **M2-GATE keeps its structural B-001 block (G-04 source authorization — unchanged, never bypassed)**; M0-GATE extended with migration rows (PASS); DA-GATE addendum 4 (asset mapping; C-1 satisfied, C-2 open).
+- CURRENT-STATE rewritten (truthful: documentation-only; migration = documentation work, not implementation). ROADMAP/MASTER-CHECKLIST regenerated. DECISIONS +D-010…D-019. TRACEABILITY §10 + COVERAGE v2 + QUALITY migration log + ASSET-GAPS/BLOCKERS platform notes.
+### Preserved
+- Product scope/laws; zero-placeholder policy (AGENT §2.1); gates G-04/B-001, B-002, B-003; blocker semantics; DA-GATE C-1 sign-off; historical evidence (web-era commits cited, never rewritten).

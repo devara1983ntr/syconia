@@ -1,19 +1,21 @@
-# SYCONIA — Current Project State (single source of truth)
+# SYCONIA — Current Project State (single source of truth — v1.1.0)
 
-**Last updated:** 2026-09-03 (M0 close-out) · **Maintainer rule:** update this file after every meaningful task transition. Never fabricate progress.
+**Last updated:** 2026-09-03 (Android platform migration) · **Maintainer rule:** update after every meaningful transition; never fabricate progress.
 
 | Field | Value |
 |---|---|
-| Current phase | **M0-RECON — closing (gate PASS recorded)** → next phase M1-FOUNDATION |
+| Current phase | **M0-RECON — closed (gate PASS incl. platform-migration rows)** → next **M1-ANDROID-FOUNDATION** |
+| Platform (v1.1.0) | Native Android client (Kotlin/Compose/M3, Clean+MVVM/UDF, Coroutines/Flow, Hilt, Navigation Compose) + Node/TS backend service (API, admin console, legal/share web, jobs) + PostgreSQL. See ARCHITECTURE §0 + DECISIONS D-010…D-019 |
+| Implementation state | **Documentation-only repository** — no app code (neither Android nor backend) exists. M0-T004 (migration) is documentation work, not application implementation |
 | Current/active task | none in flight |
-| Last verified commit | `e5b838e` at M0 close → `d0cacc0` (asset pack) post-push verified 2026-09-03 → final design/asset readiness review 2026-09-03 (AG-012/013 resolved) → supporting-asset audit 2026-09-03 (14 categories: maskable PWA icons + category-art spec created; 9 rejected per spec; AG-014 pending real UI; open: AG-001 OPEN/DEFERRED, AG-003 blocked-by-AG-001, AG-014 pending real UI; AG-002 CLOSED/PASS 2026-09-03 — operator visual sign-off) |
-| Implementation state | **Documentation-only repository.** No application source, schema, tests, or CI exist yet. Brand assets in `/branding/` (verified). All app functionality is `[REQUIRED]` (PRD status vocabulary). |
-| Current gate status | M0-GATE **PASS** · [DA-GATE](gates/DA-GATE.md) **PASS WITH CONDITIONS** (2026-09-03: production asset pack staged in `branding/` — logo variants, favicon package, app icons, watermark 128, Fraunces+Inter OFL fonts, icon system, design tokens, OG card; C-1 AG-002 visual sign-off **satisfied 2026-09-03** — operator personally inspected & approved the pack; C-2 AG-001 vector masters open) · M1–M5 gates **NOT_STARTED** |
-| Blocked tasks | M2-T008, M2-T009 (blocker B-001 — source authorization gate G-04, operator decision; **must not be unblocked by inventing a provider**) · M5-T006 (B-003 hosting AUP) · M5-T007 (B-002 counsel review) |
-| Next eligible tasks | **M0-T003** (toolchain prerequisites verification) → then M1-T001 (Next.js scaffold). Full order: ROADMAP.md + task `## Dependencies` |
-| Completed tasks | M0-T001 (`.ai` execution system), M0-T002 (baseline state + traceability/coverage audits) · **Design/asset readiness pack staged** (control activity, not a new task ID: 19 assets verified in `branding/ASSET-MANIFEST.md`, gap register `.ai/audits/ASSET-GAPS.md`, gate DA-GATE) |
-| Known risks | (1) B-001 open → M2 gate blocked indefinitely until operator acts; (2) B-002 legal review lead-time; (3) B-003 hosting AUP constraint; (4) pre-existing tracked `uploads/` originals (harmless duplicate of `branding/`); (5) `.git/config` not snapshotted — re-add `origin` remote per session before push |
-| Unresolved decisions | See DECISIONS.md — none currently awaiting decision beyond blockers B-001/B-002/B-003 (all operator-side) |
+| Last verified commit | 6d3cdd3 (sign-off) → 902a8b6 (canonical docs migration) → this series (.ai + PDF) — see CHANGELOG |
+| Gate status | M0-GATE **PASS** · DA-GATE **PASS WITH CONDITIONS** (C-1 satisfied; C-2 = AG-001 open) · M1–M5 **NOT_STARTED**; M2-GATE **structurally BLOCKED (B-001)** |
+| Blocked tasks | M2-T008/T009 (B-001 — source authorization G-04; never unblock by inventing a provider) · M5-T006 (B-003 hosting/distribution) · M5-T007 (B-002 counsel) |
+| Retired tasks | M2-T015/016/017/018 (web-era screen/query tasks → successors M5-T010/011/012 + M1-T019) |
+| Next eligible tasks | **M0-T003** (Android+backend toolchain prerequisites) → M1-T001 (Gradle scaffold) |
+| Completed tasks | M0-T001, M0-T002 (web-era, historical), **M0-T004 (platform migration)** |
+| Known risks | B-001 indefinite until operator acts; B-003/B-002 release-side; AG-001 vector masters; Android toolchain availability in the execution environment (verify at M0-T003 — record honestly if absent) |
+| Unresolved decisions | None beyond blockers (D-010…D-019 recorded; version pinning intentionally deferred to scaffold per D-016) |
 
-## Task status summary (live — regenerate from MASTER-CHECKLIST.md on update)
-M0: 2 COMPLETE · 1 READY · M1: 18 NOT_STARTED · M2: 17 NOT_STARTED + 2 BLOCKED (B-001) · M3: 10 NOT_STARTED · M4: 11 NOT_STARTED · M5: 7 NOT_STARTED + 2 BLOCKED (B-003/B-002) — **total 70 tasks: 2 COMPLETE, 1 READY, 63 NOT_STARTED, 4 BLOCKED; evidence-linked in MASTER-CHECKLIST.md**
+## Task status summary (regenerate from MASTER-CHECKLIST.md)
+M0: 3 COMPLETE · 1 READY · M1: 19 NOT_STARTED · M2: 13 NOT_STARTED + 2 BLOCKED (B-001) + 4 RETIRED · M3: 10 NOT_STARTED · M4: 11 NOT_STARTED · M5: 8 NOT_STARTED + 2 BLOCKED (B-003/B-002) — **totals: 76 records — 3 COMPLETE · 1 READY · 64 NOT_STARTED · 4 BLOCKED · 4 RETIRED; authoritative detail in MASTER-CHECKLIST.md**

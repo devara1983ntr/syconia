@@ -43,3 +43,7 @@ Secondary-category audit (14 categories, `branding/SUPPORTING-ASSETS.md`): **DA-
 ## Addendum 3 — operator visual sign-off (2026-09-03)
 
 The operator (Roshan) recorded personal visual inspection and approval of the supplied production assets: logo variants · transparent logo/symbol assets · favicon 16/32/ICO · app icons · maskable PWA icons · watermark · monochrome assets · OG asset · overall visual consistency. **C-1 is satisfied; AG-002 is CLOSED/PASS.** No other condition changed: C-2 (AG-001) remains open — no vector masters were supplied and none were fabricated; AG-003 remains blocked by AG-001; AG-014 remains pending real UI. Gate status: **PASS WITH CONDITIONS (C-1 satisfied, C-2 open)** — M1-GATE's asset precondition is now clear pending only AG-001's non-fabrication stance, which does not block M1.
+
+## Addendum 4 — platform migration (2026-09-03)
+
+Android migration mapping: DA-2 (favicon) rows now describe **backend web-surface** icons (unchanged assets); the Android equivalent (adaptive launcher + monochrome icons) is task M1-T005 consuming the same official pack (incl. ASSET-ICON-004/005 maskable). DA-5 fonts bundle into the app per AG-013 guardrail. DA-6 icons: Material Symbols mapping per D-015 (ICON-SYSTEM.md appendix added at M1-T002). All other criteria unchanged; C-1 satisfied (AG-002 closed); C-2 (AG-001) remains open — raster masters cover all Android densities (ldpi→xxxhdpi derivations are resamples, permitted).

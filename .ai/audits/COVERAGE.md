@@ -1,6 +1,6 @@
 # SYCONIA — Specification Coverage Audit
 
-Version 1.0.0 · 2026-09-03 · Goal: prove **every implementation-relevant requirement has an execution path** (spec → tasks). Verdicts: COVERED (tasks exist) / GATED (covered but blocked by a documented blocker) / NOT-EXECUTION-RELEVANT (governance-only doc, no direct tasks).
+Version 2.0.0 · 2026-09-03 (v1.1.0 platform migration applied — Android client + backend service scope) · Goal: prove **every implementation-relevant requirement has an execution path** (spec → tasks). Verdicts: COVERED (tasks exist) / GATED (covered but blocked by a documented blocker) / NOT-EXECUTION-RELEVANT (governance-only doc, no direct tasks).
 
 | Specification | Implementation-relevant content | Execution path | Verdict |
 |---|---|---|---|
@@ -26,3 +26,5 @@ Version 1.0.0 · 2026-09-03 · Goal: prove **every implementation-relevant requi
 | README / CHANGELOG / DOCUMENTATION-INDEX / LEGAL-COMPLIANCE / brand guidelines | orientation, history, index, compliance frame, brand assets | LEGAL → M1-T015/M5-T007 (B-002), source gates B-001; brand → M1-T005; others governance-only | COVERED / NOT-EXECUTION-RELEVANT (index, changelog) |
 
 **Result:** no implementation-relevant requirement is orphaned. Three intentionally gated areas (external source, legal sign-off, hosting) carry documented blockers instead of fabricated paths — per AGENT §2.1.10.
+
+> v1.1.0: every spec's execution path was re-derived against the 76-record roadmap; dispositions recorded per task; SEO.md scope-reduced (D-018); ARCHITECTURE/TESTING/CI-CD/DEPLOYMENT/PERFORMANCE/ACCESSIBILITY rewritten sections consumed by the migrated tasks. Full classification registry: CHANGELOG.md (root) §1.0.3.

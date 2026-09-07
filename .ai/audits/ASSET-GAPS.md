@@ -26,3 +26,5 @@ Version 1.0.0 · 2026-09-03 · Created by the asset-readiness directive §19. Ev
 **Supporting-asset pass (2026-09-03): open items = 4 (AG-001, AG-002, AG-003, AG-014-PENDING). 14 secondary categories audited (branding/SUPPORTING-ASSETS.md): 2 created (maskable PWA icons; category-art spec), 9 rejected with spec citations, 2 already present, 1 pending on real UI.**
 
 **Operator visual sign-off (2026-09-03): AG-002 → CLOSED / PASS.** Open items now: AG-001 (HIGH — OPEN/DEFERRED, operator-supplied official SVG masters; none may be traced/generated), AG-003 (LOW — BLOCKED BY AG-001), AG-014 (LOW — PENDING real UI). Prior summary lines above are historical snapshots of their respective passes.
+
+> v1.1.0 platform migration (2026-09-03): asset pack unaffected — favicon/browser assets now serve the **backend web surfaces** (legal/share/admin); launcher/adaptive-icon task = M1-T005 (uses official pack incl. maskable derivations). AG-001/AG-002/AG-003/AG-014 statuses unchanged.
