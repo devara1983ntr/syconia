@@ -27,3 +27,17 @@ M0-RECON ─► M1-ANDROID-FOUNDATION ─► M2-CATALOG(backend) ─► M3-WATCH
 - M2 backend work (T001…T007, T010…T014) proceeds while **M2-T008/T009 remain BLOCKED (B-001/G-04)** — the gate cannot PASS until the operator records terms verification; **no provider may be invented** (AGENT §2.1.10).
 - M5 discovery screens (T010…T013) depend on M1-T019 + M2 APIs, not on M3/M4 — schedulable after M2 per dependency graph (phase gates still order phases by policy).
 - **Blockers:** B-001 → M2-T008/T009 + M2-GATE · B-002 → M5-T007 · B-003 → M5-T006 · AG-001 (SVG masters; D-015 icons unaffected) · AG-014 (doc screenshots pending real UI).
+
+## v1.2.0 addendum — 2026-09-24 · D-024 web-primary re-migration (owner directive)
+
+**This addendum supersedes the platform-primacy aspects of v1.1.0 above for execution purposes; the v1.1.0 text is retained as historical record.**
+
+- **Platform primary: WEB** (Next.js + Node/TS backend-only roles + PostgreSQL). Web-era decisions D-020/D-021 re-activated; Android-specific decisions D-013/D-014/D-015/D-017/D-018 dormant until Android resumes.
+- **Effective lifecycle (v1.2.0):**
+  ```
+  M0-RECON (done) ─► M1-WEB-FOUNDATION (re-activated; T001–T009 COMPLETE + gap closure) ─► M2-CATALOG(backend) ─► M3-WATCH(web) ─► M4-ADMIN ─► M5-WEB-DISCOVERY-RELEASE
+  ```
+- **Android milestone set (M1-ANDROID-FOUNDATION, M3-WATCH Android tasks, M5 Android discovery) marked DEFERRED** — not cancelled; rows remain in MASTER-CHECKLIST with DEFERRED disposition and successor note → D-024.
+- **M5 scope (web track):** discovery destinations on web, full SEO scope restored per D-020/D-021 (SEO.md doc-delta required), CI/CD, deployment (B-003), legal final (B-002), PRE-RELEASE, FINAL-VERIFICATION.
+- **Blockers unchanged:** B-001 → M2-T008/T009 + M2-GATE · B-002 → M5-T007 · B-003 → M5-T006 · AG-001 · AG-014. B-004 (Android emulator) non-blocking for the web track; affects deferred Android tasks only.
+- **Parallelism (v1.2.0):** web M1 gap closure proceeds in parallel with M2 backend (T001…T007, T010…T014); M2-T008/T009 stay BLOCKED until operator source authorization (G-04).
